@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <zscript>
+		<![CDATA[
+			import esira.matricula.PedidosMatriculaController;
+			PedidosMatriculaController myBean = new PedidosMatriculaController();
+		]]>
+    </zscript>
+    <div >
+        <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+                    <li><a >Home</a></li>
+                    <li><a class="current">Pedidos de Matricula</a></li>
+                </ul>
+                ]]>
+        </html>
+    </div>
+    
+    <window id="winPMatric" forward="onCreate=onSetQueueMat" apply="${myBean}">
+          
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <hlayout > 
+                <image src="/icon/search.png"/>
+                <button style="display: inline-block;padding: 0;" tooltiptext="Filtrar" image="/icon/opcao.png" popup="popup, type=toggle, position=after_start" />
+                <textbox hflex="1" width="98%"  id="txProcurar"  ></textbox>
+                <textbox hflex="1" width="98%" id="txProcNrmec" ></textbox>
+                   
+                <intbox visible="false" hflex="1" tooltiptext="Ano de Ingresso" id="ibPAno" width="98%" ></intbox>
+                     
+                <combobox hflex="1" visible="false" tooltiptext="Curso" id="cbcurso" readonly="true" model="${$composer.listaCursoModel}" forward="onAfterRender=onAfrender" width="98%" >
+                    <comboitem label="${each}"/>
+                </combobox>  
+                 <radiogroup style="display: inline-block;"  id="ptaxa" visible="false" width="98%" >
+                    <radio id="rgrecibo" label="Com recibo de Pagamento" hflex="1" checked="true"/>
+                    <radio id="rgnrecibo"  label="Sem recibo de pagamento" hflex="1"/>
+                    <radio id="rgcrecibo"  label="Com recibo de Pagamento e outro documento" hflex="1"/>
+                </radiogroup>
+                <menupopup style="" id="popup">
+                    <menuseparator />
+                    <menuitem id="mrecibo" label="Com recibo de pagamento" autocheck="true" checkmark="true"/>
+                </menupopup>
+            </hlayout>
+            <listbox sclass="semborda" id="lbEstudantes" onSelect=""  sizedByContent="true" 
+                      emptyMessage="Sem conteudo" span="true" autopaging="true" >
+                              
+                <listhead hflex="1" sizable="true">
+                    <listheader hflex="min" label="Nome Completo" align="left"/>
+                    <listheader hflex="min" label="Numero mecanográfico" align="left"/>
+                    <listheader hflex="min" label="Curso" align="right"/>
+                    <listheader hflex="min" label="Nivel" align="right" />
+                    <listheader hflex="min" label="Data de Matricula" align="right" />
+                    <listheader hflex="min" label="Ver" align="right" />
+                    <listheader hflex="min" label="Operação" align="center"/>
+                </listhead>
+                <template name="model">
+                    <listitem value="${each}">
+                        <listcell >
+                            <label value="${each.estudante.nomeCompleto}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.estudante.nrEstudante}" />
+                        </listcell>
+                        <listcell >
+                            <label value="${each.estudante.cursocurrente}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.estudante.nivelFrequencia}"/>
+                        </listcell>
+                        <listcell >
+                            <attribute name="onCreate"><![CDATA[
+                                esira.domain.Matricula m = (esira.domain.Matricula)self.getParent().getValue();
+                                Label l = new Label();
+                                l.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(m.getDataMatricula()));
+                                l.setParent(self);                           
+                        ]]></attribute>
+                        </listcell>
+                        <listcell >
+                            <!-- <button label="editar"  forward="onClick = onEdit"   orient="horizontal" mold="trendy"/>
+                            <button label="Renovar"  forward="onClick = onRenovar"   orient="horizontal" mold="trendy"/>-->
+                            <button autodisable="self" image="/icon/docpdf.png" sclass="button2 cinza medium" forward="onClick = onVerInfo" orient="horizontal" mold="trendy"/>
+                        </listcell>
+                        <listcell >
+                            <!-- <button label="editar"  forward="onClick = onEdit"   orient="horizontal" mold="trendy"/>
+                            <button label="Renovar"  forward="onClick = onRenovar"   orient="horizontal" mold="trendy"/>-->
+                            <button autodisable="self" label="Validar" sclass="button2 cinza medium" forward="onClick = onValidar"   orient="horizontal" mold="trendy"/>
+                        </listcell>
+                        
+                    </listitem>
+                </template>
+            </listbox>
+            <button id="btv" sclass="mybuton small" label="Ver Mais" forward="onClick=onLoadi"/>
+        </div>
+    </window>
+    <script defer="true" type="text/javascript">
+        zk.afterMount(function() {
+        jq("$txProcurar").Watermark(".Pesquisar por nome...","gray");
+        jq("$txProcNrmec").Watermark(".Pesquisar por Numero...","gray");
+        });
+    </script>
+</zk>

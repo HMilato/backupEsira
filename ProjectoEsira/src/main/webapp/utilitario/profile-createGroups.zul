@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="windowGroup" border="none" apply="esira.controller.ProfileCreateGroupsController">
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+    <li><a>Utilitarios</a></li>
+    <li><a>Criar Grupos</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <div>
+            <!--<toolbar >-->
+            <div align="left" sclass="row-custimized criteriaPadEiditMatr" >
+                <hbox >
+                    <button autodisable="self" id="addGroup" label="Adicionar" mold="trendy" height="20px"/>
+                </hbox>
+            </div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <listbox  id="lbGrupo"  width="" height=""
+                          onSelect="" model="${$composer.grupoModel}" oddRowSclass="non-odd">
+                    <listhead>
+                        <listheader label="Nome"/>
+                        <listheader label="Descricao"/>
+                        <listheader align="center"/>
+                        <listheader align="center"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem value="${each}">
+                            <listcell >
+                                <label value="${each.idGrupo}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.descricao}"/>
+                            </listcell>
+                            <listcell >
+                                <button autodisable="self" label="editar" forward="onClick=onEdit"/>
+                            </listcell>
+                            <listcell >
+                                <button autodisable="self" label="apagar" if="${not each.admin}" forward="onClick=onDelete"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+            </div>
+        </div>
+        
+        <window id="mDialogAddGroup" position="center,top" closable="false"  border="none"
+                width="50%" apply="esira.controller.ProfileCreateGroupsController" style="margin-top:10px;" visible="false">
+            <!--<toolbar id="tbAddGroup" visible="false">-->
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <grid>
+                    <columns>
+                        <column width="20%"/>
+                        <column />
+                    </columns>
+                    <rows>
+                        <row>
+                            <label value="Nome do Grupo" />
+                            <textbox id="txtGrupo" constraint=" no Empty: Insira o Nome do grupo!"/>
+                        </row>
+                        <row>
+                            <label value="Descricao" />
+                            <textbox id="txtDesc" rows="3" width="98%;" tabindex="11" constraint=" no Empty: Insira a Descrição do grupo!" />
+                        </row>
+                        <row>
+                            <label value="Acesso" />              
+                            <listbox id="lb" model="${$composer.listaitemModel}" multiple="true" checkmark="true">
+                                <template name="model">
+                                <listitem value="${each}">
+                                    <listcell >
+                                        <label value="${each.label}"/>
+                                    </listcell>
+                                </listitem>
+                                </template>
+                            </listbox>      
+                        </row>
+                    </rows>
+                </grid>
+                <div align="center">
+                    <hbox >
+                        <button autodisable="self" id="saveGroup" label="Salvar" mold="trendy" height="20px" />
+                        <button autodisable="self" id="cancelGroup" label="Cancelar" mold="trendy" height="20px" />
+                    </hbox>
+                </div>
+            </div>
+            <!--</toolbar>-->
+            
+        </window>
+    </window>
+    
+   
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+         
+        
+       
+        
+    </style>
+</zk>

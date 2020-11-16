@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="winInscEq" title="Inscrição de Equivalência de Disciplinas" apply="esira.inscricao.InscricaoEstudanteController" border="normal" mode="modal" vflex="1" width="50%" contentStyle="overflow:auto" sclass="formNovo">
+        <toolbar >
+            <hbox >
+                <cell >
+                    <hbox >
+                        <div  >
+                        </div>                      
+                    </hbox>                
+                </cell>
+            </hbox>
+        </toolbar > 
+        <div sclass="row-custimized toolbarNovo">
+            <grid >
+                <columns sizable="true">
+                    <column hflex="1" vflex="1" align="left" />
+                </columns>
+                <rows>
+                    <row visible="false">
+                        <textbox id="est"/>
+                        <textbox id="cur"/>
+                    </row>
+                    <row>
+                        <hlayout vflex="1" hflex="1" sclass="second-layout">
+                            <div sclass="description-area" height="100%">
+                                <label  value="Estudante:"/>
+                            </div>
+                            <div sclass="description-area" height="100%"> 
+                                <textbox id="txest" width="50%" />
+                            </div>
+                        </hlayout> 
+                    </row>
+                    <row>
+                        <hlayout vflex="1" hflex="1" sclass="second-layout">
+                            <div sclass="description-area" height="100%">
+                                <label  value="Disciplinas:"/>
+                            </div>
+                        </hlayout>
+                    </row>
+                    <row>
+                        <listbox span="true" width="100%"  hflex="max" height="100%" oddRowSclass="non-odd" rows="10" vflex="1" checkmark="true" forward="onSelect=onSellbdisceq" id="lbdisceq"  >
+                            <listhead sizable="true">
+                                <listheader align="center" label="Disciplina"/>
+                                <listheader align="center" label="Ano que realizou" />
+                                <listheader align="center" label="Nota" />
+                            </listhead>
+                            <template name="model" >
+                                <listitem value="${each}">
+                                    <listcell >
+                                        <label value="${each}" />
+                                    </listcell> 
+                                    <listcell >
+                                        <intbox width="50%" constraint=" no Empty: Introduza o Ano que realizou a disciplina!">
+                                            <attribute name="onCreate"><![CDATA[
+                                                      self.setDisabled(true);
+                                            ]]></attribute> 
+                                        </intbox>
+                                    </listcell> 
+                                    <listcell >
+                                        <doublebox width="50%" constraint=" no Empty: Introduza a Nota Final!">
+                                            <attribute name="onCreate"><![CDATA[
+                                                     self.setDisabled(true);
+                                            ]]></attribute> 
+                                        </doublebox>
+                                    </listcell>                                       
+                                </listitem>	
+                            </template>		
+                        </listbox>
+                    </row>
+                </rows>
+            </grid>
+            <div align="center">
+                <hbox >
+                    <button autodisable="self" id="btnCnf" sclass="mybutton button blue medium" visible="false" forward="onClick=onAceitarPedido" label="Aceitar" style="margin:10px 0 0 10px;" mold="trendy" ></button>
+                    <button autodisable="self" id="btnRj" sclass="mybutton button blue medium" forward="onClick=onRejeitar" visible="false" label="Rejeitar" style="margin:10px 0 0 10px;" mold="trendy" ></button>
+                    <button  autodisable="self" sclass="mybutton button blue medium" forward="onClick=onSalvarEq" label="Salvar"  />
+                    <button autodisable="self" label="Cancelar" forward="onClick=onCanlarEq" sclass="mybutton button medium" style="margin:10px 0 0 0px;" mold="trendy" />
+                </hbox>
+            </div>
+        </div>
+    </window>
+</zk>

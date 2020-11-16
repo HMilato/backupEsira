@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window apply="esira.matricula.PlanoMatriculaController" id="winmain">
+        <script type="text/javascript"><![CDATA[
+		zk.afterLoad('zul.tab', function () {
+			var _xTab = {};
+			zk.override(zul.tab.Tab.prototype, _xTab, {
+				_sel: function(notify, init) {
+					if (this.desktop && !init && notify)
+						zAu.send(new zk.Event(this, 'onSwitchTab'));
+					else
+						_xTab._sel.apply(this, arguments); //call the original method
+				}
+			});
+		});
+	]]></script>
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+    <li><a>Home</a></li>
+    <li><a class="current">Plano de Matricula</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <label id="massage" style="color:red"/>
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <button autodisable="self" id="addPlano" forward="onClick=onAddPlano" sclass="mybutton button blue medium" label="Novo Plano" />
+            <listbox  id="lbplm" onSelect=""  oddRowSclass="non">
+                <auxhead>
+                    <auxheader colspan="4" align="center">Matricula</auxheader>
+                    <auxheader colspan="2" align="center"></auxheader>
+                    <!--  <auxheader colspan="2" align="center">Multa 15 dias antes</auxheader>-->
+                    <!--  <auxheader colspan="2" align="center">Multa 15 dias depois</auxheader>-->
+                    <!--<auxheader colspan="1" align="center"></auxheader>-->
+                </auxhead>               
+
+                <listhead>
+                     <listheader label="Faculdade" align="center"/>
+                    <listheader label="Ano Lectivo" align="center"/>
+                    <listheader label="Data de Inicio" align="center"/>
+                    <listheader label="Data Final" align="center"/>
+                    <!--<listheader label="Tolerancia" align="center"/>-->
+                    <listheader label="Taxa de matricula" align="center"/>
+                    <!--<listheader label="Estrangeiro" align="center"/>-->
+                    <!--<listheader label="Nacional" align="center"/>-->
+                    <!-- <listheader label="Estrangeiro" align="center"/>-->
+                    <!-- <listheader label="Nacional" align="center"/>-->
+                    <!-- <listheader label="Estrangeiro" align="center"/>-->
+                    <!-- <listheader label="acção" align="center"/>-->
+                    <!--<listheader label="Taxa Nacional" align="center"/>-->
+                    <!--<listheader label="Taxa Estrangeiro" align="center"/>-->
+                    <!--<listheader label="Taxa fora do Prazo" align="center"/>-->
+                    <listheader label="Operação" align="center"/>
+                </listhead>
+                <template name="model">
+                    <listitem value="${each}">
+                        <listcell >
+                            <label value="${each.faculdade.abreviatura}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.anolectivo}"/>
+                        </listcell>
+                        <listcell >
+                            <attribute name="onCreate"><![CDATA[
+                                esira.domain.PlanificacaoAnoLectivo i = (esira.domain.PlanificacaoAnoLectivo)self.getParent().getValue();
+                                Label l = new Label();
+                                l.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy").format(i.getDataInicioMatricula()));
+                                l.setParent(self);  
+                        ]]></attribute> 
+                        </listcell>
+                        <listcell >
+                            <attribute name="onCreate"><![CDATA[
+                                esira.domain.PlanificacaoAnoLectivo i = (esira.domain.PlanificacaoAnoLectivo)self.getParent().getValue();
+                                Label l = new Label();
+                                l.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy").format(i.getDataFinalMatricula()));
+                                l.setParent(self);                           
+                        ]]></attribute> 
+                        </listcell>
+                        <!--   <listcell >
+                            <label value="${each.dataFimMatriculaE2}"/>
+                        </listcell>-->
+                        <listcell >
+                            <label value="${each.taxaMatriculaNacional}"/>
+                        </listcell>
+<!--                        <listcell >
+                            <label value="${each.taxaMatriculaEstrangeiro}"/>
+                        </listcell>-->
+                        <!--   <listcell >
+                            <label value="${each.percentagemMultaMatricula15dias}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.percentagemMultaMatricula15dias}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.percentagemMultaMatricula30dias}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.percentagemMultaMatricula30dias}"/>
+                        </listcell>-->
+                        <listcell >
+                            <button autodisable="self" tooltiptext="Editar" hoverImage="/icon/ico_editar.png" image="/icon/ico_editar1.png"  forward="onClick = onEdit"/>
+                        </listcell>
+                    </listitem>
+                </template>
+            </listbox>
+        </div>
+  
+        <window id="mDialogAddPlano"  position="center,center" closable="false"  visible="false" border="none"
+                width="50%" apply="esira.matricula.PlanoMatriculaController">
+        
+        
+            <div height="20px">
+                <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+    <li><a href=" ">Plano de Matricula</a></li>
+</ul>
+                  ]]>
+                </html>
+            </div>
+        
+            <div style="margin-top:20px; margin-bottom:4px;" >
+                <hbox >
+                    <combobox id="cbfaculdade" value="-Faculdade-" model="${$composer.faculdadeModel}" width="98%" readonly="true">
+                    <attribute name="onAfterRender"><![CDATA[
+                            if((self.getModel()!=null) && self.getModel().getSize()>0){
+                               self.setSelectedIndex(0);
+                            }                           
+                        ]]></attribute>
+                    <comboitem label="${each}"/>
+                </combobox>
+                    <button autodisable="self" sclass="mybutton button blue medium" id="salvarPlano" forward="onSalvarPlano" label="Salvar" mold="trendy" height="20px"/>
+                    <button autodisable="self" id="cancelarPlano" label="cancelar" mold="trendy" height="20px" />
+                </hbox>
+            </div>
+            <div style="margin: auto">
+                <label id="validation" style="color:red;"/>
+            </div>
+            <tabbox id="tabPlanoMatricula" width="99%" apply=" ">
+                <tabs id="tabs">
+                    <tab  label="Taxas" style="color:red" id="tabtaxa" selected="true"/>
+                    <tab label="Dados Matricula / Inscricao" id="tabMatricula" />
+                </tabs>
+                <tabpanels>
+                    <tabpanel  >
+                   
+                        <div width="98%" sclass="row-custimizedWhite criteriaPad button-blue">
+                            <grid>
+                                <columns>
+                                    <column width="180px" align="right" />
+                                    <column width="250px" align="left" />
+
+                                </columns>
+                                <rows>
+                                    <row visible="false">
+                                        <intbox id="ibano"/>
+                                        <intbox id="litem"/>
+                                        <intbox id="idfac"/>
+                                    </row>
+                                    <!-- 
+                                    <row>
+                                        <label value="Validade de Matricula" style="margin-right:20px"/>
+                                        <datebox id="validade" format="dd/MM/yyyy"/>
+                                    </row>
+                                    -->
+                                    <row>
+                                        <label value="Taxa de Matricula" style="margin-right:20px"/>
+
+<!--                                        <grid>
+                                            <columns>
+                                                <column label="Nacional"/>
+                                                <column label="Estrageiro"/>
+                                            </columns>-->
+
+                                            <!--<rows>-->
+                                                <!--<row>-->
+                                                    <doublebox value="0" id="dbTaxMatriculaN"  />
+                                                    <doublebox visible="false"  value="0" id="dbuTaxMatriculaE" />
+                                                <!--</row>-->  
+                                            <!--</rows>-->
+                                        <!--</grid>-->
+                                    </row>
+                                    <row>
+                                        <label value="Taxa de Inscrição" style="margin-right:20px"/>
+
+<!--                                        <grid>
+                                            <columns>
+                                                <column label="Nacional"/>
+                                                <column label="Estrageiro"/>
+                                            </columns>
+
+                                            <rows>
+                                                <row>-->
+                                                    <doublebox value="0" id="dbTaxInscricaoN"  />
+                                                    <doublebox visible="false"  value="0" id="dbTaxInscricaoE" />
+<!--                                                </row>  
+                                            </rows>
+                                        </grid>-->
+                                    </row>
+                                    <row>
+                                        <label value="Taxa de Exame Externo" style="margin-right:20px"/>
+
+<!--                                        <grid>
+                                            <columns>
+                                                <column label="Nacional"/>
+                                                <column label="Estrageiro"/>
+                                            </columns>
+
+                                            <rows>
+                                                <row>-->
+                                                    <doublebox value="0" id="dbuTaxEExternoN"  />
+                                                    <doublebox visible="false"  value="0" id="dbuTaxEExternoE" />
+<!--                                                </row>  
+                                            </rows>
+                                        </grid>-->
+                                    </row>
+                                    <row>
+                                        <label value="Taxa mudança de curso via exame de dmissão" style="margin-right:20px"/>
+
+<!--                                        <grid>
+                                            <columns>
+                                                <column label="Nacional"/>
+                                                <column label="Estrageiro"/>
+                                            </columns>
+
+                                            <rows>
+                                                <row>-->
+                                                    <doublebox value="0" id="TaxMudancaEN"  />
+                                                    <doublebox visible="false" value="0" id="TaxMudancaEE" />
+<!--                                                </row>  
+                                            </rows>
+                                        </grid>-->
+                                    </row>
+                                    <row>
+                                        <label value="Taxa mudança de curso via Requerimento" style="margin-right:20px"/>
+
+<!--                                        <grid>
+                                            <columns>
+                                                <column label="Nacional"/>
+                                                <column label="Estrageiro"/>
+                                            </columns>
+
+                                            <rows>
+                                                <row>-->
+                                                    <doublebox value="0" id="TaxMudancaRN"  />
+                                                    <doublebox visible="false"  value="0" id="TaxMudancaRE" />
+<!--                                                </row>  
+                                            </rows>
+                                        </grid>-->
+                                    </row>
+                                    <row>
+                                        <label value="Taxa de Equivalência" style="margin-right:40px"/>
+
+                                        <grid>
+                                            <columns>
+                                                <column label="Interno"/>
+                                                <column label="Externo"/>
+                                            </columns>
+
+                                            <rows>
+                                                <row>
+                                                    <doublebox value="0" id="TaxEquivalenciaN"  />
+                                                    <doublebox value="0" id="TaxEquivalenciaE" />
+                                                </row>  
+                                            </rows>
+                                        </grid>
+                                    </row>
+
+                                    <row>
+                                        <label value="taxa de pedido de revisão" style="margin-right:20px"/>
+
+                                        <grid>
+                                            <columns>
+                                                <column label="Provas e Trabalhos"/>
+                                                <column label="Exame escrito"/>
+                                            </columns>
+
+                                            <rows>
+                                                <row>
+                                                    <doublebox value="0" id="TaxPrevisaoP"  />
+                                                    <doublebox value="0" id="TaxPrevisaoE" />
+                                                </row>  
+                                            </rows>
+                                        </grid>
+                                    </row>
+                                    <row>
+                                        <label value="taxa de pedido de declaracão" style="margin-right:20px"/>
+
+                                        <grid>
+                                            <columns>
+                                                <column label="Frequencia"/>
+                                                <column label="Disciplinas Feitas"/>
+                                            </columns>
+
+                                            <rows>
+                                                <row>
+                                                    <doublebox value="0" id="TaxPdeclaracaoF"  />
+                                                    <doublebox value="0" id="TaxPdeclaracaoD" />
+                                                </row>  
+                                            </rows>
+                                        </grid>
+                                    </row>
+                                    <row>
+                                        <label value="taxa de pedido de certificado" style="margin-right:20px"/>
+
+                                        <grid>
+                                            <columns>
+                                                <column label="Habilitações"/>
+                                                <column label="Plano Tematico"/>
+                                            </columns>
+
+                                            <rows>
+                                                <row>
+                                                    <doublebox value="0" id="TaxPcertificadoH"  />
+                                                    <doublebox value="0" id="TaxPcertificadoP" />
+                                                </row>  
+                                            </rows>
+                                        </grid>
+                                    </row>
+                                  
+                                    <row>
+                                        <label value="taxa de pedido" style="margin-right:20px"/>
+
+                                        <grid>
+                                            <columns>
+                                                <column label="Mudança de Turno"/>
+                                                <column label="Segunda Chamada prova frequencia"/>
+                                            </columns>
+
+                                            <rows>
+                                                <row>
+                                                    <doublebox value="0" id="TaxPmudancaT"  />
+                                                    <doublebox value="0" id="TaxPsegundaC" />
+                                                </row>  
+                                            </rows>
+                                        </grid>
+                                    </row>
+                                    <row>
+                                        <label value="taxa de pedido" style="margin-right:20px"/>
+
+                                        <grid>
+                                            <columns>
+                                                <column label="diploma"/>
+                                                <column label="Levantamento de Suspensao"/>
+                                            </columns>
+
+                                            <rows>
+                                                <row>
+                                                    <doublebox value="0" id="TaxPdiploma"  />
+                                                    <doublebox value="0" id="TaxPlsuspensao" />
+                                                </row>  
+                                            </rows>
+                                        </grid>
+                                    </row>
+
+                                    <row>
+                                        <label value="taxa de Recorrência" style="margin-right:20px"/>
+
+                                        <!--<grid>-->
+<!--                                            <columns>
+                                                <column label="Recorrência"/>
+                                                -->
+                                            <!--</columns>-->
+
+<!--                                            <rows>
+                                                <row>-->
+                                                    <doublebox value="0" id="TaxRecorrencia"  />
+<!--                                                    
+                                                </row>  
+                                            </rows>
+                                        </grid>-->
+                                    </row>
+
+                                </rows>
+
+                            </grid>
+                        </div>
+                    </tabpanel>
+                    <tabpanel>
+                        <div width="98%" sclass="row-custimizedWhite criteriaPad button-blue">
+                            <grid>
+                                <columns>
+                                    <column width="200px" align="right" />
+                                    <column align="left" />
+                                </columns>
+                                <rows>
+                                    <row>
+                                        <label value="Renovação de Matricula / Inscrição - 1o Semestre" style="color:blue;margin-right:20px"/>
+                                    </row>
+                                    <row>
+                                        <label value="Data Inicio" style="margin-right:20px"/>
+                                        <datebox id="dataInicio" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Fim da primeira Época" style="margin-right:20px"/>
+                                        <datebox id="datafimEpoca1" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Fim da segunda Época " style="margin-right:20px"/>
+                                        <datebox id="datafimEpoca2" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Fim da Terceira Época " style="margin-right:20px"/>
+                                        <datebox id="dm1" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Matriculas e Inscrições (Novos Ingressos) - 1o Semestre" style="color:blue;margin-right:20px"/>
+                                    </row>
+                                    <row>
+                                        <label value="Data Inicio" style="margin-right:20px"/>
+                                        <datebox id="dataInicioI" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Fim da primeira Época" style="margin-right:20px"/>
+                                        <datebox id="datafimIEpoca1" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row visible="false">
+                                        <label value="Fim da segunda Época" style="margin-right:20px"/>
+                                        <datebox id="datafimIEpoca2" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row visible="false">
+                                        <label value="Fim da Terceira Época" style="margin-right:20px"/>
+                                        <datebox id="dma1" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Inscrições do 2o Semestre" style="color:blue;margin-right:20px"/>
+                                    </row>
+                                    <row>
+                                        <label value="Data Inicio" style="margin-right:20px"/>
+                                        <datebox id="dataInicioI2" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Fim da primeira Época" style="margin-right:20px"/>
+                                        <datebox id="datafimIEpoca21" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Fim da segunda Época" style="margin-right:20px"/>
+                                        <datebox id="datafimIEpoca22" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Fim da Terceira Época" style="margin-right:20px"/>
+                                        <datebox id="di1" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Multa de Renovação de Matrícula" style="color:blue;margin-right:20px"/>
+                                    </row>
+                                    <row>
+                                        <label value="Taxa de Multa (%)" style="margin-right:20px"/>
+                                        <grid>
+                                            <columns>
+                                                <column label="Multa 2o Periodo"/>
+                                                <column label="Multa 3o Periodo"/>
+                                            </columns>
+                                            <rows>
+                                                <row>
+                                                    <intbox id="taxaMulta15"  />
+                                                    <intbox id="taxaMulta30"  />
+                                                </row>  
+                                            </rows>
+                                        </grid>
+                                    </row>
+                                    <row>
+                                        <label value="Multa Inscricao" style="color:blue;margin-right:20px"/>
+                                    </row>
+                                    <row>
+                                        <label value="Taxa de Multa (%)" style="margin-right:20px"/>
+                                        <grid>
+                                            <columns>
+                                                <column label="Multa 2o Periodo"/>
+                                                <column label="Multa 3o Periodo"/>
+                                            </columns>
+                                            <rows>
+                                                <row>
+                                                    <intbox id="taxaMultaI15"  />
+                                                    <intbox id="taxaMultaI30"  />
+                                                </row>  
+                                            </rows>
+                                        </grid>
+                                    </row>
+                                    <row>
+                                        <label value="1o Semestre - Periodo de Aulas" style="color:blue;margin-right:20px"/>
+                                    </row>
+                                    <row>
+                                        <label value="Data Inicio" style="margin-right:20px"/>
+                                        <datebox id="dataSem1I" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Data Final" style="margin-right:20px"/>
+                                        <datebox id="dataSem1F" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="2o Semestre - Periodo de Aulas" style="color:blue;margin-right:20px"/>
+                                    </row>
+                                    <row>
+                                        <label value="Data Inicio" style="margin-right:20px"/>
+                                        <datebox id="dataSem2I" format="dd/MM/yyyy"/>
+                                    </row>
+                                    <row>
+                                        <label value="Data Final" style="margin-right:20px"/>
+                                        <datebox id="dataSem2F" format="dd/MM/yyyy"/>
+                                    </row>
+                                </rows>
+                            </grid>
+                        </div>
+                    </tabpanel>
+                </tabpanels>
+            </tabbox>
+        </window>
+    </window>
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+        
+        div.z-listcell-cnt{
+        border:1px;
+        }
+    </style>
+</zk>

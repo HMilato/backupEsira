@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 12 21:23:35     2006, Created by tomyeh
+		Fri May 01 04:36:35     2009, Modified by stera
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+  
+    <window id="winAnularI" title="Anular Inscricao" border="none" hflex="1" apply="esira.inscricao.InscricaoController" vflex="1" width="50%" contentStyle="overflow:auto" sclass="formNovo" mode="modal">
+        
+        <grid>
+            <columns sizable="true">
+                <column hflex="1" vflex="1" />
+            </columns> 
+            <rows>
+                <row visible="false">
+                    <label  id="lbano" value="${arg.ano}" style="color:#dc291e"/>
+                    <intbox id="item"/>
+                    <intbox id="idest"/>
+                </row>
+                <row>
+                    <label id="erroValidacao" style="color:#dc291e"/>
+                </row>
+                <row> 
+                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                        <div sclass="description-area" height="100%">Numero Mecanográfico:</div> 
+                        <div sclass="description-area" height="100%">
+                            <label id="lbNumero" style="color:#dc291e" value="${arg.nrMec}"/>
+                        </div>
+                    </hlayout>
+                </row>
+                <row>
+                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                        <div sclass="description-area" height="100%"> Nome Completo:</div>
+                        <div sclass="description-area" height="100%">
+                            <label id="lbNome" value="${arg.nome}" style="color:#dc291e"/>
+                        </div>
+                    </hlayout>
+                </row>
+                <row> 
+                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                        <div sclass="description-area" height="100%"> Motivo: </div>
+                        <div sclass="description-area" height="100%">
+                            <textbox id="txMotivo" type="text" rows="10" width="300px" constraint=" no Empty: Preenche o campo!"/> 
+                        </div>
+                    </hlayout>
+                </row>
+                <row>  
+                    <hlayout sclass="second-layout">
+                        <div sclass="description-area" height="100%">
+                            <button id="lbc" label="Anexar Requerimento" mold="trendy" upload="true,multiple=true,maxsize=50000">
+                                <attribute name="onUpload"><![CDATA[
+                               if(event.getMedias()==null)return;
+                               org.zkoss.util.media.Media[] lmmm = 
+                               new org.zkoss.util.media.Media[event.getMedias().length+lbimg1.getItemCount()];
+                                int t = 0;
+                               for (int i =0;i<event.getMedias().length;i++)
+                               {
+                                  org.zkoss.util.media.Media m = event.getMedias()[i];
+                                  String f = m.getFormat();
+                                  if (!(m instanceof org.zkoss.image.Image)&&(!f.equalsIgnoreCase("pdf"))&& (!f.equalsIgnoreCase("doc"))
+                                      && (!f.equalsIgnoreCase("xls"))&& (!f.equalsIgnoreCase("docx"))&& (!f.equalsIgnoreCase("xlsx"))) {
+                                         Clients.showNotification("Formato não suportado", "error", null, null, 0,true);
+                                         return;
+                                  }
+                                  lmmm[t]=m;
+                                  t=t+1;
+				  for(org.zkoss.zul.Listitem li:lbimg1.getItems()){
+                                            org.zkoss.util.media.Media m2 = (org.zkoss.util.media.Media)li.getValue();
+                                     if(m2.getName().equals(m.getName())){
+                                        Clients.showNotification("Por favor, os nomes devem ser diferentes", "error", null, null, 0,true);
+                                        return;
+                                     }
+                                     if(i==0){
+                                       lmmm[t]=m2;
+                                       t=t+1;
+                                     }
+                                  }
+                               }
+                               lbimg1.setModel(new ListModelList(lmmm));
+                                        ]]>
+                                </attribute>
+                            </button> 
+                        </div>
+                        <div sclass="description-area" height="100%">
+                            <textbox style="border:none;background: transparent;position: absolute" width="0px" height="0px" id="tbimg3" constraint=" no Empty: Por favor anexar Certificado de Habilitações!"/>
+                            <listbox span="true" sizedByContent="true" style="overflow:auto" height="100%" id="lbimg1" >
+                                <template name="model">
+                                    <listitem value="${each}">
+                                        <listcell >
+                                            <label value="${each.name}"/>
+                                        </listcell>
+                                        <listcell >
+                                            <button label="ver">
+                                                <attribute name="onCreate"><![CDATA[
+                                                    lbc.setDisabled(true);
+                                                                     tbimg3.value="value";
+                                                                     ]]>
+                                                </attribute>
+                                                <attribute name="onClick"><![CDATA[
+                                                Window win = (Window) Executions.createComponents("/report.zul", null, null);
+                                                win.setTitle("Requerimento");
+                                                Iframe iframe = (Iframe) win.getFellow("report");
+                                                org.zkoss.util.media.Media m =(org.zkoss.util.media.Media)((Listitem)self.getParent().getParent()).getValue();
+                                                org.zkoss.util.media.Media amedia = new org.zkoss.util.media.AMedia(m.getName(), m.getFormat(), m.getContentType(), m.getStreamData());
+                                                iframe.setContent(amedia);
+                                                ]]>
+                                                </attribute>
+                                            </button>
+                                        </listcell>
+                                        <listcell >
+                                            <button label="apagar">
+                                                <attribute name="onClick"><![CDATA[
+                                                    lbc.setDisabled(false);
+                                                lbimg1.removeChild(((Listitem)self.getParent().getParent()));
+                                                                    if(lbimg1.getItemCount()==0)tbimg3.setValue(null);
+                                                ]]>
+                                                </attribute>
+                                            </button>
+                                        </listcell>
+                                    </listitem>
+                                </template>
+                            </listbox>
+                        </div>
+                    </hlayout>
+                </row>
+            </rows>
+        </grid>
+        <div style="margin-top:20px; margin-bottom:4px;" >
+            <hbox >
+                <button autodisable="self" id="btnRegistar" forward="onClick=onRegistarAnulacao" label="Aceitar"  mold="trendy" />
+                <button autodisable="self" id="btnCancAnul" forward="onClick=onCancAnul" label="Cancelar"  mold="trendy" />
+            </hbox>
+        </div>
+    </window>
+</zk>

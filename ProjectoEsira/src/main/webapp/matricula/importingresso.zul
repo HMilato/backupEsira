@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:ca="client/attribute">
+     <window id="janelaInformacao"  position="center,center" closable="false"  mode="modal" border="none"
+               width="80%" apply="esira.matricula.ListaAdmissaoController">
+          
+            <grid >
+                <columns>
+                  <column label="O ficheiro Excel a importar para o Sistema deve seguir o modelo abaixo. [Cabecalho, e o prenchimento das linhas]" >
+                        
+                  </column>  
+                </columns>
+                  <rows >
+                    <row>
+                        <vbox>
+                             <hbox>  <button sclass="mybutton button blue" upload="true" id="uploadButton"  label="Continuar" forward="onClick=onUploadFile"  height="50px" /> 
+                        <button  autodisable="self" label="Cancelar" forward="onClick=onCanlar" height="50px" /> 
+                         </hbox>   <image src="icon/tabela_excel3.png"  />
+                             
+                        </vbox>
+                  	</row>
+                    </rows>
+                  </grid>
+        </window>
+</zk>

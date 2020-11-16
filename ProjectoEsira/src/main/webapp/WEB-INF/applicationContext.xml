@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xmlns:mvc="http://www.springframework.org/schema/mvc" 
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/mvc
+           http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/tx
+                   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+    <!--
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/fecn1" />
+        <property name="username" value="root" />
+        <property name="password" value="root" />
+    </bean>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="jdbc:postgresql://localhost:5433/fecn1" />
+        <property name="username" value="postgres" />
+        <property name="password" value="root" />
+    </bean>-->
+    <bean id="c3p0DataSource" class = "com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="org.postgresql.Driver" />
+        <property name="jdbcUrl" value="jdbc:postgresql://127.0.0.1:5433/fecn1" />
+        <property name="user" value="postgres" />
+        <property name="password" value="root" />
+        
+
+        <!-- these are C3P0 properties -->
+        <property name="acquireIncrement" value="5" />
+        <property name="minPoolSize" value="10" />
+        <property name="maxStatements" value="1000" />
+        <property name="maxPoolSize" value="1000" />
+        <property name="maxIdleTime" value="1500" />
+    </bean>
+
+    <!-- Define the datasource; define the session factory, we need specify 
+    the packagesToScan property, this property will scan all entity annotated 
+    class. define the context component-scan basepackage, this will scan all 
+    @Repository annotated Class -->	
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <!--   <property name="dataSource" ref="c3p0DataSource" />-->
+        <property name="packagesToScan" value="esira.domain" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+                <!--    <prop key="hibernate.default_schema">fecn1</prop>-->
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+              
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.use_sql_comments">true</prop>
+                <prop key="hibernate.zeroDateTimeBehavior">convertToNull</prop>
+                <prop key="hibernate.multiTenancy">DATABASE</prop>
+                <prop key="hibernate.tenant_identifier_resolver">esira.hibernate.TenantIdResolver</prop>
+                <prop key="hibernate.multi_tenant_connection_provider">esira.hibernate.MultiTenantConnectionProviderImpl</prop>  
+                <prop key="hibernate.c3p0.privilegeSpawnedThreads">true</prop><!--adicionado com multitenant para destruir threads de pool perdidos-->
+                <prop key="hibernate.c3p0.contextClassLoaderSource">library</prop> 
+            </props>
+        </property>
+        <!-- Enable Hibernate's automatic session context management -->
+    </bean>
+    
+    <!-- <bean id="currentTenantIdentifierResolver" class="esira.hibernate.CurrentTenantIdentifierResolverImpl"></bean>-->
+
+    <bean id="transactionManager"
+          class="esira.hibernate.HibernateTransationManagerImpl" >
+        <property name="autodetectDataSource" value="false" /><!-- Adicionado com Multitenancy-->
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <!-- Container Configuration: The IOC container configuration xml file is 
+    shown below,The container has the <context:component-scan> element and <context:annotation-config/> 
+    <context:annotation-config/> used to intimate the beans of this IOC container 
+    are annotation supported. By pass the base path of the beans as the value 
+    of the base-package attribute of context:component-scan element, we can detect 
+    the beans and registering their bean definitions automatically without lots 
+    of overhead. The value of base-package attribute is fully qualified package 
+    name of the bean classes. We can pass more than one package names by comma 
+    separated -->    
+
+    <context:annotation-config />
+    <context:component-scan base-package="esira"/>
+      
+
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+	 
+    <bean id="CRUDService" class="esira.service.CRUDServiceImpl" />
+    <!--   <bean id="staffDao" class="esira.saas.dao.impl.StaffDAOImpl" >
+            <property name="sessionFactory" ref="sessionFactory"/>
+    </bean> -->
+
+
+<!-- Configure to plugin JSON as request and response in method handler -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="jsonMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Configure bean to convert JSON to POJO and vice versa -->
+    <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+
+    <!--<bean id="jsonMessageConverter" class="org.springframework.http.converter.json.Jackson2ObjectMapperBuilder"></bean>-->
+
+    <!-- Enables the Spring MVC @Controller programming model -->
+    <mvc:annotation-driven />
+     <mvc:resources mapping="/icon/**" location="/icon/" />
+     <mvc:resources mapping="/images/**" location="/images/" />
+     <mvc:resources mapping="/icones/**" location="/icones/" />
+     <mvc:resources mapping="/img/**" location="/img/" />
+     <mvc:resources mapping="/**" location="/" />
+     <mvc:resources mapping="/css/**" location="/css/" />
+     
+     
+</beans> 

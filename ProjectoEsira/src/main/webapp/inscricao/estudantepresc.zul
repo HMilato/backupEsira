@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="winEstPrec" apply="esira.inscricao.PrescricaoController">
+        <div >
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+                    <li><a >Home</a></li>
+                    <li><a  class="current">Estudantes com prescrição</a></li>
+                </ul>
+                ]]>
+            </html>
+        </div>
+        <hbox >
+            <div  >
+                <button autodisable="self" id="addPresc" forward="onAddPresc" label="Adicionar Prescrição" mold="trendy" />
+                <button autodisable="self" label="Exportar" image="/icon/ico-excel.png" forward="onClick=onExcelExport"/>
+            </div>  
+            <div visible="false">
+                <textbox id="txx"/>
+                <textbox id="tx"/>
+                <listbox id="lbin" />
+            </div>                      
+        </hbox>                
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <listbox span="true" emptyMessage="Sem conteudo"  id="lbinscdisc" onSelect=""  oddRowSclass="non" >
+                <auxhead id="auxi">
+                    <auxheader colspan="7" align="center">
+                        <image src="/icon/search.png"/>
+                        <intbox hflex="1" width="98%" visible="false" tooltiptext="Filtrar por Ano Lectivo" id="anoi" constraint=" no Empty: Insira o ano!"/>
+                        <combobox hflex="1" width="98%" readonly="true" id="cbcursoP" model="${$composer.cursoModel}"  value="....Curso....." >
+                            <comboitem label="${each.nome}"/>
+                        </combobox> 
+                        <combobox hflex="1" width="98%" readonly="true" onCreate="self.setSelectedIndex(0)" visible="false" id="cbDiscP" onAfterRender="self.setOpen(false)" >
+                            <comboitem label="${each.nome}"/>
+                        </combobox>
+                        <button style="padding: 0;" tooltiptext="Filtrar" image="/icon/opcao.png" popup="popup, type=toggle, position=after_start" />
+                        <menupopup id="popup">
+                            <menuitem id="manoi" label="Ano Lectivo" autocheck="true" checkmark="true"/>
+                        </menupopup>
+                    </auxheader>
+                </auxhead>
+                
+                <listhead sizable="true">
+                    <listheader align="center" label="NrMec"/>
+                    <listheader align="center" label="Estudante" />
+                    <listheader align="center" label="Curso" />
+                    <listheader align="center" label="Disciplina" />
+                    <listheader align="center" label="Data Inscricao" />
+                    <listheader align="center" label="Situação" />
+                    <listheader  label="Operação" align="center" />
+                </listhead>
+                <template name="model">
+                    <listitem value="${each}">
+                        <attribute name="onCreate"><![CDATA[
+                             esira.service.CRUDService csimp = (esira.service.CRUDService) org.zkoss.zkplus.spring.SpringUtil.getBean("CRUDService");
+                             java.util.Map par = new java.util.HashMap();
+                           par.clear();
+                             par.put("pk",((esira.domain.Prescricao)self.getValue()).getInscricaodisciplinaPK());
+                             esira.domain.Inscricaodisciplina m = csimp.findEntByJPQuery("from Inscricaodisciplina m where m.inscricaodisciplinaPK = :pk",par);                
+                                  org.zkoss.zul.Listcell lc;
+                                  org.zkoss.zul.Label l;
+                                  lc = new org.zkoss.zul.Listcell();
+                                  l = new org.zkoss.zul.Label();
+                                  l.setValue(m.getInscricao().getIdEstudante().getNrEstudante());
+                                  l.setParent(lc);
+                                  self.getChildren().add(0,lc);
+                                  lc = new org.zkoss.zul.Listcell();
+                                  l = new org.zkoss.zul.Label();
+                                  l.setValue(m.getInscricao().getIdEstudante().getNomeCompleto());
+                                  l.setParent(lc);
+                                  self.getChildren().add(1,lc);
+                        lc = new org.zkoss.zul.Listcell();
+                                  l = new org.zkoss.zul.Label();
+                                  l.setValue(m.getInscricao().getIdEstudante().getCursocurrente().getDescricao());
+                                  l.setParent(lc);
+                                  self.getChildren().add(2,lc);
+                         lc = new org.zkoss.zul.Listcell();
+                                  l = new org.zkoss.zul.Label();
+                                  l.setValue(m.getDisciplina().getNome());
+                                  l.setParent(lc);
+                                  self.getChildren().add(3,lc);
+                            lc = new org.zkoss.zul.Listcell();
+                                  l = new org.zkoss.zul.Label();
+                        l.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(m.getInscricao().getDataInscricao()));
+                                  l.setParent(lc);
+                                  self.getChildren().add(4,lc);       
+                        ]]></attribute>
+                        <listcell >
+                            <label if="${not each.estado}" value="Regularizado"/>
+                            <label if="${each.estado}" value="Não Regularizado"/>
+                        </listcell>
+                        <listcell >
+                            <button autodisable="self" label="Alterar"  forward="onClick = onEditPresc"  orient="horizontal">
+                                <!--    <attribute name="onCreate"><![CDATA[
+                                     if (!self.parent.parent.value.estado) {
+                                self.setDisabled(true);
+                            }
+                                    ]]>
+                                </attribute>-->
+                            </button>
+                            <button autodisable="self" label="Eliminar"  forward="onClick = onEliminar"  orient="horizontal"/>
+                        </listcell>        
+                    </listitem>
+                </template>
+            </listbox>
+            <button id="btv" sclass="mybuton small" label="Ver Mais" forward="onClick=onLoadi"/>
+        </div>
+          
+        <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+        <script type="text/javascript">
+            zk.afterMount(function() {
+            jq("$anoi").Watermark("Ano..","gray");
+            jq("$cbPeriodDisc").Watermark("Semestre..","gray");
+            jq("$cbcurso").Watermark("Curso..","gray");
+            jq("$cbDisc").Watermark("Disciplina..","gray");
+        
+            });
+        </script>
+    </window>
+</zk>

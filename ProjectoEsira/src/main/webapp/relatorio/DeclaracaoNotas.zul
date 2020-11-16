@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <div >
+        <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+                    <li><a >Relatório</a></li>
+                    <li><a class="current">Declaração de Notas</a></li>
+                </ul>
+                ]]>
+        </html>
+    </div>
+    <window apply="esira.relatorio.DeclaracaoNotas" forward="onCreate=onSetQueueLadm" id="WStudent">
+         
+       
+        <radiogroup forward="onCheck=onCheckRadio" id="toRadio"></radiogroup>
+        <radiogroup id="onlyRadio"></radiogroup>
+       
+            
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <vlayout>
+                <hlayout>    
+                    <image src="/icon/search.png"/>
+                    <!--                <textbox hflex="1" id="textboxPesquisar" forward="onOK=textboxPesquisar.onPesquisar,
+                    onChange=textboxPesquisar.onPesquisar" placeholder="Pesquisar por Nome"  ></textbox>-->
+                        
+                    <intbox visible="false" id="posc"/>
+                    
+                    <combobox id="combEst" width="98%" style="display: inline-block;" hflex="1" forward="onChanging=onCombEst, onSelect=onSCombEst" buttonVisible="true" autodrop="true" mold="rounded">
+                        <template name="model">
+                            <comboitem label="${each.nomeCompleto}">
+                                <attribute name="onCreate"><![CDATA[
+                                                           if(((esira.domain.Estudante)self.getValue()).getIdEstudante()==null){
+                                                              self.setStyle("color:blue");
+                                                           }
+                                                       ]]>
+                                </attribute>
+                            </comboitem>
+                        </template>
+                    </combobox>
+                    <combobox style="display: inline-block;" hflex="1" readonly="true"   width="98%"  id="cbSemestre" >
+                        <comboitem label="Semestre 1" value="1"/>
+                        <comboitem label="Semestre 2" value="2"/>
+                        <comboitem label="Todos" value="3"/>
+                        
+                    </combobox>
+                </hlayout>
+                <hlayout hflex="1" >
+                    <radio id="rad1"   label="Entre os niveis" radiogroup="toRadio" />
+                    <intbox id="de"   placeholder="Inicio" />
+                    <intbox id="ate"   placeholder="Fim"  />
+         
+                    <radio id="rad2"  label="Somente o nivel" radiogroup="toRadio" />
+                    <intbox   id="somente" />
+                </hlayout>
+            </vlayout>
+                    
+            <button hflex="1" sclass="mybutton button blue medium" style="display: inline-block;" id="btv" label="Visualizar" forward="onClick=onRelatorio"/>
+        </div>
+       
+      
+    </window>
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+        
+        div.z-listcell-cnt{
+        border:1px;
+        }
+    </style>
+    <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+    <script type="text/javascript">
+        zk.afterMount(function() {
+        jq("$combEst").find("input").Watermark(".Pesquise ou seleccione um Estudante","gray");
+        jq("$cbSemestre").find("input").Watermark("Semestre","gray");
+        });
+    </script>
+</zk>

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns:c="client">
+    <window id="windowUser" border="none" apply="esira.controller.ProfileCreateUsersController">
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+    <li><a>Utilitarios</a></li>
+    <li><a>Criar Usuarios</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <div align="left" sclass="row-custimized criteriaPadEiditMatr">
+            <hbox >
+                <button autodisable="self" id="addUser" forward="onAddUser" label="Adicionar" mold="trendy" height="20px"/>
+                <button autodisable="self" label="Exportar" image="/icon/ico-excel.png" forward="onClick=onExportUsr"/>           
+            </hbox>
+        </div>
+        
+        <div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <hlayout id="ahead">
+                    <image src="/icon/search.png"/>
+                    <textbox hflex="1" id="txProcurar"  ></textbox>
+                    <combobox id="cbgrupop" readonly="true" hflex="1" width="98%" onCreate="self.setSelectedIndex(0)" forward="onChanging=onChgrupo" model="${$composer.grupoPModel}">
+                        <comboitem label="${each}"/>
+                    </combobox>
+                    <!-- <textbox hflex="1" id="txPbi"  ></textbox>-->
+                    <combobox hflex="1" id="cbfaculdade" model="${$composer.listFacModel}" readonly="true" onCreate="self.setSelectedIndex(0)" width="98%" >
+                        <comboitem label="${each}"/>
+                    </combobox>
+                </hlayout>
+                <listbox sclass="semborda" id="lbUser" emptyMessage="Sem conteudo" oddRowSclass="non-odd">
+                    <listhead>
+                        <listheader label="Nome" align="center"/>
+                        <listheader label="Utilizador" align="center"/>
+                        <listheader label="Nome do Grupo" align="center"/>
+                        <listheader label="email" align="center"/>
+                        <listheader label="Ultimo acesso" align="center"/>
+                        <listheader label="operção" align="center"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem value="${each}">
+                            <listcell >
+                                <label value="${each.nome}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.utilizador}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.idGrupo.idGrupo}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.email}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.lastAccess}"/>
+                            </listcell>
+                            <listcell >
+                                <button autodisable="self" tooltiptext="Editar" hoverImage="/icon/ico_editar.png" image="/icon/ico_editar1.png" forward="onClick=onEdit"/>
+                                <button autodisable="self" tooltiptext="Apagar" hoverImage="/icon/ico_borrar.png"  image="/icon/ico_borrar1.png" if="${not each.admin}" forward="onClick=onDelete"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+                <button id="btv" sclass="mybuton small" label="Ver Mais" forward="onClick=onLoadi"/>
+            </div>
+        
+        
+            <window id="mDialogAddUser"  position="center,center" closable="false"  visible="false" border="none"
+                    width="50%" apply="esira.controller.ProfileCreateUsersController">
+                <div>
+                    <div style="margin-top: 10px; margin-left:10px;">
+                        <label id="validation" style="color:red;"/>
+                    </div>
+                        
+                    <div sclass="row-custimizedWhite criteriaPad button-blue">
+                        <grid oddRowSclass="non-odd">
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" />
+                            </columns>
+                            <rows>
+                                <row id="row1user">
+                                    <hlayout vflex="max" hflex="1" sclass="first-layout">
+                                        <radiogroup onCheck="cbfunc.disabled=!rf.selected;cbest.disabled=!re.selected;
+                                        f1.visible=f2.visible=f3.visible=f4.visible=f5.visible=f6.visible=f7.visible=f8.visible=f9.visible=ne.selected">
+                                            <div sclass="description-area" height="100%">
+                                                <vbox hflex="1" vflex="max">
+                                                    <vbox>									 
+                                                        <radio id="rf" checked="true" label="Funcionario" />   
+                                                        <combobox id="cbfunc" forward="onChanging=onCbfunc, onSelect=onSCbfunc" disabled="false" constraint=" no Empty: Seleccione um funcionario!">
+                                                            <template name="model">
+                                                                <comboitem label="${each}">
+                                                                    <attribute name="onCreate"><![CDATA[
+                                                           if(((esira.domain.Funcionario)self.getValue()).getIdFuncionario()==null){
+                                                              self.setStyle("color:blue");
+                                                           }
+                                                       ]]>
+                                                                    </attribute>
+                                                                </comboitem>
+                                                            </template>
+                                                        </combobox>
+                                                    </vbox>
+                                                    <vbox>
+                                                        <radio id="re" label="Estudante" />
+                                                        <combobox id="cbest" forward="onChanging=onCbest, onSelect=onSCbest" disabled="true" constraint=" no Empty: Seleccione um estudante!">
+                                                            <template name="model">
+                                                                <comboitem label="${each}">
+                                                                    <attribute name="onCreate"><![CDATA[
+                                                           if(((esira.domain.Estudante)self.getValue()).getIdEstudante()==null){
+                                                              self.setStyle("color:blue");
+                                                           }
+                                                       ]]>
+                                                                    </attribute>
+                                                                </comboitem>
+                                                            </template>
+                                                        </combobox>
+                                                    </vbox>
+                                                    <vbox>
+                                                        <radio id="ne" label="Adicionar novo estudante" />
+                                                        
+                                                    </vbox>
+                                                </vbox>
+                                            </div>
+                                        </radiogroup>
+                                    </hlayout>
+                                </row>
+                                <row visible="false" id="f1">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Nome Completo" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox id="txtnome" constraint=" no Empty: Insira o nome do utilizador!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row visible="false" id="f2">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Apelido"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox id="txtapelido" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row visible="false" id="f3">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Nr. Mec"/>
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <textbox id="txtnrmec"   constraint=" no Empty: palavra-passe!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row visible="false" id="f4">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Ano de Ingresso"/>
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <intbox id="tbanoing"  constraint=" no Empty: palavra-passe!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="f5" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Curso Ingresso" />
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbcurso" readonly="true" tooltiptext="Curso" model="${$composer.cursoModel}" onCreate="self.setSelectedIndex(0)"  autodrop="true" >
+                                                <comboitem label="${each.nome}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="f6" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Curso Currente" />
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbcurso2" readonly="true" tooltiptext="Curso" model="${$composer.cursocModel}" onCreate="self.setSelectedIndex(0)"  autodrop="true" >
+                                                <comboitem label="${each.nome}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="f7" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Plano Curricular:" />
+                                        </div> 
+                                        <div sclass="description-area" height="100%"> 
+                                            <combobox id="cbplanoU" width="98%" readonly="true" >
+                                                <comboitem hflex="1" label="${each.planocurricularPK.ano}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="f8" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Turma" />
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <intbox id="ibturma"  constraint=" no Empty: palavra-passe!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="f9" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Turno" />
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <combobox readonly="true" id="cbTurnoU">
+                                                <comboitem label="Laboral" value="1"/>
+                                                <comboitem label="Pos-Laboral" value="2"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <!--  //////////////////////////////// -->
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Utilizador" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox id="txtAccount" constraint=" no Empty: Insira o nome do utilizador!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="email"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox id="txtEmail" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Nova palavra-passe"/>
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <textbox id="txtPass" type="password" constraint=" no Empty: palavra-passe!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Confirmar palavra-passe" />
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <hbox>
+                                                <textbox id="txtPassConfirm" type="password" constraint=" no Empty: confirmar a palavra-passe!" c:onChange='pwdValid(this)'/>
+                                                <label style="color:red" id="pwd_val" value="" />
+                                            </hbox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Faculdade" />
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <combobox id="cbfac" model="${$composer.facModel}" constraint=" no Empty:Seleccione uma Faculdade!">
+                                                <comboitem label="${each}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <label value="Grupo de Utilizador" />
+                                    </hlayout>
+                                </row> 
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <combobox onAfterRender="self.setSelectedIndex(0)" readonly="true" id="cbgrupos" model="${$composer.grupoModel}">
+                                            <template name="model">
+                                                <comboitem label="${each.idGrupo}"/>
+                                            </template>
+                                        </combobox>
+                                        <div sclass="description-area" height="100%">
+                                            <button id="btnvag" tooltiptext="Seleccionar" forward="onClick=onBtnvagrup" label="►►" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>  
+                                    <vbox width="98%">
+                                        <listbox sizedByContent="true" sclass="mylitem4 mylitem5" oddRowSclass="non-odd" id="lbgrupo" style="overflow:auto" hflex="1" span="true" vflex="max">
+                                            <listhead sizable="true">
+                                                <listheader width="80%" ></listheader>
+                                                <listheader width="20%" align="right"></listheader>
+                                            </listhead>
+                                            <template name="model" >
+                                                <listitem value="${each}">
+                                                    <listcell>
+                                                        <label value="${each}"/> 
+                                                    </listcell>
+                                                    <listcell>
+                                                        <button tooltiptext="remover" autodisable="self" hoverImage="/icon/ico_borrar.png"  image="/icon/ico_borrar1.png">
+                                                            <attribute name="onClick"><![CDATA[
+                                                    ((ListModelList) lbgrupo.getModel()).remove(((Listitem)self.getParent().getParent()).getIndex());
+                                            new Listbox().appendChild(((Listitem)self.getParent().getParent()));                                                
+                                            // lbgrupo.removeChild();
+                                                ]]>
+                                                            </attribute>
+                                                        </button> 
+                                                    </listcell>
+                                                </listitem>
+                                            </template>		
+                                        </listbox>
+                                    </vbox>
+                                </row>
+                                <row visible="false">
+                                    <textbox id="oldnr"/><!--Antigo numero mecanografico ao editar estudante-->
+                                    <textbox id="lid"/>
+                                    <intbox id="posce"/>
+                                    <intbox id="poscf"/>
+                                </row>
+                            </rows>
+                        </grid>
+                        <div align="center">
+                            <hbox >
+                                <button autodisable="self" id="saveUser" forward="onSaveUser" label="Salvar" mold="trendy" height="20px" />
+                                <button autodisable="self" id="cancelUser" label="Cancelar" mold="trendy" height="20px" />
+                            </hbox>
+                        </div>
+                    </div>
+                </div>
+            </window>
+        </div>
+    </window>
+    <script><![CDATA[
+        function pwdValid(pwd2) {
+            var valLabel = jq("$pwd_val");
+            if (pwd2.getValue() == "") {
+                zk.Widget.$(valLabel).setValue("");
+            } else if (pwd2.getValue() != zk.Widget.$(jq("$txtPass")).getValue()) {
+                zk.Widget.$(valLabel).setValue("palavra-passe nao confirma")
+            };
+          
+        }
+    ]]></script>
+    
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+        
+        div.z-listcell-cnt{
+        border:1px;
+        }
+    </style>
+    <script type="text/javascript">
+        zk.afterMount(function() {
+        jq("$txProcurar").Watermark(".Pesquisar por nome...","gray");
+        });
+    </script>
+</zk>

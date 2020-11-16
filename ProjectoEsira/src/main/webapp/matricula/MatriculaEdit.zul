@@ -1,0 +1,1376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <!--   <zscript>
+                <![CDATA[
+                        import esira.matricula.GuardarEstudanteController;
+                        GuardarEstudanteController myBean = new GuardarEstudanteController();
+                ]]>
+    </zscript>-->
+    <window id="mDialogMatricula" apply="esira.matricula.GuardarEstudanteController2" title="Nova Matricula"
+            sizable="true" width="80%" contentStyle="overflow:auto" sclass="formNovo" mode="modal">
+        <script type="text/javascript"><![CDATA[
+		zk.afterLoad('zul.tab', function () {
+			var _xTab = {};
+			zk.override(zul.tab.Tab.prototype, _xTab, {
+				_sel: function(notify, init) {
+					if (this.desktop && !init && notify)
+						zAu.send(new zk.Event(this, 'onSwitchTab'));
+					else
+						_xTab._sel.apply(this, arguments); //call the original method
+				}
+			});
+		});
+	]]></script>
+        <div visible="false" style="margin: auto">
+            <label id="taxamultas" value="${arg.periodo}" visible="true"/>
+        </div>
+        <tabbox id="tabEstudante" width="98%"  apply=" ">
+            <tabs id="tabs">
+                <tab forward="onSwitchTab=onSwitchTab"  label="Dados Pessoais" id="tabDadosPessoais" style="color:red"/>
+                <tab forward="onSwitchTab=onSwitchTab" label="Enderecos" id="tabEnderecos"/>
+                <tab forward="onSwitchTab=onSwitchTab" label="Historial Academico" id="tabHA"/>
+                <tab forward="onSwitchTab=onSwitchTab" label="Dados Economicos" id="tabDadosEconomicos"/>
+                <tab forward="onSwitchTab=onSwitchTab" label="Documentacao" id="tabDocumentacao"/>
+                <tab forward="onSwitchTab=onSwitchTab" label="Pagamento de Taxa" id="tabPagamentoTaxaMat"/>
+            </tabs>
+            <tabpanels id="tpanel">
+                <tabpanel>
+                    <div >
+                        <grid oddRowSclass="non-odd">
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" />
+                            </columns>
+                            <rows>
+                                <row visible="false"> 
+                                    <div>
+                                        <intbox id="ibidEstudante"/>
+                                        <textbox id="nrmeca"/>
+                                        <intbox id="ibano"/>
+                                        <intbox id="litem"/>
+                                        <intbox id="idl"/>
+                                        <label id="lbf"/>
+                                        <intbox id="tipov"/>
+                                        <intbox id="idEstuMudaC"/>
+                                    </div> 
+                                </row>
+                                <row id="rwnrm">
+                                    <hlayout vflex="max" hflex="1" sclass="first-layout">
+                                        <div sclass="description-area" vflex="max" height="100%">
+                                            <label value="Número Mecanográfico:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <vbox hflex="1" vflex="max">
+                                                <checkbox id="nrm" forward="onCheck=onCheNrm" label="Gerado Automaticamente    " checked="true"/>
+                                                <textbox visible="false" xmlns:w="client" id="nrmec" width="100px">
+                                                    <attribute w:name="doKeyDown_"><![CDATA[
+			function (evt) {
+				var keyCode = event.keyCode;
+				if( keyCode == 8 // back space
+					|| keyCode == 13 // enter
+					|| keyCode == 16 // enter
+					|| (keyCode >= 35 && keyCode <= 40) // home, end, arrows
+					|| keyCode == 46) { // Delete
+					this.$doKeyDown_(evt);
+				} else if ( !evt.shiftKey &&  // only do without shift key
+					(keyCode >= 48 && keyCode <= 57)
+					|| (keyCode >= 96 && keyCode <= 105)) {// number range
+					this.$doKeyDown_(evt);
+				} else {
+					evt.stop();
+					return;
+				}
+			}
+		]]></attribute>
+                                                </textbox>
+                                            </vbox>
+                                        </div>
+                                    </hlayout>
+                                </row> 
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Nome Completo:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbnomeCompleto" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row> 
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Apelido: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbapelido" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row> 
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Curso:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbcursocurrente" onAfterRender="self.setSelectedIndex(0)"  width="200px" model="${$composer.cursocurrenteModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div> 
+                                    </hlayout>
+                                </row>
+                                <row visible="false" id ="rcurso">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Pretende mudar de Curso? *" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <radiogroup hflex="1" id="rdgCurso">
+                                                <radio id="rgNC" label="Não    " checked="true"/>
+                                                <radio id="rgSC" label="Sim     "/>
+                                            </radiogroup>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwCurso"  visible="false">
+                                    <grid >
+                                        <columns sizable="true">
+                                            <column hflex="1" vflex="1" align="left" />
+                                        </columns>
+                                        <rows>
+                                            <row>
+                                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                                    <div sclass="description-area" height="100%">
+                                                        <label value="Novo Curso:"/>
+                                                    </div>
+                                                    <div sclass="description-area" height="100%">
+                                                        <combobox hflex="1" id="cbcurso" onAfterRender="self.setSelectedIndex(0)"  width="200px" model="${$composer.cursocurrenteModel}" constraint=" no Empty: Seleccione um item!">
+                                                            <comboitem label="${each.descricao}"/>
+                                                        </combobox>
+                                                    </div> 
+                                                </hlayout>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                </row> 
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Turno:"/>
+                                        </div>
+                                        <div sclass="description-area" hflex="1" onAfterRender="self.setSelectedIndex(0)">
+                                            <combobox readonly="true" id="cbTurno">
+                                                <comboitem label="Laboral" value="1"/>
+                                                <comboitem label="Pos-Laboral" value="2"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Data de Nascimento:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <datebox hflex="1" format="dd/MM/yyyy" id="dabdataNascimento" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="sexo:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <radiogroup hflex="1" >
+                                                <radio id="rgsexo" label="Masculino    " checked="true"/>
+                                                <radio id="rgsm"  label="Feminino     "/>
+                                            </radiogroup>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Nome do Pai: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbnomePai" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Nome da Mae: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbnomeMae" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Nome do Encarregado de Educacao"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbnomeEncarregado" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Contacto do Encarregado"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbcontactoEncarregado" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Grau de Parentesco"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbgrauParentesco" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row> 
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Nacionalidade: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <combobox id="cbnacionalidade"  width="200px" onCreate="self.setSelectedIndex(121)" model="${$composer.nacionalidadeModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem hflex="1" label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                 <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Naturalidade: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <combobox id="cbnaturalidade"  width="200px" onCreate="self.setSelectedIndex(1)" model="${$composer.provinciaModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem hflex="1" label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwnaturalidade"  visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Pais, Provicia"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbnaturalidade" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Distrito: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbdistrito" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                        
+                                 <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Localidade: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tblocalidade" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>   
+                                <row visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Idioma: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbidioma" width="200px"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Estado Civil: *"/>
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbestadoCivil"  width="200px" model="${$composer.estadoCivilModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                      
+                            </rows>
+                        </grid>
+                    </div>
+                   
+                </tabpanel>
+                <tabpanel>
+                    <div>
+                        <grid oddRowSclass="non-odd">
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" align="left" />
+                            </columns>
+                            <rows>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Email: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbemail" width="200px"  constraint="/.+@.+\.[a-z]+/: Introduza um email válido"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1">
+                                        <div width="100%" sclass="description-area" height="100%">
+                                            <label style="align:center;color:blue" value="Endereço Periodo do Ano Lectivo" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Avenida: "/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbavenidaRua" width="200px"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Bairro: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbbairro" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%"> 
+                                            <label value="Provincia (Periodo Ano Lectivo): *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbprovinciaEndAL"  width="200px" model="${$composer.provinciaModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Contacto: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbtelefone" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1">
+                                        <div width="100%" sclass="description-area" height="100%">
+                                            <label style="align:center;color:blue" value="Endereço Periodo Férias:  *" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Avenida: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbavenidaRua2" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Bairro: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbbairro2" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%"> 
+                                            <label value="Provincia (Periodo Ano Lectivo): *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">  
+                                            <combobox hflex="1" id="cbprovinciaEndPF"  width="200px" model="${$composer.provinciaModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Contacto: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbtelefone2" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>       
+                            </rows>
+                        </grid>
+                    </div>
+                </tabpanel>
+                <tabpanel>
+                    <div >
+                        <grid oddRowSclass="non-odd">
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" align="left" />
+                            </columns>
+                            <rows>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Ano Conclusão Ensino Médio: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <intbox hflex="1" id="ibanoTerMedio" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Nota Admissão: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <intbox hflex="1" id="ibnotaAdmissao" width="200px" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Escola onde Frequentou o Ensino Médio: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbescola" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Escola Pais: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbescolaPais"  onCreate="self.setSelectedIndex(121)" width="200px" model="${$composer.escolaPaisModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Província onde Frequentou o Ensino Médio: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbescolaProvincia"  width="200px" model="${$composer.provinciaModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="É a sua primeria Universidade? *" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <radiogroup hflex="1" forward="onCheck=onRdgPuni" id="rdgPuni">
+                                                <radio id="rgNuni" label="Não"    />
+                                                <radio id="rgSuni" label="Sim    " checked="true"/>
+                                            </radiogroup>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwPuni"  visible="false">
+                                    <grid >
+                                        <columns sizable="true">
+                                            <column hflex="1" vflex="1" align="left" />
+                                        </columns>
+                                        <rows>
+                                             
+                                            <row>
+                                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                                    <div sclass="description-area" height="100%">
+                                                        <label  value="Nome da Primeira Universidade:"/>
+                                                    </div>
+                                                    <div sclass="description-area" height="100%">
+                                                        <textbox hflex="1" id="tbprimeiraUniversidade" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                                    </div>
+                                                </hlayout>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1">
+                                        <div sclass="description-area" height="100%">
+                                            <label style="align:center;color:blue" value="Via de Ingresso" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Ingresso: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbviaIngresso"  width="200px" model="${$composer.viaIngressoModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox> 
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwUmudanca"  visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Nome da Universidade: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbnomeUniversidade" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwTipoU"  visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Tipo de Universidade: *" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbtipouniversidade" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="Publica" value="1"/>
+                                                <comboitem label="Privada"  value="2"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwPaisUmudanca"  visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Pais da universidade: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbpaisUniversidade" onCreate="self.setSelectedIndex(121)" width="200px" model="${$composer.paisUniversidadeModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwoutraVia"  visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Especifique"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox rows="5" hflex="1" id="tboutraViaIngresso" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                
+                                            
+                                <row id="rwPexameA" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Provincia Admissao: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbprovinciaAdmissao"  width="200px" model="${$composer.provinciaModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                            </rows>
+                        </grid>
+                    </div>
+                </tabpanel>
+                <tabpanel>
+                    <div>
+                        <grid oddRowSclass="non-odd">
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" align="left" />
+                            </columns>
+                            <rows>
+                                <row>
+                                    <hlayout vflex="1" hflex="1">
+                                        <div width="100%" sclass="description-area" height="100%">
+                                            <label style="align:center;color:blue" value="Regalia Social" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                     
+                                <!--   <label value="Possui alguma Bolsa de estudos? *" />
+                                <radiogroup id="rdgbolsa">
+                                    <radio id="rgNP" label="Não    " checked="true"/>
+                                    <radio id="rgP" label="Sim     "/>
+                                </radiogroup>-->
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Bolsa: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbbolsa"  width="200px" model="${$composer.bolsaModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwdataAprovacao"  visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Data de Aprovacao: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <datebox hflex="1" id="dabdataAprovacao" width="200px" constraint=" no Empty: Seleccione uma Data!" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwdataDoador" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Entidade Doadora:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tbdoador" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row> 
+                                     
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Possui alguma profissao remunerada? *" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <radiogroup hflex="1" id="rdgProfissao">
+                                                <radio id="rgNP" label="Não    " checked="true"/>
+                                                <radio id="rgP" label="Sim     "/>
+                                            </radiogroup>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwProfissao"  visible="false">
+                                    <grid >
+                                        <columns sizable="true">
+                                            <column hflex="1" vflex="1" align="left" />
+                                        </columns>
+                                        <rows>
+                                            <row>
+                                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                                    <div sclass="description-area" height="100%">
+                                                        <label  value="Local Profissão: *"/>
+                                                    </div>
+                                                    <div sclass="description-area" height="100%">
+                                                        <textbox hflex="1" id="tbdescricaopr" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                                    </div>
+                                                </hlayout>
+                                            </row>
+                                            <row>
+                                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                                    <div sclass="description-area" height="100%">
+                                                        <label  value="Avenida *"/>
+                                                    </div>
+                                                    <div sclass="description-area" height="100%">
+                                                        <textbox hflex="1" id="tbavenidapr" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                                    </div>
+                                                </hlayout>
+                                            </row>
+                                            <row>
+                                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                                    <div sclass="description-area" height="100%">
+                                                        <label  value="Bairro"/>
+                                                    </div>
+                                                    <div sclass="description-area" height="100%">
+                                                        <textbox hflex="1" id="tbbairropr" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                                    </div>
+                                                </hlayout>
+                                            </row>
+                                            <row>
+                                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                                    <div sclass="description-area" height="100%">
+                                                        <label value="Provincia:"/>
+                                                    </div>
+                                                    <div sclass="description-area" height="100%">
+                                                        <combobox hflex="1" id="cbprovinciapr"  width="200px" model="${$composer.provinciaModel}" constraint=" no Empty: Seleccione um item!">
+                                                            <comboitem label="${each.descricao}"/>
+                                                        </combobox>
+                                                    </div>
+                                                </hlayout>
+                                            </row>
+                                            <row>
+                                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                                    <div sclass="description-area" height="100%">
+                                                        <label  value="Contacto"/>
+                                                    </div>
+                                                    <div sclass="description-area" height="100%">
+                                                        <textbox hflex="1" id="tbcontactopr" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                                    </div>
+                                                </hlayout>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Tamanho do Agregado Familiar"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <intbox hflex="1" id="ibtamAgregadoFamiliar" width="20px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                            </rows>
+                        </grid>
+                    </div>
+                </tabpanel>
+                <tabpanel>
+                    <div >
+                        <grid oddRowSclass="non-odd">
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" align="left" />
+                            </columns>
+                            <rows>
+                                <!--/////////////////////Foto -->
+                                <row>
+                                    <hlayout sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <button id="btnfotoR" label="Fotografia" image="/icon/attach.png" mold="trendy" upload="true,maxsize=50000">
+                                                <attribute name="onUpload"><![CDATA[
+                                           if(event.getMedia()==null)return;
+                                           org.zkoss.util.media.Media media = event.getMedia();
+                                           if (media instanceof org.zkoss.image.Image) {
+                                                org.zkoss.zul.Image image = new org.zkoss.zul.Image();
+                                                img.setContent(media);
+                                                //img.setWidth("170px");
+                                                //img.setHeight("170px");
+                                                //img.setParent(picss);
+                                                tbimg.value=media.getName();
+                                    lif.value=media;
+                                           } else {
+                                                Clients.showNotification("Por favor carregue uma imagem", "error", null, null, 0,true);
+                                                break;
+                                          }
+                                        ]]>
+                                                </attribute>
+                                            </button> 
+                                        </div>
+                                        <div sclass="description-area" style="background-image:url('../images/profilev.png'); width:171px; height:171px;border:1px solid #ddd;">
+                                            <textbox style="border:none;background: transparent;position: absolute" width="0px" height="0px" id="tbimg" constraint=" no Empty: Por favor, anexar uma imagem!"/>                
+                                            <listbox style="border:none;background: transparent;position: absolute" width="0px" height="0px"> 
+                                                <listitem  id="lif"/>
+                                            </listbox>
+                                            <vlayout id="picss" height="171px" width="171px" style="overflow:auto">
+                                                <image width="170px" height="170px" id="img" />
+                                            </vlayout>
+                                        </div>
+                    
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Tipo de Documento: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox hflex="1" id="cbtipo"  width="200px" model="${$composer.tipoDocModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Data de Emissao"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <datebox hflex="1" id="dabdataEmissao" format="dd/MM/yyyy" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Local de Emissao"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox hflex="1" id="tblocalEmissao" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Nr de Documento: *"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox  hflex="1" id="tbnrDocumento" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <button id="lbi" label="Fotocopia de BI (Autenticada)" image="/icon/attach.png" mold="trendy" upload="true,multiple=true,maxsize=50000">
+                                                <attribute name="onUpload"><![CDATA[
+                               if(event.getMedias()==null)return;
+                               org.zkoss.util.media.Media[] lmm = 
+                               new org.zkoss.util.media.Media[event.getMedias().length+lbimg2.getItemCount()];
+                                int t = 0;
+                               for (int i =0;i<event.getMedias().length;i++)
+                               {
+                                  org.zkoss.util.media.Media m = event.getMedias()[i];
+                                  String f = m.getFormat();
+                                  if (!(m instanceof org.zkoss.image.Image)&&(!f.equalsIgnoreCase("pdf"))&& (!f.equalsIgnoreCase("doc"))
+                                      && (!f.equalsIgnoreCase("xls"))&& (!f.equalsIgnoreCase("docx"))&& (!f.equalsIgnoreCase("xlsx"))) {
+                                         Clients.showNotification("Formato não suportado", "error", null, null, 0,true);
+                                         return;
+                                  }
+                                  lmm[t]=m;
+                                  t=t+1;
+				  for(org.zkoss.zul.Listitem li:lbimg2.getItems()){
+                                            org.zkoss.util.media.Media m2 = (org.zkoss.util.media.Media)li.getValue();
+                                     if(m2.getName().equals(m.getName())){
+                                        Clients.showNotification("Por favor, os nomes devem ser diferentes", "error", null, null, 0,true);
+                                        return;
+                                     }
+                                     if(i==0){
+                                       lmm[t]=m2;
+                                       t=t+1;
+                                     }
+                                  }
+                               }
+                               lbimg2.setModel(new ListModelList(lmm));
+                                        ]]>
+                                                </attribute>
+                                            </button> 
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox style="border:none;background: transparent;position: absolute" width="0px" height="0px" id="tbimg2" />
+                                            <!--constraint=" no Empty: Por favor anexar uma Copia do Bilhete!"/>-->
+                                            <listbox span="true" sizedByContent="true" style="overflow:auto" height="100%" id="lbimg2" >
+                                                <template name="model">
+                                                    <listitem value="${each}">
+                                                        <listcell >
+                                                            <label value="${each.name}"/>
+                                                        </listcell>
+                                                        <listcell >
+                                                            <button label="ver">
+                                                                <attribute name="onCreate"><![CDATA[
+                                                                     tbimg2.value="value";
+                                                                     ]]>
+                                                                </attribute>
+                                                                <attribute name="onClick"><![CDATA[
+                                                Window win = (Window) Executions.createComponents("/report.zul", null, null);
+                                                win.setTitle("Bilhete de Identidade");
+                                                Iframe iframe = (Iframe) win.getFellow("report");
+                                                org.zkoss.util.media.Media m =(org.zkoss.util.media.Media)((Listitem)self.getParent().getParent()).getValue();
+                                                org.zkoss.util.media.Media amedia = new org.zkoss.util.media.AMedia(m.getName(), m.getFormat(), m.getContentType(), m.getStreamData());
+                                                iframe.setContent(amedia);
+                                                ]]>
+                                                                </attribute>
+                                                            </button>
+                                                        </listcell>
+                                                        <listcell >
+                                                            <button label="apagar">
+                                                                <attribute name="onClick"><![CDATA[
+                                                lbimg2.removeChild(((Listitem)self.getParent().getParent()));
+                                                                    if(lbimg2.getItemCount()==0)tbimg2.setValue(null);
+                                                ]]>
+                                                                </attribute>
+                                                            </button>
+                                                        </listcell>
+                                                    </listitem>
+                                                </template>
+                                            </listbox>
+                                        </div>
+                    
+                                    </hlayout>
+                                </row>
+                                 
+                                <row>
+                                    <hlayout sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <button id="lbc" label="Certificado de Habilitações (Autenticada)" image="/icon/attach.png" mold="trendy" upload="true,multiple=true,maxsize=50000">
+                                                <attribute name="onUpload"><![CDATA[
+                               if(event.getMedias()==null)return;
+                               org.zkoss.util.media.Media[] lmmm = 
+                               new org.zkoss.util.media.Media[event.getMedias().length+lbimg1.getItemCount()];
+                                int t = 0;
+                               for (int i =0;i<event.getMedias().length;i++)
+                               {
+                                  org.zkoss.util.media.Media m = event.getMedias()[i];
+                                  String f = m.getFormat();
+                                  if (!(m instanceof org.zkoss.image.Image)&&(!f.equalsIgnoreCase("pdf"))&& (!f.equalsIgnoreCase("doc"))
+                                      && (!f.equalsIgnoreCase("xls"))&& (!f.equalsIgnoreCase("docx"))&& (!f.equalsIgnoreCase("xlsx"))) {
+                                         Clients.showNotification("Formato não suportado", "error", null, null, 0,true);
+                                         return;
+                                  }
+                                  lmmm[t]=m;
+                                  t=t+1;
+				  for(org.zkoss.zul.Listitem li:lbimg1.getItems()){
+                                            org.zkoss.util.media.Media m2 = (org.zkoss.util.media.Media)li.getValue();
+                                     if(m2.getName().equals(m.getName())){
+                                        Clients.showNotification("Por favor, os anexos devem ter nomes diferentes", "error", null, null, 0,true);
+                                        return;
+                                     }
+                                     if(i==0){
+                                       lmmm[t]=m2;
+                                       t=t+1;
+                                     }
+                                  }
+                               }
+                               lbimg1.setModel(new ListModelList(lmmm));
+                                        ]]>
+                                                </attribute>
+                                            </button> 
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox style="border:none;background: transparent;position: absolute" width="0px" height="0px" id="tbimg3"/> 
+                                            <!--constraint=" no Empty: Por favor anexar Certificado de Habilitações!"/>-->
+                                            <listbox span="true" sizedByContent="true" style="overflow:auto" height="100%" id="lbimg1" >
+                                                <template name="model">
+                                                    <listitem value="${each}">
+                                                        <listcell >
+                                                            <label value="${each.name}"/>
+                                                        </listcell>
+                                                        <listcell >
+                                                            <button label="ver">
+                                                                <attribute name="onCreate"><![CDATA[
+                                                                     tbimg3.value="value";
+                                                                     ]]>
+                                                                </attribute>
+                                                                <attribute name="onClick"><![CDATA[
+                                                Window win = (Window) Executions.createComponents("/report.zul", null, null);
+                                                win.setTitle("Certificado de Habilitações");
+                                                Iframe iframe = (Iframe) win.getFellow("report");
+                                                org.zkoss.util.media.Media m =(org.zkoss.util.media.Media)((Listitem)self.getParent().getParent()).getValue();
+                                                org.zkoss.util.media.Media amedia = new org.zkoss.util.media.AMedia(m.getName(), m.getFormat(), m.getContentType(), m.getStreamData());
+                                                iframe.setContent(amedia);
+                                                ]]>
+                                                                </attribute>
+                                                            </button>
+                                                        </listcell>
+                                                        <listcell >
+                                                            <button label="apagar">
+                                                                <attribute name="onClick"><![CDATA[
+                                                lbimg1.removeChild(((Listitem)self.getParent().getParent()));
+                                                                    if(lbimg1.getItemCount()==0)tbimg3.setValue(null);
+                                                ]]>
+                                                                </attribute>
+                                                            </button>
+                                                        </listcell>
+                                                    </listitem>
+                                                </template>
+                                            </listbox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                            </rows>
+                        </grid>
+                    </div>
+                </tabpanel>
+                <tabpanel>
+                    <div >
+                        <grid oddRowSclass="non-odd">
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" align="left" />
+                            </columns>
+                            <rows>
+                                <row id="rwTaxanM">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Taxa Normal de Matricula:" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbtaxaMatricula" value="" width="98%" style="color:red;"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwTaxaeM">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Taxa de Matricula para Estudante Estrangeiro:" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbtaxaMatriculaE" value="" width="98%" style="color:red;"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwTaxamulta15">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Taxa de Multa por Atraso / 2o Período:" />
+                                        </div> 
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbtaxaMulta15dias" value="" width="98%" style="color:red;"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwTaxamulta30">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Taxa de Multa por Atraso / 3o Período:" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbtaxaMulta30dias" value="" width="98%" style="color:red;"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwmulta">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Taxa de Multa (%):"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <intbox id="ibmulta" value="0"  constraint=" no Empty: Insira a Taxa de multa. ( zero, se não tem multa)!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwTaxaMuniversidade">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%"> 
+                                            <label value="Taxa de Mudanca de Universidade:" /> 
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <label id="lbtaxaMuniversidade" value="" width="98%" style="color:red;"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%"> 
+                                            <label value="Total :" />
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <label id="lbtotal" value="" width="98%"/>
+                                        </div>
+                                    </hlayout>
+                                </row> 
+                                <row>
+                                    <hlayout vflex="1" hflex="1">
+                                        <div sclass="description-area" height="100%">
+                                            <label style="align:center;color:blue" value="Comprovativo de Pagamento" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row visible="false" id="rwRU">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%"> 
+                                           
+                                    </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox style="background-color: yellow" id="txRU" rows="5" width="98%" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <button id="btrecibo" label="Recibo de depósito" image="/icon/attach.png" mold="trendy" upload="true,maxsize=50000">
+                                                <attribute name="onUpload"><![CDATA[
+                               if(event.getMedias()==null)return;
+                               entidade.Arquivo[] lm = new entidade.Arquivo[event.getMedias().length+lbimg.getItemCount()];
+                                int t = 0;
+                               for (int i =0;i<event.getMedias().length;i++)
+                               {
+                                  org.zkoss.util.media.Media m = event.getMedias()[i];
+                                  String f = m.getFormat();
+                                  if (!(m instanceof org.zkoss.image.Image)&&(!f.equalsIgnoreCase("pdf"))&& (!f.equalsIgnoreCase("doc"))
+                                      && (!f.equalsIgnoreCase("xls"))&& (!f.equalsIgnoreCase("docx"))&& (!f.equalsIgnoreCase("xlsx"))) {
+                                         Clients.showNotification("Formato não suportado", "error", null, null, 0,true);
+                                         return;
+                                  }
+                                  lm[t]=new entidade.Arquivo("",m,m.getName(), "", null, "", null);
+                                  t=t+1;
+				  for(org.zkoss.zul.Listitem li:lbimg.getItems()){
+                                            org.zkoss.util.media.Media m2 = ((entidade.Arquivo)li.getValue()).getMedia();
+                                     if(m2.getName().equals(m.getName())){
+                                        Clients.showNotification("Por favor, os nomes devem ser diferentes", "error", null, null, 0,true);
+                                        return;
+                                     }
+                                     if(i==0){
+                                       lm[t]=new entidade.Arquivo("",m2,m.getName(), "", null, "", null);
+                                       t=t+1;
+                                     }
+                                  }
+                               }
+                               lbimg.setModel(new ListModelList(lm));
+                                                    tbimg4.setFocus(true);
+                                        ]]>
+                                                </attribute>
+                                            </button> 
+                                        </div>
+                                        <div sclass="description-area" style="background-image:url('../images/profilev.png');border:1px solid #ddd;">
+                                            <textbox style="border:none;background: transparent;position: absolute" width="0px" height="0px" id="tbimg4"/> 
+                                            <!--constraint=" no Empty: Por favor anexar Comprovativo de pagamento!"/>-->
+                                            <listbox span="true"  sizedByContent="true" style="overflow:auto" height="100%" id="lbimg" >
+                                                <listhead  sizable="true">
+                                                    <listheader label="Numero de recibo" align="left"/>
+                                                    <listheader label="Banco" align="left"/>
+                                                    <listheader label="Valor do recibo" align="left"/>
+                                                    <listheader label="Data de depósito" align="left"/>
+                                                </listhead>
+                                                <template name="model">
+                                                    <listitem value="${each}">
+                                                        <listcell >
+                                                            <textbox constraint=" no Empty: Nr. de recibo!">
+                                                                <attribute name="onCreate"><![CDATA[
+                                                                    tbimg4.value="value";
+                                                                   // self.value=" ";
+                                                                    if(ibidEstudante.getValue()!=null){
+                                                                       String s = self.parent.parent.value.nrtalao;
+                                                                    if(!s.equals(""))
+                                                                     self.value = s;
+                                                                    }
+                                                                ]]>
+                                                                </attribute>
+                                                                <attribute name="onError"><![CDATA[
+                                              Clients.scrollIntoView(self);
+                                             ]]>
+                                                                </attribute>
+                                                            </textbox>
+                                                        </listcell>
+                                                        <listcell >
+                                                            <textbox constraint=" no Empty: Banco!">
+                                                                <attribute name="onCreate"><![CDATA[
+                                                                    if(ibidEstudante.getValue()!=null){
+                                                                       String s = self.parent.parent.value.banco;
+                                                                    if(!s.equals(""))
+                                                                     self.value = s;
+                                                                    }
+                                                                ]]>
+                                                                </attribute>
+                                                                <attribute name="onError"><![CDATA[
+                                              Clients.scrollIntoView(self);
+                                             ]]>
+                                                                </attribute>
+                                                            </textbox>
+                                                        </listcell>
+                                                        <listcell >
+                                                            <doublebox constraint=" no Empty: Valor de depósito!">
+                                                                <attribute name="onCreate"><![CDATA[
+                                                                    if(ibidEstudante.getValue()!=null){
+                                                                       Float s = self.parent.parent.value.valor;
+                                                                    if(s!=null)
+                                                                     self.value = s;
+                                                                    }
+                                                                ]]>
+                                                                </attribute>
+                                                                <attribute name="onError"><![CDATA[
+                                              Clients.scrollIntoView(self);
+                                             ]]>
+                                                                </attribute>
+                                                            </doublebox>
+                                                        </listcell>
+                                                        <listcell >
+                                                            <datebox format="dd/MM/yyyy" constraint=" no Empty: Data de depósito!">
+                                                                <attribute name="onCreate"><![CDATA[
+                                                                    if(ibidEstudante.getValue()!=null){
+                                                                       Date s = self.parent.parent.value.datamat;
+                                                                    if(s!=null)
+                                                                     self.value = s;
+                                                                    }
+                                                                ]]>
+                                                                </attribute>
+                                                                <attribute name="onError"><![CDATA[
+                                              Clients.scrollIntoView(self);
+                                             ]]>
+                                                                </attribute>
+                                                            </datebox>
+                                                            <label style="display: inline-block" value="${each.nome}"/> 
+                                                            <button style="display: inline-block" label="ver">
+                                                                <attribute name="onClick"><![CDATA[
+                                                Window win = (Window) Executions.createComponents("/report.zul", null, null);
+                                                win.setTitle("Recibo");
+                                                Iframe iframe = (Iframe) win.getFellow("report");
+                                                org.zkoss.util.media.Media m =((entidade.Arquivo)((Listitem)self.getParent().getParent()).getValue()).getMedia();
+                                                org.zkoss.util.media.Media amedia = new org.zkoss.util.media.AMedia(m.getName(), m.getFormat(), m.getContentType(), m.getStreamData());
+                                                iframe.setContent(amedia);
+                                                ]]>
+                                                                </attribute>
+                                                            </button>
+                                   
+                                   
+                                                            <button style="display: inline-block" label="apagar">
+                                                                <attribute name="onClick"><![CDATA[
+                                                                    
+                                                lbimg.removeChild(((Listitem)self.getParent().getParent()));
+                                                                    if(lbimg.getItemCount()==0&&lbimgII.getItemCount()==0)tbimg4.setValue(null);
+                                                ]]>
+                                                                </attribute>
+                                                            </button>
+                                                        </listcell>
+                                                    </listitem>
+                                                </template>
+                                            </listbox>
+                                        </div>
+                    
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <button id="btrecibo2" label="Outro comprovativo" image="/icon/attach.png" mold="trendy" upload="true,maxsize=50000">
+                                                <attribute name="onUpload"><![CDATA[
+                               if(event.getMedias()==null)return;
+                               entidade.Arquivo[] lm = new entidade.Arquivo[event.getMedias().length+lbimgII.getItemCount()];
+                                int t = 0;
+                               for (int i =0;i<event.getMedias().length;i++)
+                               {
+                                  org.zkoss.util.media.Media m = event.getMedias()[i];
+                                  String f = m.getFormat();
+                                  if (!(m instanceof org.zkoss.image.Image)&&(!f.equalsIgnoreCase("pdf"))&& (!f.equalsIgnoreCase("doc"))
+                                      && (!f.equalsIgnoreCase("xls"))&& (!f.equalsIgnoreCase("docx"))&& (!f.equalsIgnoreCase("xlsx"))) {
+                                         Clients.showNotification("Formato não suportado", "error", null, null, 0,true);
+                                         return;
+                                  }
+                                  lm[t]=new entidade.Arquivo("",m,m.getName());
+                                  t=t+1;
+				  for(org.zkoss.zul.Listitem li:lbimgII.getItems()){
+                                            org.zkoss.util.media.Media m2 = ((entidade.Arquivo)li.getValue()).getMedia();
+                                     if(m2.getName().equals(m.getName())){
+                                        Clients.showNotification("Por favor, os nomes devem ser diferentes", "error", null, null, 0,true);
+                                        return;
+                                     }
+                                     if(i==0){
+                                       lm[t]=new entidade.Arquivo("",m2,m.getName());
+                                       t=t+1;
+                                     }
+                                  }
+                               }
+                               lbimgII.setModel(new ListModelList(lm));
+                                                    tbimg4.setFocus(true);
+                                        ]]>
+                                                </attribute>
+                                            </button> 
+                                        </div>
+                                        <div sclass="description-area" style="background-image:url('../images/profilev.png');border:1px solid #ddd;">
+                                            <listbox span="true" style="overflow:auto" height="100%" id="lbimgII" >
+                                                <template name="model">
+                                                    <listitem value="${each}">
+                                                        <listcell style="dispaly: inline-block" >
+                                                            <label style="dispaly: inline-block" value="${each.nome}">
+                                                                <attribute name="onCreate"><![CDATA[
+                                                                    tbimg4.value="value";
+                                                                   // self.value=" ";
+                                                                ]]>
+                                                                </attribute>
+                                                            </label>
+                                                            <button label="ver">
+                                                                <attribute name="onClick"><![CDATA[
+                                                Window win = (Window) Executions.createComponents("/report.zul", null, null);
+                                                win.setTitle("Recibo");
+                                                Iframe iframe = (Iframe) win.getFellow("report");
+                                                org.zkoss.util.media.Media m =((entidade.Arquivo)((Listitem)self.getParent().getParent()).getValue()).getMedia();
+                                                org.zkoss.util.media.Media amedia = new org.zkoss.util.media.AMedia(m.getName(), m.getFormat(), m.getContentType(), m.getStreamData());
+                                                iframe.setContent(amedia);
+                                                ]]>
+                                                                </attribute>
+                                                            </button>
+                                                            <button label="apagar">
+                                                                <attribute name="onClick"><![CDATA[
+                                                                    
+                                                lbimgII.removeChild(((Listitem)self.getParent().getParent()));
+                                                                   if(lbimg.getItemCount()==0 && lbimgII.getItemCount()==0)tbimg4.setValue(null);
+                                                ]]>
+                                                                </attribute>
+                                                            </button>
+                                                        </listcell>
+                                                    </listitem>
+                                                </template>
+                                            </listbox>
+                                        </div>
+                    
+                                    </hlayout>
+                                </row>
+                                <row id="prazomat">
+                                    <hlayout 
+                                        sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Observações:"/>
+                                        </div>
+                                        <div sclass="description-area" height="98%">
+                                            <textbox id="txMot" rows="5" width="98%"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                            </rows>
+                        </grid>
+                    </div>
+                </tabpanel>
+            </tabpanels> 
+        </tabbox>
+        <button autodisable="self" id="idant" label="Anterior" sclass="mybutton button green medium" forward="onClick=onAnterior" style="margin:10px 0 0 10px;" mold="trendy" >
+            <attribute name="onCreate"><![CDATA[
+                self.setDisabled(true);
+                ]]>
+            </attribute>
+        </button>
+        <button autodisable="self" id="idprox" label="Próximo" sclass="mybutton button green medium" forward="onClick=onProximo" style="margin:10px 0 0 10px;" mold="trendy" />
+        <button autodisable="self" id="btnsave" sclass="mybutton button blue medium" forward="onClick=onSave" label="Salvar" style="margin:10px 0 0 10px;" mold="trendy" >
+            <attribute name="onCreate"><![CDATA[
+                btnsave.setDisabled(true);
+                if(((esira.domain.Users)Sessions.getCurrent().getAttribute("user")).getUestudante()){
+                   self.setLabel("Enviar");
+                } else{
+                 self.setLabel("Salvar");
+               }
+                ]]>
+            </attribute>
+        </button>
+        <button autodisable="self" id="btnCnf" sclass="mybutton button blue medium" visible="false" forward="onClick=onAceitarPedido" label="Aceitar" style="margin:10px 0 0 10px;" mold="trendy" ></button>
+        <button autodisable="self" id="btnRj" sclass="mybutton button blue medium" forward="onClick=onRejeitar" visible="false" label="Rejeitar" style="margin:10px 0 0 10px;" mold="trendy" ></button>
+        <button autodisable="self" id="btncancelar" forward="onClick=onBtncancelar" sclass="mybutton button medium" label="Cancelar" style="margin:10px 0 0 0px;" mold="trendy" />
+        <window id="winAddMotivo" apply="esira.matricula.GuardarEstudanteController" title="Rejeitar Pedido de Matricula" visible="false"
+                sizable="true"    width="50%" contentStyle="overflow:auto" sclass="formNovo" >
+            <vbox width="100%">
+                Motivo:
+                <textbox id="txMotivoR" rows="5" width="100%"  constraint=" no Empty: Por favor, preenche o campo!" />
+            </vbox>
+            <div style="margin-top:20px; margin-bottom:4px;" >
+                <hbox >
+                    <button autodisable="self" sclass="mybutton button red medium" id="btnRjt" forward="onClick=onRejeitarPedido"  label="Rejeitar"  mold="trendy" />
+                    <button autodisable="self" id="btnC" forward="onClick=onBtnC"  label="Cancelar"  mold="trendy" />
+                </hbox> 
+            </div>           
+        </window> 
+    </window>
+</zk>

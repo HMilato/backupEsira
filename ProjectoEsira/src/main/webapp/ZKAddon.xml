@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language-addon>
+	<addon-name>myaddon</addon-name>
+	<language-name>xul/html</language-name>
+	<stylesheet href="/css/login.css" type="text/css" />
+	<stylesheet href="/css/style.css" type="text/css" />
+	<stylesheet href="/css/ThemeStyle.css" type="text/css" />
+         <stylesheet href="/css/estilologin.css" type="text/css" />
+         <stylesheet href="/css/estilo.css" type="text/css" />
+</language-addon>

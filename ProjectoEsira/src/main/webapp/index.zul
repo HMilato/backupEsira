@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?page id="clientGUI" title="eSira Unilurio"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<?link rel="shortcut icon" type="image/x-icon" href="/img/icoul.png"?>
+<!--<?link rel="stylesheet" type="text/css" href="/macros/zksandbox.css.dsp?v=${desktop.webApp.build}"?>-->
+<?script type="text/javascript" src="/macros/zksandbox.js.dsp?v=${desktop.webApp.build}"?>
+
+<?component name="category" extends="button" widgetClass="zksandbox.Category" mold="default"?>
+<?component name="categorybar" extends="div" widgetClass="zksandbox.Categorybar"?>
+
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <style>
+        .z-button {
+        .fontStyle(@baseTitleFontFamily, 16px, normal, #FFFFFF);
+        text-shadow: none;
+        border: none;  
+        border-          
+        .borderRadius(0);
+        .verGradient(#5687A8, #5687A8);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+    </style> 
+    <custom-attributes org.zkoss.zul.image.preload="true" />
+    <borderlayout forward="onCreate=onSetQueueValid" id="main" apply="esira.webapp.MainLayoutComposer">
+        <north id="nort" sclass="banner" border="none" size="75px" collapsible="true">
+            <hbox >
+                <hbox id="hmenu" visible="false" hflex="min"> 
+                    <button id="bmenu" sclass="menu-button" image="icon/menu.png" forward="onClick=onAbrirMenu" />
+                </hbox>
+                <hbox hflex="min"> 
+                    <image id="mainpic" hflex="min" vflex="min" width="50%"  height="50%" src="/img/icoul.png"/>
+                    
+                    <div hflex="1"  vflex="min">
+                        <html>
+                        <![CDATA[
+                        <div id="cab" >
+			   <div style="margin-left:-1px;" class="hello">
+				eSira<span></span>
+				<div class="ola">UniLurio</div>
+			    </div>
+		        </div>
+                        ]]>
+                        </html>
+                    </div>
+                </hbox>
+                    
+                <!-- hbox com Botoes de cada categoria -->    
+                
+                <!--<categorybar zclass="demo-categorybar" id="header">-->            
+                <hbox id="categ" hflex="min" vflex="min">
+                    <div sclass="demo-categorybar" style="margin-left:35px;">
+                        <!--<combobox xmlns:w="client" w:onFocus="this.setText('sfs')"/>-->
+                        <button height="30px" width="150px" class="z-button" forEach="${main$MainLayoutComposer.categories}" orient="vertical"
+                                id="${each.id}" label="${each.label}" 
+                                forward="onClick=main.onCategorySelect"/>   
+                    
+                        <!--                     <category height="70px"  forEach="${main$MainLayoutComposer.categories}" orient="vertical"
+                                id="${each.id}" image="${each.icon}" label="${each.label}" 
+                                forward="onClick=main.onCategorySelect"/>   
+                        -->
+                        <!--</categorybar>-->      
+                    </div>        
+                </hbox>
+                <hbox  id="autent" style="align:center" apply="esira.controller.LoginController" 
+                       hflex="min" vflex="min" pack="end" align="end" >
+                    <vbox>
+                    <hbox>
+                    <image src="/img/profile.png" width="20px" height="20px"/>
+                    <label id="user" sclass="loguser" if="${not sessionScope.userCredential.anonymous}"/>
+                    </hbox>
+                    <combobox visible="false" buttonVisible="false" onClick="self.open()" forward="onAfterRender=onSFpermissao;onSelect=onSCfac"
+                                      readonly="true" id="cfac" constraint=" no Empty:Seleccione uma Faculdade!">
+                                <template name="model">
+                                    <comboitem label="${each}"/>
+                                </template>
+                    </combobox>
+                    </vbox>
+                    <window apply="esira.controller.LoginController" id="conta" mode="overlapped" position="right,top"  visible="false" width="200px" >
+                        <vbox  width="100%" height="50px" pack="center" align="center">
+                            <label id="unome" value="" style="font-size:15px;color:blue"/>
+                        </vbox> 
+                        <vbox>
+                            Tipo de Permissao:
+                            <combobox onAfterRender="self.setSelectedIndex(0)" readonly="true" id="cbgrupo" constraint=" no Empty:Seleccione um Grupo de utilizador!">
+                                <template name="model">
+                                    <comboitem label="${each.idGrupo}"/>
+                                </template>
+                            </combobox>
+                            <space />
+                            <a id="Senha" label="Mudar a Senha" href="/senha.zul"/>
+                            <space />
+                            <label id="logout" style="color:red" value="Sair do Sistema" if="${not sessionScope.userCredential.anonymous}" sclass="logout"/>
+                        </vbox>
+                        <space />
+                        <space />
+                        <div align="center">
+                            <hbox >
+                                <button autodisable="self" id="bfconta" sclass="button2 cinza small" label="Cancelar" mold="trendy" height="20px" />
+                            </hbox>
+                        </div>
+                    </window>
+                </hbox>
+            </hbox>
+        </north>
+        <west id="west" title="MENU" size="220px" flex="true"
+              minsize="210" maxsize="500" collapsible="true">
+            <!-- Lista de Item -->
+            <listbox width="70%" sclass="mylitem4 semborda" id="itemList" oddRowSclass="non-odd"
+                     itemRenderer="${main$MainLayoutComposer.itemRenderer}"
+                     model="${main$MainLayoutComposer.selectedModel}" vflex="true">
+                <custom-attributes org.zkoss.zul.listbox.rod="false"/>
+            </listbox>
+        </west>
+        <east width="opx" >
+            <window id="wmenu" mode="overlapped" visible="false" width="200px" top="35px" left="10px">
+                <vbox  width="100%" height="50px" pack="center" align="center">
+                    <label style="font-size:20px">MENU</label>
+                </vbox>
+                <listbox>
+                    <listitem label="News feed" />
+                    <listitem label="Messages" />
+                    <listitem label="Nearby" />
+                    <listitem label="Events" />
+                    <listitem label="Notes" />
+                    <listitem label="Gallery" />
+                    <listitem label="Friends" />
+                    <listitem label="Training" />
+                    <listitem label="Messages" />
+                    <listitem label="Nearby" />
+                    <listitem label="Help Center" />
+                    <listitem label="Settings" />
+                    <listitem label="News feed" />
+                    <listitem label="Messages" />
+                    <listitem label="Nearby" />
+                    <listitem label="Events" />
+                    <listitem label="Notes" />
+                    <listitem label="Gallery" />
+                    <listitem label="Friends" />
+                    <listitem label="Training" />
+                    <listitem label="Messages" />
+                    <listitem label="Nearby" />
+                    <listitem label="Help Center" />
+                    <listitem label="Settings" />
+                    <listitem label="News feed" />
+                    <listitem label="Messages" />
+                    <listitem label="Nearby" />
+                    <listitem label="Events" />
+                    <listitem label="Notes" />
+                    <listitem label="Gallery" />
+                    <listitem label="Friends" />
+                    <listitem label="Training" />
+                    <listitem label="Messages" />
+                    <listitem label="Nearby" />
+                    <listitem label="Help Center" />
+                    <listitem label="Settings" />
+                </listbox>
+            </window>
+        </east>
+        <center autoscroll="true" flex="true">
+            <include style="padding:3px;" id="xcontents" />
+        </center>
+        <south style="background-color:#DDD" size="3%" border="none">
+            <div align="center">
+                <label id="bar" value="Todos Direitos Reservados ©"/>
+            </div>
+        </south>
+    </borderlayout>
+    <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+    <style>
+        .z-west{
+    
+        <!--border: 1px solid #FFFFFF; position: absolute; overflow: hidden; background-color: white;-->
+    
+        }
+        .z-west-splt, .z-west-header{
+        background: #FFFFFF top;
+        background-image:none;
+        }
+    </style>
+</zk>

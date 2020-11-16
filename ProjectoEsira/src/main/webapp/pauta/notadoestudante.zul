@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="windowPauta" title="Pauta" border="none" apply="esira.pauta.PautaController"> 
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+    <li><a>Categoria</a></li>
+    <li><a>Criar Pauta</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <div>
+            <div align="left" sclass="row-custimized criteriaPadEiditMatr" >
+                <hbox >
+                    <button id="addPauta" label="Adicionar" mold="trendy" height="20px"/>
+                </hbox>
+            </div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <listbox id="lbPauta" sizedByContent="true" emptyMessage="Sem conteudo" span="true" autopaging="true" >
+                    <listhead width="" height="28px">
+                        <listheader id="descricao" sort="auto(lhpautaPK)" label="descricao" align="center"/>
+                        <listheader id="formula" sort="auto(lhpautaPK)" label="formula" align="center"/>
+                        <listheader id="obs" sort="auto(lhpautaPK)" label="obs" align="center"/>
+                        <listheader id="publicada" sort="auto(lhpautaPK)" label="publicada" align="center"/>
+                        <listheader id="valido" sort="auto(lhpautaPK)" label="valido" align="center"/>
+                        <listheader id="classificado" sort="auto(lhpautaPK)" label="classificado" align="center"/>
+                        <listheader id="descresumo" sort="auto(lhpautaPK)" label="descresumo" align="center"/>
+                        <listheader id="tipo" sort="auto(lhpautaPK)" label="tipo" align="center"/>
+                        <listheader id="percent" sort="auto(lhpautaPK)" label="percent" align="center"/>
+                        <listheader id="disciplina" sort="auto(lhpautaPK)" label="disciplina" align="center"/>
+                        <listheader id="docente" sort="auto(lhpautaPK)" label="docente" align="center"/>
+                        <listheader id="funcionario" sort="auto(lhpautaPK)" label="funcionario" align="center"/>
+                        <listheader label="Acção" align="center"/>                                
+                    </listhead>
+                    <template name="model">
+                        <listitem>
+                            <listcell >
+                                <label value="${each.descricao}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.formula}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.obs}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.publicada}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.valido}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.classificado}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.descresumo}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.tipo}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.percent}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.disciplina}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.docente}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.funcionario}"/>
+                            </listcell>
+                            <listcell >
+                                <button label="Editar"  forward="onClick = onEditarPauta"   orient="horizontal" mold="trendy"/>
+                                <button label="Remover"  forward="onClick = onRemoverPauta"   orient="horizontal" mold="trendy"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox> 
+                <paging id="pagPauta" detailed="true"  pageSize="8" />
+            </div>
+        </div>
+        <window id="formPauta" position="center,center" closable="false"  border="none"
+         width="50%" apply="esira.pauta.PautaController" style="margin-top:10px;" visible="false">
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <grid>
+                    <columns sizable="true">
+                        <column hflex="1" vflex="1" />
+                    </columns>
+                    <rows>
+                        <row height="0px" visible="false">
+                            <intbox id="ibano" />
+                        </row>
+                        <row height="0px" >
+                            <datebox id="dabdatap" />
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label  value="descricao"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <textbox id="tbdescricao" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label  value="formula"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <textbox id="tbformula" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label  value="obs"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <textbox id="tbobs" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">                                    
+                                    <label value="publicada?" />
+                                </div>
+                                <div sclass="description-area" height="100%">                                    
+                                    <radiogroup id="rdgpublicada">
+                                        <radio id="rpnpublicada" label="Não    " checked="true"/>
+                                        <radio id="rpspublicada" label="Sim     "/>
+                                    </radiogroup>
+                                </div>
+                            </hlayout>                                
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">                                    
+                                    <label value="classificado?" />
+                                </div>
+                                <div sclass="description-area" height="100%">                                    
+                                    <radiogroup id="rdgclassificado">
+                                        <radio id="rpnclassificado" label="Não    " checked="true"/>
+                                        <radio id="rpsclassificado" label="Sim     "/>
+                                    </radiogroup>
+                                </div>
+                            </hlayout>                                
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label  value="descresumo"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <textbox id="tbdescresumo" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label  value="percent"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <intbox id="ibpercent" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="disciplina:"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <combobox id="cbdisciplina"  width="200px" model="${$composer.disciplinaModel}" constraint=" no Empty: Seleccione um item!">
+                                        <comboitem label="${each}"/>
+                                    </combobox>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="docente:"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <combobox id="cbdocente"  width="200px" model="${$composer.docenteModel}" constraint=" no Empty: Seleccione um item!">
+                                        <comboitem label="${each}"/>
+                                    </combobox>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="funcionario:"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <combobox id="cbfuncionario"  width="200px" model="${$composer.funcionarioModel}" constraint=" no Empty: Seleccione um item!">
+                                        <comboitem label="${each}"/>
+                                    </combobox>
+                                </div>
+                            </hlayout>
+                        </row>
+                    </rows>
+                </grid>
+                <div align="center">
+                    <hbox >
+                        <button  id="savePauta" label="Salvar" forward="onClick = onSavePauta"  mold="trendy" height="20px" />
+                        <button id="cancelPauta" label="Cancelar" mold="trendy" height="20px" />
+                    </hbox>
+                </div>
+            </div>
+        </window> 
+    </window>
+    <style>
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+    </style>
+    <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+    <script type="text/javascript">
+        zk.afterMount(function() {});
+    </script>
+</zk>

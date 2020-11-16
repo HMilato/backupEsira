@@ -1,0 +1,344 @@
+/* Start: Action Images- Auditlog
+---------------------------------------------- */
+.fImageAudit {
+	width: 25px;
+	background-image: url('/images/AuditLog.jpg');
+	background-repeat: no-repeat;
+	border: 0 none;
+	cursor: pointer;
+}
+
+/* Start: Action Images- system
+---------------------------------------------- */
+.fImageSystem {
+	width: 25px;
+	background-image: url('/images/QuestionmarkButton-16x16.png');
+	background-repeat: no-repeat;
+	border: 0 none;
+	cursor: help;
+}
+
+/* Start: Action Images- Filter
+---------------------------------------------- */
+.fImageFilter {
+	width: 15px;
+	background-image: url('/images/Filter-16x16.png');
+	background-repeat: no-repeat;
+	border: 0 none;
+	padding-left: 10px;
+}
+
+/* Start: Action Images- Edit
+---------------------------------------------- */
+.fimageedit {
+	width: 25px;
+	background-image: url('/images/EditRecord.png');
+	background-repeat: no-repeat;
+	border: 0 none;
+	cursor: pointer;
+}
+
+/* End: Action Images - Edit
+---------------------------------------------- */
+
+/* Start: Action Images- Delete
+---------------------------------------------- */
+.fimageDelete {
+	width: 25px;
+	background-image: url('/images/DeleteRecord.png');
+	background-repeat: no-repeat;
+	border: 0 none;
+	cursor: pointer;
+}
+
+.fimageView {
+	width: 25px;
+	background-image: url('/images/view.png');
+	background-repeat: no-repeat;
+	border: 0 none;
+	cursor: pointer;
+}
+
+/* End: Action Images - Delete
+---------------------------------------------- */
+
+/* Start: Action Images- Active
+---------------------------------------------- */
+.fimageActive {
+	width: 25px;
+	background-image: url('/images/ActiveRecord.png');
+	background-repeat: no-repeat;
+	border: 0 none;
+	cursor: pointer;
+}
+
+/* End: Action Images - Active
+---------------------------------------------- */
+
+/* Start: Action Images- Inactive
+---------------------------------------------- */
+.fimageInactive {
+	width: 25px;
+	background-image: url('/images/DeactivateRecord.png');
+	background-repeat: no-repeat;
+	border: 0 none;
+	cursor: pointer;
+}
+
+/* End: Action Images - InActive
+---------------------------------------------- */
+
+/* ----------------------------------------------------------------------------------------------------------------------- */
+/* Listbox CSS Customization
+/* ----------------------------------------------------------------------------------------------------------------------- */
+.mylist.z-listbox {
+	background-image: none;
+}
+
+/* Header Column forecolor Color */
+.mylist .z-listheader-cnt {
+	color: white;
+}
+
+/* odd Rows Color */
+.mylist .z-listitem.z-listbox-odd {
+	background-image: none;
+	background-color: transparent;
+}
+
+/* Ascending sort order image*/
+.mylist .z-listheader-sort-asc .z-listheader-sort-img {
+	background-image: none;
+	background-image: url("/images/sort_up_24.png");
+}
+
+/* Descending sort order image*/
+.mylist .z-listheader-sort-dsc .z-listheader-sort-img {
+	background-image: none;
+	background-image: url("/images/sort_down_24.png");
+}
+
+.mylist .z-listheader-sort-dsc .z-listheader-sort-img {
+	background-position: 0 -1px;
+}
+
+.mylist .z-listheader-sort .z-listheader-sort-img {
+	height: 20px;
+	margin-top: -5px;
+	width: 28px;
+}
+
+.mylist .z-listheader-sort-img {
+	float: left;
+	font-size: 0;
+	left: 90%;
+	margin-left: auto;
+	margin-right: auto;
+	position: absolute;
+	margin-left: auto;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------- */
+/* BorderLayout Images
+/* ----------------------------------------------------------------------------------------------------------------------- */
+.fimgtopbkg {
+	background-repeat: repeat-x;
+	height: 81px;
+	width: 100%;
+}
+
+.fimgsidetop {
+	background-position: center bottom;
+	background-repeat: no-repeat;
+	height: 39px;
+	width: 300px;
+}
+
+.fimgsidemid {
+	background-repeat: repeat-x;
+	height: 42px;
+	width: 88px;
+}
+
+.fimgsidebgk {
+	height: 100%;
+	width: 88px;
+}
+
+.fimgbottom {
+	background-repeat: repeat;
+	height: 21px;
+	width: 100%;
+}
+/* ----------------------------------------------------------------------------------------------------------------------- */
+/* Panel
+/* ----------------------------------------------------------------------------------------------------------------------- */
+.sectionPanel {
+	padding-left: 0px;
+}
+
+.sectionPanel .z-panelchildren {
+	margin-left: -4px;
+}
+/* ----------------------------------------------------------------------------------------------------------------------- */
+/* Label CSS Customization
+/* ----------------------------------------------------------------------------------------------------------------------- */
+.TitleWBold.z-label {
+	font-weight: bolder;
+}
+
+.TitleBold.z-label {
+	font-weight: bolder;
+}
+
+.sectionTitleLabel.z-label {
+	font-size: 14px;
+	font-weight: bolder;
+}
+
+.flabel.z-label {
+	font-size: 13px;
+	font-weight: bold;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------- */
+/* Vertical Grid
+/* ----------------------------------------------------------------------------------------------------------------------- */
+.vgrid tr.z-row
+		td.z-row-inner,tr.z-row,div.z-grid-body div.z-cell,div.z-grid {
+	border: none;
+	overflow: hidden;
+	zoom: 1;
+	background: white;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: none;
+}
+
+.vgrid .z-grid-odd .vgrid .z-row-inner,.vgrid .z-grid-odd .z-cell {
+	background-color: transparent;
+	border-bottom: 1px solid transparent;
+	border-left: 1px solid transparent;
+	border-top: 1px solid transparent;
+}
+
+.vgrid .z-grid-odd .vgrid.z-row-inner,.vgrid.z-grid-odd .z-cell,.vgrid.z-grid-odd
+	{
+	background: none repeat scroll 0 0 transparent;
+}
+
+.vgrid tr.z-row td.z-row-inner,.vgrid tr.z-row .z-cell {
+	line-height: 12px;
+}
+
+.vgrid tr.z-grid-odd td.z-row-inner,.vgrid tr.z-grid-odd .z-cell,.vgrid tr.z-grid-odd
+	{
+	background: white
+}
+
+.vgrid tr.z-row td.z-row-inner,.vgrid tr.z-row .z-cell {
+	background: white;
+	border-top: none;
+}
+
+/* End: Form Grid 
+---------------------------------------------- */
+
+/* ----------------------------------------------------------------------------------------------------------------------- */
+/* Div(s)
+/* ----------------------------------------------------------------------------------------------------------------------- */
+.sectionTitle {
+	float: left;
+	padding-left: 2px;
+}
+
+.sectionTitleBar {
+	margin-left: 20px;
+	padding: 2px 10px;
+}
+
+.sectionSeperator {
+	margin-bottom: 18px;
+	padding-bottom: 0.25em;
+	margin-left: 1px;
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------- */
+/* Button
+/* ----------------------------------------------------------------------------------------------------------------------- */
+.mybutton.z-button .z-button-cm {
+	background-image: none;
+	color: white;
+	font-weight: bolder;
+}
+
+.mybutton.z-button .z-button-tm,.z-button .z-button-bm {
+	background-image: none;
+}
+
+.mybutton.z-button .z-button-cl,.z-button .z-button-cr {
+	background-image: none;
+}
+
+.mybutton.z-button .z-button-tl {
+	background-image: none;
+}
+
+.mybutton.z-button .z-button-bl {
+	background-image: none;
+}
+
+.mybutton.z-button .z-button-tr {
+	background-image: none;
+}
+
+.mybutton.z-button .z-button-br {
+	background-image: none;
+}
+
+.button {
+	display: inline-block;
+	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+	*display: inline;
+	vertical-align: baseline;
+	margin: 0 2px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	font: 14px/100% Arial, Helvetica, sans-serif;
+	padding: .5em 2em .55em;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
+	-webkit-border-radius: .5em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+}
+
+.button:hover {
+	text-decoration: none;
+}
+
+.button:active {
+	position: relative;
+	top: 1px;
+}
+
+.bigrounded {
+	-webkit-border-radius: 2em;
+	-moz-border-radius: 2em;
+	border-radius: 2em;
+}
+
+.medium {
+	font-size: 12px;
+	padding: .4em 1.5em .42em;
+}
+
+.small {
+	font-size: 11px;
+	padding: .2em 1em .275em;
+}

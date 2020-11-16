@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window apply="esira.matricula.ListaAdmissaoController" forward="onCreate=onSetQueueLadm" id="winmain">
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+    <li><a href="">Home</a></li>
+    <li><a href="" class="current">Estudantes Admitidos Para o Ano Lectivo Corrente</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <label id="massage" style="color:red"/>
+        <hbox >
+            <div>
+                 <button  id="uploadInfoButton"  image="/icon/excel.png"  autodisable="self" label="Importar" forward="onClick=onClickApearInfo" mold="trendy" />
+                 <button autodisable="self" id="exportBtn" label="Exportar" image="/icon/ico-excel.png" forward="onClick=onExcelExport"/>
+                 <button autodisable="self" id="addList" forward="onClick=onAddList" label="Adicionar Admitido" mold="trendy" />
+                 <button autodisable="self" tooltiptext="Apagar em massa" hoverImage="/icon/ico_borrar.png"  image="/icon/ico_borrar1.png"  forward="onEliminarLista"  mold="trendy" />
+            </div>
+        </hbox>
+        
+        
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <hlayout id="ahead">
+                <image src="/icon/search.png"/>
+                <textbox hflex="1" id="txProcurar"  ></textbox>
+                <textbox hflex="1" id="txPbi"  ></textbox>
+                <intbox hflex="1" width="98%" tooltiptext="Ano Lectivo" id="ibProcAno" />
+                <combobox id="cbfaculdade" forward="onSelect=onSelectcbfaculdadeCurso" visible="false"  hflex="1" width="98%" readonly="true">
+                    <attribute name="onAfterRender"><![CDATA[
+                            if((self.getModel()!=null) && self.getModel().getSize()>0){
+                               self.setSelectedIndex(0);
+                            }                           
+                        ]]></attribute>
+                    <comboitem label="${each}"/>
+                </combobox>
+                <combobox hflex="1" id="cbcurso" readonly="true"  model="${$composer.listCursoPModel}">
+                    <comboitem label="${each}"/>
+                </combobox>
+            </hlayout>
+            <listbox  id="lbplm" sclass="semborda" emptyMessage="Sem conteudo" span="true" onSelect=""  >
+                <listhead>
+                    <listheader label="Numero" align="left"/>
+                    <listheader label="Nota de admissao" align="left"/>
+                    <listheader label="Nome Completo" align="left"/>
+                    <listheader label="Curso" align="left"/>
+                     <listheader label="Turno" align="left"/>
+                    <listheader label="Cidade" align="left"/>
+                    <listheader label="Contacto primario " align="left"/>
+                    <listheader label="Operação" align="center"/>
+                </listhead>
+                <template name="model">
+                    <listitem value="${each}">
+                        <listcell >
+                            <label value="${each.numero}" />
+                        </listcell>
+                        <listcell >
+                            <label value="${each.notaAdmissao}" />
+                        </listcell>
+                        <listcell >
+                            <label value="${each.nome}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.curso.descricao}"/>
+                        </listcell>
+                         <listcell >
+                             <attribute name="onCreate"><![CDATA[
+                                esira.domain.Listaadmissao la = (esira.domain.Listaadmissao)self.getParent().getValue();
+                                      Label l = new Label();
+                                 if(la.getTurno()==1){
+                                    l.setValue("Laboral");                  
+                                }else{  
+                                      l.setValue("Pos Laboral"); 
+                                }
+                                l.setParent(self);           
+                        ]]></attribute> 
+                        </listcell>
+                        <listcell >
+                            <label value="${each.cidade}"/>
+                        </listcell>
+                        
+                        
+                         <listcell >
+                            <label value="${each.contacto}"/>
+                        </listcell>
+                        
+                        <listcell >
+                            <button autodisable="self" sclass="button2 cinza medium"  visible="${not each.matriculado}" label="Matricular"  forward="onClick = onMatricular"   orient="horizontal" mold="trendy"/>
+                            <button autodisable="self" tooltiptext="Editar" visible="${each.idEstudante == null}" hoverImage="/icon/ico_editar.png" image="/icon/ico_editar1.png" forward="onClick = onEdit"   orient="horizontal" mold="trendy"/>
+                            <button autodisable="self" tooltiptext="Apagar" hoverImage="/icon/ico_borrar.png"  image="/icon/ico_borrar1.png" forward="onClick = onEliminar"   orient="horizontal" mold="trendy"/>                           
+                        </listcell>
+                    </listitem>
+                </template>
+            </listbox>
+            <button id="btv" sclass="mybuton small" label="Ver Mais" forward="onClick=onLoadi"/>
+            <!--  <hbox width="100%" style="overflow:auto;  position:relative;">
+                <paging id="pagListaad" detailed="true" hflex="min" pageSize="8" />
+            </hbox>-->
+        </div>
+       
+        
+        <window id="mDialogAddLista"  position="center,center" closable="false"  visible="false" border="none"
+                width="50%" apply="esira.matricula.ListaAdmissaoController">
+        
+            <div height="20px">
+                <html>
+                        <![CDATA[
+                        <ul id="breadcrumbs-one">
+
+                            <li><a>Inserir Estudante Admitido</a></li>
+                        </ul>
+                          ]]>
+                </html>
+            </div>
+                
+            <div style="margin-top: 30px; margin-left:10px;">
+                <label id="validation" style="color:red; font-size:10px;"/>
+            </div>
+            <div width="98%" sclass="row-custimizedWhite criteriaPad button-blue">
+                   
+                <grid>
+                    <columns sizable="true">
+                        <column hflex="1" vflex="1" />
+                    </columns>
+                    <rows>
+                        <row visible="false">
+                            <div>
+                                <intbox id="ibidaluno"/>
+                                <intbox id="litem"/>
+                            </div>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Tipo de Admitido" style="margin-right:20px"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <combobox id="cbTipoAdm" value="Selecione..." >
+                                        <comboitem id="cbIadm" label="Admitido" />
+                                        <comboitem id="cbIrep" label="Repescado"/>
+                                    </combobox>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Curso" style="margin-right:20px"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <combobox id="cbCurso" model="${$composer.listCursoModel}" value="selecione..."  >
+                                        <comboitem label="${each.descricao}" />
+                                    </combobox> 
+                                </div>
+                            </hlayout>
+
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Ano de  Ingresso" style="margin-right:20px"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <intbox id="ibanoi" width="250px" />
+                                </div>
+                            </hlayout>
+                        </row>
+                         <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Turno" style="margin-right:20px"/>
+                                </div>
+                                <div sclass="description-area" height="100" >
+                                    <combobox readonly="true" onAfterRender="self.setSelectedIndex(0)" id="cbTurnoA">
+                                        <comboitem label="Laboral" value="1"/>
+                                        <comboitem label="Pos-Laboral" value="2"/>
+                                    </combobox>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Numero" style="margin-right:20px"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <textbox id="txNumero" width="250px" />
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Nome Completo" style="margin-right:20px"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <textbox id="txNome" width="250px" />
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row visible="false">
+                            <label value="idaluno" style="margin-right:20px"/>
+                            <textbox id="txidaluno" width="250px" />
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Numero de BI/Passaporte" style="margin-right:20px" />
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <textbox id="txBI" width="250px" />
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Contacto" style="margin-right:20px" />
+                                </div> 
+                                <div sclass="description-area" height="100%">
+                                    <textbox id="txCont" width="250px" />
+                                </div>
+                            </hlayout>
+                        </row>
+                    </rows>  
+                </grid> 
+            </div>
+       
+            <div align="center">
+                <hbox >
+                    <button autodisable="self" sclass="mybutton button blue medium" id="guardarLista" forward="onClick=onGuardarLista" label="Guardar" mold="trendy" height="20px" />
+                    <button autodisable="self" sclass="mybutton button medium" id="cancelarLista" forward="onClick=onCancelarLista" label="Cancelar" mold="trendy" height="20px" />
+                </hbox>
+            </div>
+      
+        </window>
+        <window id="formApagarLista" border="none" visible="false" apply="esira.matricula.ListaAdmissaoController"
+                width="50%" contentStyle="overflow:auto" sclass="formNovo" >
+             
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <grid>
+                    <columns sizable="true">
+                        <column hflex="1" vflex="1" align="left" />
+                    </columns>
+                    <rows>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                    <label style="color:blue" value="Elimine toda lista de um determinado ano" />
+                            </hlayout>
+                        </row>
+                     
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100">
+                                    <label value="Ano de Ingresso" />
+                                </div>
+                                <div sclass="description-area" height="100">
+                                    <intbox id="anoeliminar" constraint=" no Empty: Introduza o Ano!"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                    </rows>
+                </grid>
+                <div align="center">
+                    <hbox >
+                        <button autodisable="self" sclass="mybutton button blue medium"  forward="onClick=onBtnApagar" label="Aceitar"  mold="trendy" />
+                        <button autodisable="self" sclass="mybutton button medium"   forward="onClick=onBtnCanc" label="Cancelar"  mold="trendy" />
+                    </hbox>
+                </div>
+                            
+            </div>
+                      
+        </window> 
+    </window>
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+        
+        div.z-listcell-cnt{
+        border:1px;
+        }
+    </style>
+    <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+    <script type="text/javascript">
+        zk.afterMount(function() {
+        jq("$txProcurar").Watermark(".Pesquisar por nome...","gray");
+        jq("$txPbi").Watermark(".Pesquisar por nr. de BI...","gray");
+        jq("$cbcurso").find("input").Watermark("Seleccione um Curso","gray");
+        jq("$ibProcAno").Watermark(".Ano Lectivo...","gray");
+        });
+    </script>
+</zk>

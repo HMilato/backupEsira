@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?page id="utiliz" title="Configuracao de Senha"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk>
+   <hbox self="@define(content)" vflex="1" hflex="1" align="center"
+          pack="center" spacing="20px" style="background:#8e8e8e">
+      
+     <vlayout >
+            <window id="senhaWin"
+                    apply="esira.controller.LoginController"
+                     sclass="z-window-embedded-cnt" title="ALTERAR A SENHA:" width="400px" height="300px">
+                <vbox hflex="min" sclass="button-blue" >
+                    Antiga senha :
+                    <textbox id="senhaA" type="password"
+                                         width="350px" height="30px"/>
+                    Nova senha :
+                    <textbox id="senhaN" type="password"
+                                         width="350px" height="30px"/>
+                    Confirmar a nova senha :
+                    <textbox id="senhaC" type="password"
+                                         width="350px" height="30px"/>
+                    <label id="msg" sclass="warn" value="&#160;" />
+                     <hbox>
+                        <button id="aceitar" label="Aceitar"  mold="trendy"  width="100px" />
+                        <button id="cancelar" label="Cancelar"  mold="trendy"  width="100px" />
+                     </hbox>
+                </vbox>
+            </window>
+            <!--  (use account='zkoss' and password='1234' to login) -->
+        </vlayout>
+   </hbox>
+</zk>

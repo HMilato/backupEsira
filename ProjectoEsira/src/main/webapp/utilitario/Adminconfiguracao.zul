@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns:c="client">
+    <window id="winPermissao" forward="onCreate=onCreateWnd" border="none" apply="esira.controller.PermissaoController">
+        <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+    <li><a>Administracao</a></li>
+    <li><a>Configuracoes de administracao</a></li>
+</ul>
+                ]]>
+        </html>
+        <div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <grid>
+                    <columns sizable="true">
+                        <column hflex="1" vflex="1" align="left" />
+                    </columns>
+                    <rows>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100">
+                                    <label  value="Testar envio de email"/>
+                                </div>
+                                <div sclass="description-area" height="100">
+                                    <hbox >
+                                        <textbox id="tbemail" hflex="1" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        <button autodisable="self" id="savePerm" forward="onClick=onTestEmail" label="Testar" mold="trendy" height="20px" />
+                                    </hbox> 
+                                </div> 
+                            </hlayout>
+                        </row>
+                         <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100">
+                                    <label  value="Adicionar estudantes apartir da lista de novos ingressos"/>
+                                </div>
+                                <div sclass="description-area" height="100">
+                                    <hbox >
+                                        <button autodisable="self" forward="onClick=onAddEstudante" label="Adicionar" mold="trendy" height="20px" />
+                                    </hbox> 
+                                </div> 
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100">
+                                    <label  value="Actualizar o nivel de todos estudantes"/>
+                                </div>
+                                <div sclass="description-area" height="100">
+                                    <hbox >
+                                        <button autodisable="self" forward="onClick=onRefreshNivelEst" label="Avancar" mold="trendy" height="20px" />
+                                    </hbox> 
+                                </div> 
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100">
+                                    <label  value="Atribuir novo nivel aos aprovados"/>
+                                </div>
+                                <div sclass="description-area" height="100">
+                                    <hbox >
+                                        <button autodisable="self" forward="onClick=onRefreshNivelEst2" label="Avancar" mold="trendy" height="20px" />
+                                    </hbox> 
+                                </div> 
+                            </hlayout>
+                        </row>
+                         <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100">
+                                    <label  value="Actualizae nr Estudante"/>
+                                </div>
+                                <div sclass="description-area" height="100">
+                                    <hbox >
+                                        <button autodisable="self" forward="onClick=onRefreshNrEst" label="Avancar" mold="trendy" height="20px" />
+                                    </hbox> 
+                                </div> 
+                            </hlayout>
+                        </row>
+                        
+                            <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100">
+                                    <label  value="Encriptar Senha de todos usuarios"/>
+                                </div>
+                                <div sclass="description-area" height="100">
+                                    <hbox >
+                                        <button autodisable="self" forward="onClick=onEncriptarSenha" label="Avancar" mold="trendy" height="20px" />
+                                    </hbox> 
+                                </div> 
+                            </hlayout>
+                        </row>
+                        
+                        
+                    </rows>
+                </grid>
+                <div align="center">
+                            
+                                
+                          
+                </div>
+            </div>
+        </div>
+    </window>
+    
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+        
+        div.z-listcell-cnt{
+        border:1px;
+        }
+    </style>
+</zk>

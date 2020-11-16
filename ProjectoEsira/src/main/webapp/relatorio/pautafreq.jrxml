@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6c55a67e-3d43-49f1-9a46-c17aa3507610">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="21"/>
+	<parameter name="img" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="curso" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="discip" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anol" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="localiz" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fac" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="inscricao" class="esira.domain.Inscricao">
+		<fieldDescription><![CDATA[inscricao]]></fieldDescription>
+	</field>
+	<field name="notaFinal" class="java.lang.Float">
+		<fieldDescription><![CDATA[notaFinal]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="167" splitType="Stretch">
+			<image>
+				<reportElement x="121" y="0" width="75" height="50" uuid="d7c2ec40-484c-4020-b904-8189ddf69049"/>
+				<imageExpression><![CDATA[$P{img}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="90" y="50" width="122" height="20" uuid="2ee9632a-155f-469c-bce0-0d7a3d8d62ad"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+					<paragraph lineSpacing="Proportional"/>
+				</textElement>
+				<text><![CDATA[Universidade Lurio]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="79" y="64" width="147" height="20" uuid="c8b1297f-aef2-4544-ab45-fd37252894de"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{fac}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="94" width="36" height="20" uuid="98fe4b6f-3b89-4f9a-b284-df817a354953"/>
+				<textElement>
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Curso:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="110" width="57" height="20" uuid="ebd33f03-3549-40ec-827a-2ef711f52005"/>
+				<textElement>
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Disciplina:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="36" y="94" width="186" height="16" uuid="435e30c4-1671-406b-a63e-bd6ae4871dc9"/>
+				<textElement>
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{curso}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="57" y="110" width="186" height="20" uuid="27f3e844-106f-4994-9135-4cbbbed1970a"/>
+				<textElement>
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{discip}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="130" width="66" height="20" uuid="38d34143-1f46-429e-bcd0-8755feebf126"/>
+				<textElement>
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ano Lectivo:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="66" y="130" width="70" height="20" uuid="8d31669a-c36b-401c-8ea0-29c58a51a4cc"/>
+				<textElement>
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{anol}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="146" width="66" height="20" uuid="2638b6ad-86df-4793-9e7d-d8c844ba6a67"/>
+				<textElement>
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Docente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="382" y="14" width="125" height="16" uuid="1a8d5c2b-3a57-4901-b02d-aeb829d8e5f2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Director da Faculdade]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement positionType="Float" isPrintRepeatedValues="false" mode="Opaque" x="314" y="51" width="231" height="16" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF" uuid="b77f88c3-1ec5-4511-81e6-d688c0db2dae">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<box topPadding="0" bottomPadding="2"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{director}+", "+$P{grauDirector}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="382" y="49" width="127" height="1" uuid="8201a897-787b-4147-bd70-f7bd6d30c6b4"/>
+			</line>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="83" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="107" height="83" backcolor="#CCCCCC" uuid="b8ba8d1b-16a9-4925-896f-3431891a4b79"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.75"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="107" y="0" width="152" height="83" backcolor="#CCCCCC" uuid="253c7490-1bcf-40d7-ba54-a3470aed6cae"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome dos Estudantes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="0" width="123" height="29" uuid="896b82f9-7dd9-439c-b88d-43d8c3f2ab3d"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<text><![CDATA[Avaliação de		Frequência]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="29" width="24" height="54" uuid="4e0959c2-5e3e-40bf-bbe1-c66d82c962f0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left"/>
+				<text><![CDATA[Média]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="283" y="29" width="99" height="54" uuid="80861380-071d-4ec5-81db-47ad75430063"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Resultado 		Qualitativo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="382" y="0" width="58" height="29" uuid="de9ad05a-2afa-4c71-bdf6-b1811d81f216"/>
+				<textElement textAlignment="Center" verticalAlignment="Top"/>
+				<text><![CDATA[Avaliação do 		Exame]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="382" y="29" width="27" height="54" uuid="8c4d81eb-e1c6-4c13-989f-81d890f7c302"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left"/>
+				<text><![CDATA[Final]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="409" y="29" width="31" height="54" uuid="5b8a496f-68f6-4ef6-9303-7a6619736f35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left"/>
+				<text><![CDATA[Recorrênc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="0" width="32" height="83" uuid="90e107dc-328b-4633-b9a1-982e1d1a6056"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left"/>
+				<text><![CDATA[Avaliação Final]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="472" y="0" width="83" height="83" uuid="8855b5ab-1b1d-4c9d-93b7-7e7a7150a8b9"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Resultado Final qualitativo]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="107" height="20" uuid="60a62a05-e030-47ff-9164-2caac72ae33b"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inscricao}.getIdEstudante().getNrEstudante()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="107" y="0" width="152" height="20" uuid="fc5efecc-4da6-404b-826c-4b37523144bf"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inscricao}.getIdEstudante().getNomeCompleto()]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

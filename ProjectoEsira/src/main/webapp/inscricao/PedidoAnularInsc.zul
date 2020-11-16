@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window forward="onCreate=onSetQueueA" id="winPAnularInsc" apply="esira.inscricao.PedidoAnulacaoController">
+        <div >
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+                    <li><a >Home</a></li>
+                    <li><a  class="current">Pedidos para Anular Inscrição</a></li>
+                </ul>
+                ]]>
+            </html>
+        </div>
+        <toolbar >
+            <hbox >
+                <cell >
+                    <hbox >
+                        <div visible="false">
+                            <textbox id="txx"/>
+                        </div>                    
+                    </hbox>                
+                </cell>
+            </hbox>
+        </toolbar > 
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <listbox  id="lbpanularInsc" sizedByContent="true" emptyMessage="Sem conteudo" span="true" model="${$composer.pedidoModel}" >
+                <listhead hflex="1">
+                    <listheader hflex="min" align="center" label="Nome"  />
+                    <listheader hflex="min" align="center" label="NrMec"  />
+                    <listheader hflex="min" align="center" label="Curso"/>
+                    <listheader hflex="min" align="center" label="Nivel"   />
+                    <listheader hflex="min" align="center" label="Data Insc"   />
+                    <listheader hflex="min" label="Operação" align="center"/>
+                </listhead>
+                <template name="model">
+                    <listitem value="${each}">
+                        <listcell >
+                            <label value="${each.idEstudante}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.idEstudante.nrEstudante}" />
+                        </listcell>
+                        <listcell >
+                            <label value="${each.idEstudante.cursocurrente.abreviatura}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.idEstudante.nivelFrequencia}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.dataanulacao}"/>
+                        </listcell>
+                        <listcell >
+                            <button autodisable="self" label="Validar"  forward="onClick = onValidar"   orient="horizontal" mold="trendy"/>
+                        </listcell>
+                    </listitem>
+                </template>
+            </listbox>
+        </div>
+          
+        <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+        <script type="text/javascript">
+            zk.afterMount(function() {
+            jq("$txAno").Watermark("Ano","gray");
+            jq("$txProcurar").Watermark("Pesquisar por nome...","gray");
+            jq("$txProcurarNrmec").Watermark("Pesquisar por Numero...","gray");
+        
+            });
+        </script>
+        <window id="winVAnulacao" title="Validar Anulação de Inscrição" visible="false" apply="esira.inscricao.PedidoAnulacaoController"
+                width="80%" contentStyle="overflow:auto" sclass="formNovo" >
+            <grid>
+                <columns>
+                    <column width="35%"/>
+                    <column width="80%"/>
+                    <column />
+                </columns>
+                <rows>
+                    <row visible="false">
+                        <label  id="lbano" value="${arg.ano}" style="color:#dc291e"/>
+                        <intbox id="idlitem"/>
+                        <intbox id="idest"/>
+                        <intbox id="idanul"/>
+                    </row>
+                    <row>
+                        <label id="erroValidacao" style="color:#dc291e"/>
+                    </row>
+                    <row> Numero Mecanográfico:
+                        <label id="lbNumero" style="color:#dc291e" value="${arg.nrMec}"/>
+                    </row>
+                    <row> Nome Completo:
+                        <label id="lbNome" value="${arg.nome}" style="color:#dc291e"/>
+                    </row>
+                    <row> Motivo: 
+                        <textbox id="txMotivo" type="text" rows="10" width="300px" constraint=" no Empty: Preenche o campo!"/> 
+                    </row>
+                    <row>Disciplinas:</row>
+                    <row>            
+                        <listbox sclass="mylitem4" oddRowSclass="non-odd" id="lbd" width="98%" rows="5">
+                            <template name="model">
+                                <listitem value="${each}">
+                                    <listcell  >
+                                        <label value="${each.nome} - ${each.nivel}º Ano - ${each.semestre}º Sem - ${each.credito} - ${each.credito} Credito" />
+                                    </listcell>                                             
+                                </listitem>	
+                            </template>
+                        </listbox>
+                    </row>
+                    <row>  
+                        <button autodisable="self" label="Ver Requerimento" forward="onClick=onVerRequerimento"/>
+                    </row>
+                </rows>
+            </grid>
+            <div style="margin-top:20px; margin-bottom:4px;" >
+                <hbox >
+                    <button autodisable="self" id="btnCnf" sclass="mybutton button blue medium" forward="onClick=onAceitarPedido" label="Aceitar" style="margin:10px 0 0 10px;" mold="trendy" ></button>
+                    <button autodisable="self" id="btnRj" sclass="mybutton button blue medium" forward="onClick=onRejeitar" label="Rejeitar" style="margin:10px 0 0 10px;" mold="trendy" ></button>
+                    <button autodisable="self" id="btncancelar" forward="onClick=onBtncancelar" sclass="mybutton button medium" label="Cancelar" style="margin:10px 0 0 0px;" mold="trendy" />
+                </hbox>
+            </div>
+        </window>
+        <window id="winAddMotivo" title="Rejeitar Pedido de Anulação de Inscrição" visible="false" apply="esira.inscricao.PedidoAnulacaoController"
+                sizable="true"    width="80%" contentStyle="overflow:auto" sclass="formNovo" >
+            <vbox visible="false">
+                <intbox id="ibidInsc"/>
+                <intbox id="idlitem"/>
+            </vbox>
+            <vbox>
+                Motivo:
+                <textbox id="txMotivoR" rows="5" width="98%;"  constraint=" no Empty: Por favor, preenche o campo!" />
+            </vbox>
+            <div style="margin-top:20px; margin-bottom:4px;" >
+                <hbox >
+                    <button autodisable="self" id="btnRjt" forward="onClick=onBtnRjt" label="Rejeitar"  mold="trendy" />
+                    <button autodisable="self" id="btnC" forward="onClick=onBtnC"  label="Cancelar"  mold="trendy" />
+                </hbox>
+            </div>           
+        </window> 
+    </window>
+</zk>

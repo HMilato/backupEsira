@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <div >
+        <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+                    <li><a >Home</a></li>
+                    <li><a class="current">Estudantes inscritos</a></li>
+                </ul>
+                ]]>
+        </html>
+    </div>
+    <window id="winInscricaoEst" apply="esira.inscricao.InscricaoController">
+        <toolbar >
+            <hbox >
+                <cell >
+                    <hbox >
+                        <div  >
+                            <button id="relatInscEst" label="Relatorio" mold="trendy" />
+                        </div>                      
+                    </hbox>                
+                </cell>
+            </hbox>
+        </toolbar > 
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <grid>
+                <columns>
+                    <column width="20%"/>
+                    <column width="20%"/>
+                    <column width="20%"/>
+                </columns>
+                <rows>
+                    <row>
+                        
+                         
+                            <combobox id="cbDiscRel" model="${$composer.discRelModel}" >
+                                <comboitem label="${each.nome}"/>
+                            </combobox>
+                        
+                         
+                            <combobox id="cbCursoRel" model="${$composer.cursoRelModel}" >
+                                <comboitem label="${each.descricao}"/>
+                            </combobox>
+                       
+                           
+                            <datebox id="dinsc" />
+                       
+                    </row>
+                </rows>
+            </grid>
+            <listbox  id="lbinscricao" onSelect="" model="${$composer.inscricaoEstudanteModel}"  oddRowSclass="non" > 
+                <listhead>
+                    <listheader label="Numero mecanográfico" align="left"/>
+                    <listheader label="Nome Completo" align="left"/>
+                </listhead>
+                <template name="model">
+                    <listitem value="${each}">
+                        <listcell >
+                            <label value="${each.nrEstudante}" />                          
+                        </listcell>
+                        <listcell >
+                            <label value="${each.nomeCompleto}"/>
+                        </listcell>
+                    </listitem>
+                </template>
+            </listbox>
+        </div>
+          
+        <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+        <script type="text/javascript">
+            zk.afterMount(function() {
+            jq("$txAno").Watermark("Ano","gray");
+            jq("$txProcurar").Watermark("Pesquisar por nome...","gray");
+            jq("$txProcurarNrmec").Watermark("Pesquisar por Numero...","gray");
+        
+            });
+        </script>
+         
+    </window>
+</zk>

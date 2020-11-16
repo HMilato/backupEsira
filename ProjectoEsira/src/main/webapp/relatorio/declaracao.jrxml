@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0ea99d40-570e-4662-a59e-c7d82242865c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="144"/>
+	<parameter name="img" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="curso" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="discip" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="anol" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="localiz" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="faculdade" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nomeCompleto" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nomePai" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nomeMae" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="distrito" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="provincia" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="naturalidade" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="director" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="dirAcademico" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="grauDirector" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="data" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="genero" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="grauChefeRegisto" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cidade" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="disciplina" class="java.lang.String">
+		<fieldDescription><![CDATA[disciplina]]></fieldDescription>
+	</field>
+	<field name="nivel" class="java.lang.Integer">
+		<fieldDescription><![CDATA[nivel]]></fieldDescription>
+	</field>
+	<field name="classificacao" class="java.lang.String">
+		<fieldDescription><![CDATA[classificacao]]></fieldDescription>
+	</field>
+	<field name="ano" class="java.lang.Integer">
+		<fieldDescription><![CDATA[ano]]></fieldDescription>
+	</field>
+	<variable name="variable1" class="java.lang.String" incrementType="Report"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="292" splitType="Stretch">
+			<image>
+				<reportElement x="220" y="0" width="96" height="76" uuid="2cb97adf-f214-4186-8988-d90ec5d73d76"/>
+				<imageExpression><![CDATA[$P{img}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement mode="Opaque" x="159" y="73" width="202" height="20" backcolor="#FFFFFF" uuid="a927aca9-e232-4e49-84b0-ff0a76e51058"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="15" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Proportional"/>
+				</textElement>
+				<text><![CDATA[UNIVERSIDADE LÚRIO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="159" y="88" width="202" height="20" uuid="4df16320-1315-40d1-9c13-5b7151d55c6c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14"/>
+					<paragraph lineSpacing="Proportional"/>
+				</textElement>
+				<text><![CDATA[Faculdade de Engenharia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="102" width="284" height="22" uuid="3aa2e8e9-5d9a-41aa-a5a9-5233a2d42ca4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Departamento dos Serviços Académicos]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="118" y="116" width="284" height="20" uuid="9b3ccaae-1ffd-4654-b4e3-765f4416757c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="11" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{localiz}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="198" width="555" height="56" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF" uuid="bee48d0f-6ca1-43f5-aff5-b9f3eeca7df3"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="SansSerif" size="12" isBold="false" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["----- "+ $P{director} +", Director da "
++$P{faculdade} +" da Universidade Lúrio, declara que <b>"+$P{nomeCompleto} +
+"</b>, filh"+$P{genero}+" de "+ $P{nomePai}+" e de "+ $P{nomeMae} + ", Natural de "+$P{naturalidade}+", "+
+"Distrito de "+ $P{distrito} +", Província de "+$P{provincia}+
+", obteve aproveitamento pedagógico nas seguintes disciplinas no curso de "
++$P{curso}+" nesta Faculdade: -----"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="255" width="69" height="37" backcolor="#CCCCCC" uuid="395f59aa-945e-4305-999e-208154e06558"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ano]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="416" y="255" width="139" height="37" backcolor="#CCCCCC" uuid="d929ab95-2a3b-4801-965c-e82acfd5e567"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.75"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Classificação                   (em valores)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="69" y="255" width="76" height="37" backcolor="#CCCCCC" uuid="9a59c687-9f96-4a00-a197-4d6e46103d23"/>
+				<box>
+					<topPen lineWidth="0.75"/>
+					<leftPen lineWidth="0.75"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Nível]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="145" y="255" width="271" height="37" backcolor="#CCCCCC" uuid="72622d99-3433-49db-905c-e0f4dabc839c"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Disciplina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="176" y="154" width="185" height="22" backcolor="#CCCCCC" uuid="2fb91440-39e9-4d21-a592-2d352fea0fdc"/>
+				<box>
+					<pen lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[DECLARAÇÃO DE NOTAS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="69" height="20" uuid="a02ede2e-dca0-43b7-82d2-79ddd7ec3d56"/>
+				<box topPadding="2">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ano}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="69" y="0" width="76" height="20" uuid="2d1a829a-14c1-41aa-9c5d-d7c5ef2709a5"/>
+				<box topPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nivel}+"<sup>o</sup>"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="159" y="0" width="257" height="20" uuid="61c078d3-21c2-4507-bb0f-d865c9476820"/>
+				<box topPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{disciplina}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="416" y="0" width="139" height="20" uuid="31dc5a82-34e3-4df4-a7d6-99444b056116"/>
+				<box topPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="styled">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{classificacao}+" <style size='1'> .</style>"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="145" y="0" width="15" height="20" uuid="47006bb2-32fd-4bed-bacb-cdfb302d3a37"/>
+				<box topPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="styled">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<style size='1'>"+$F{disciplina}.substring(0,1)+"</style>"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="205" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" mode="Opaque" x="0" y="3" width="555" height="56" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF" uuid="aecd54b6-d1a8-4441-8f1b-fb6d872f8dd9">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<box topPadding="0" bottomPadding="2"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["------ E por ser verdade, mandou-se passar a presente"+
+" declaração que é assinada e autenticada com carimbo"+
+" a óleo em uso nesta faculdade. -------------------------------------------------------------------------------------"+
+"------ E, eu " + $P{dirAcademico} +
+", chefe do Departamento dos Serviços Academicos, desta Faculdade, "+
+"a extraí e conferí. ------"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" mode="Opaque" x="0" y="78" width="555" height="19" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF" uuid="4400fa87-66a7-4a6a-96ef-65eecd6ba9e1">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<box topPadding="0" bottomPadding="2"/>
+				<textElement textAlignment="Center" markup="html">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{cidade}+", aos "+$P{data}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="29" y="159" width="151" height="1" uuid="fe52ef64-548e-41af-8b18-7b86c16a80bb"/>
+			</line>
+			<line>
+				<reportElement x="374" y="160" width="127" height="1" uuid="02b66822-8887-48e0-986f-b2c4078e233c"/>
+			</line>
+			<staticText>
+				<reportElement x="35" y="119" width="145" height="16" uuid="c2fa2192-35ae-424b-917b-7b9303b226fa"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Dep. Serviços Académicos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="374" y="119" width="125" height="16" uuid="f9046b0f-7996-4730-b8da-6e34b8193794"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Director da Faculdade]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement positionType="Float" isPrintRepeatedValues="false" mode="Opaque" x="0" y="162" width="233" height="16" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF" uuid="10c3550e-46f0-47fe-810c-a60527b50c4a">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<box topPadding="0" bottomPadding="2"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dirAcademico}+ ", "+$P{grauChefeRegisto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement positionType="Float" isPrintRepeatedValues="false" mode="Opaque" x="324" y="161" width="231" height="16" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF" uuid="fb455979-abe2-4f37-87d2-fb1d50cb3c60">
+					<property name="net.sf.jasperreports.export.pdf.tag.td"/>
+				</reportElement>
+				<box topPadding="0" bottomPadding="2"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{director}+", "+$P{grauDirector}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

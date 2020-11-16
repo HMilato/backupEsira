@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="windowFaculdade" border="none" apply="esira.controller.PlanoCurricularController">
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+     <li><a>Plano Curricular</a></li>
+    <li><a>Faculdades</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <div>
+            <!--<toolbar >-->
+            <div align="left" sclass="row-custimized criteriaPadEiditMatr" >
+                <hbox >
+                    <button autodisable="self" id="addFaculdade" label="Adicionar" mold="trendy" height="20px"/>
+                </hbox>
+            </div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <listbox  id="lbFaculdade"
+                          onSelect="" model="${$composer.faculdadeModel}" sizedByContent="true" 
+                          emptyMessage="Sem conteudo" span="true" autopaging="true">
+                    
+                    <listhead>
+                        <listheader label="Codigo"/>
+                        <listheader label="Descricao"/>
+                        <listheader label="Abreviatura"/>
+                        <listheader label="Director"/>
+                        <listheader label="Delegacao"/>
+                        <listheader label="Operação" align="center"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem value="${each}">
+                            <listcell >
+                                <label value="${each.codigo}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.desricao}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.abreviatura}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.director.nome}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.iddelegacao}"/>
+                            </listcell>
+                            <listcell >
+                                <button autodisable="self" tooltiptext="Editar" hoverImage="/icon/ico_editar.png" image="/icon/ico_editar1.png" forward="onClick=onEditFaculdade"/>
+                                <button autodisable="self"  tooltiptext="Apagar" hoverImage="/icon/ico_borrar.png" image="/icon/ico_borrar1.png" forward="onClick=onDeleteFaculdade"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+            </div>
+        </div>
+        
+        <window id="mDialogAddFaculdade" position="center,center" closable="false"  border="none"
+                width="50%" apply="esira.controller.PlanoCurricularController" style="margin-top:10px;" visible="false">
+            <!--<toolbar id="tbAddFaculdade" visible="false">-->
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <div style="margin-top: 10px; margin-left:10px;">
+                    <label id="validationFac" style="color:red;"/>
+                </div>
+                <grid>
+                    <columns>
+                        <column width="20%"/>
+                        <column />
+                    </columns>
+                    <rows>
+                        <row visible="false">
+                            <intbox id="fid"/>
+                            <intbox id="poscf"/>
+                        </row>
+                        <row>
+                            <label value="Codigo" />
+                            <textbox id="txtCodigo" width="100%" constraint=" no Empty: Insira o Codigo!"/>
+                        </row>
+                        <row>
+                            <label value="Nome da Faculdade" />
+                            <textbox id="txtDescricao" width="100%" constraint=" no Empty: Insira o Nome da Faculdade!"/>
+                        </row>
+                        <row>
+                            <label value="Abreviatura" />
+                            <textbox id="txtAbreviatura" constraint=" no Empty: Insira uma abreviatura!" />
+                        </row>
+                        <row>
+                            <a label="Nova Deleg." onClick='cbdelegacao.setModel(null);execution.sendRedirect("/index.zul#j8", "_blank")'/>
+                        </row>
+                        <row>
+                            <label value="Delegacao" />
+                            <combobox id="cbdelegacao" hflex="1" onOpen='if(cbdelegacao.getModel()==null)cbdelegacao.setModel($composer.delegModel)' width="200px" model="${$composer.delegModel}" constraint=" no Empty: Seleccione um item!">
+                                <template name="model">       
+                                    <comboitem label="${each}">
+                                    </comboitem> 
+                                </template>
+                            </combobox>
+                        </row>
+                        <row>
+                            <label value="Localizacao" />
+                            <textbox id="txtLocalizacao" constraint=" no Empty: Insira a localizacao!" />
+                        </row>
+                        <row>
+                            <a label="Novo Dir." onClick='execution.sendRedirect("/index.zul#h3", "_blank")'/>
+                        </row>
+                        <row>
+                            <label value="Director" />
+                            <combobox id="cbdirector" forward="onChanging=onCbfunc, onSelect=onSCbfunc" disabled="false" constraint=" no Empty: Pesquisar ou Seleccione um funcionario!">
+                                <template name="model">
+                                    <comboitem label="${each}">
+                                        <attribute name="onCreate"><![CDATA[
+                                                           if(((esira.domain.Funcionario)self.getValue()).getIdFuncionario()==null){
+                                                              self.setStyle("color:blue");
+                                                           }
+                                                       ]]>
+                                        </attribute>
+                                    </comboitem>
+                                </template>
+                            </combobox>
+                        </row>
+  
+                    </rows>
+                </grid>
+                <div align="center">
+                    <hbox >
+                        <button autodisable="self" id="saveFaculdade" label="Salvar" mold="trendy" height="20px" />
+                        <button autodisable="self" id="cancelFaculdade" label="Cancelar" mold="trendy" height="20px" />
+                    </hbox>
+                </div>
+            </div>
+            <!--</toolbar>-->
+            
+        </window>
+    </window>
+    
+   
+    <style>
+     
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+        div.z-listbox-header tr.aux1.z-auxhead{
+        background-color: #F0FDFF;  
+        background-position: 0 8px;
+        }
+    </style>
+</zk>

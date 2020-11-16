@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:ca="client/attribute">
+    <window id="winInscEst" border="none" apply="esira.inscricao.InscricaoEstudanteController" title="Inscrição Personalizada" hflex="1" mode="modal" vflex="1" width="50%" contentStyle="overflow:auto" sclass="formNovo">
+        
+        <hbox >
+            <div id="prazo" style="margin: auto">
+                <label id="aviso" style="color:red" value="Esta Inscrição ficara pendente como um pedido de Inscrição até a confirmação do Director" visible="true"/>
+            </div>                    
+        </hbox>                
+                
+        <tabbox id="tabInscEst" width="98%"  apply=" ">
+            <tabs id="tabs">
+                <tab label="Adicionar Disciplinas para um estudante" id="tabInscEstu" style="color:red"/>
+                <tab label="Incluir Estudantes numa Disciplina" id="tabInscDisc"/>
+            </tabs>
+            <tabpanels id="tpanel">
+                <tabpanel id="tpanel1">
+                    <div>
+                        <grid oddRowSclass="non-odd" >
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" align="left" />
+                            </columns>
+                            <rows>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Ano:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <intbox id="ibano" forward="onChange=onChiba1" constraint=" no Empty: Introduza o ano!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Periodo:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <combobox id="cbPeriodDisc" forward="onSelect=onSelCbp1" readonly="true" constraint=" no Empty: Seleccione o periodo semestral!">
+                                                <comboitem label="Semestre 1" value="1"/>
+                                                <comboitem label="Semestre 2" value="2"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Estudante:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <combobox id="combEstu" constraint=" no Empty: Seleccione um Estudante!" forward="onChanging=onCombEstu, onSelect=onSCombEstu" buttonVisible="true" width="100%" autodrop="true" mold="rounded">
+                                                <template name="model">
+                                                    <comboitem label="${each}">
+                                                        <attribute name="onCreate"><![CDATA[
+                                                           if(((esira.domain.Estudante)self.getValue()).getIdEstudante()==null){
+                                                              self.setStyle("color:blue");
+                                                           }
+                                                       ]]>
+                                                        </attribute>
+                                                    </comboitem>
+                                                </template>	
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row visible="false">
+                                    <intbox id="posc"/>
+                                </row>
+                                <row>
+                                    <hlayout sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Disciplinas:"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <vbox width="98%">
+                                        <listbox hflex="1"  oddRowSclass="non-odd" span="true" vflex="1" checkmark="true"  id="lbdisc"  >
+                                            <listhead  sizable="true" hflex="1" visible="false">
+                                                <listheader  align="left" label=""   />
+                                                <listheader align="center" label=""   />
+                                            </listhead>   
+                                            <template name="model" >
+                                                <listitem forward="onSellbdisc" value="${each}">
+                                                    <listcell >
+                                                        <label value="${each}" />
+                                                    </listcell>   
+                                                    <listcell >
+                                                        <doublespinner width="25%">
+                                                            <attribute name="onCreate"><![CDATA[
+                                                     self.setDisabled(true);
+                                                     self.setConstraint("min 0 max 20");
+                                            ]]></attribute> 
+                                                        </doublespinner>
+                                                    </listcell>                                        
+                                                </listitem>	
+                                            </template>		
+                                        </listbox>
+                                    </vbox>
+                                </row>
+                                <row>
+                                    <hlayout sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <checkbox id="chEst" label="Registar a matricular automaticamente   " checked="false"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout 
+                                        sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Observação da Inscrição:"/>
+                                        </div>
+                                        <div sclass="description-area" height="98%">
+                                            <textbox id="txMotEst" rows="5" width="98%"  constraint=" no Empty: Por favor, preenche o campo!" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                            </rows>
+                        </grid>
+                        <div align="center">
+                            <hbox >
+                                <button autodisable="self" sclass="mybutton button blue medium" forward="onClick=onSalvarEstu" label="Salvar"  />
+                                <button autodisable="self" label="Cancelar" forward="onClick=onCanlar" mold="trendy" />
+                            </hbox>
+                        </div>
+                    </div>
+                </tabpanel>
+                <tabpanel id="tpanel2">
+                    <div>
+                        <grid oddRowSclass="non-odd">
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" align="left" />
+                            </columns>
+                            <rows>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Ano:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <intbox id="ibano2" forward="onChange=onChiba2" constraint=" no Empty: Introduza o ano!" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Periodo:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <combobox id="cbPeriodDisc2" readonly="true" forward="onSelect=onSelCbp2" constraint=" no Empty: Seleccione o periodo semestral!">
+                                                <comboitem label="Semestre 1" value="1"/>
+                                                <comboitem label="Semestre 2" value="2"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Curso:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <combobox id="cbcurso"  model="${$composer.listCursoModel}" width="200px" constraint=" no Empty: Seleccione o periodo semestral!">
+                                                <comboitem hflex="1" label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Plano Curricular:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <combobox id="cbplano" width="200px" readonly="true" >
+                                                <comboitem hflex="1" label="${each.planocurricularPK.ano}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Disciplina:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%"> 
+                                            <combobox id="cbdisciplina"  width="200px" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem hflex="1" label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row visible="false">
+                                    <intbox id="posd"/>
+                                </row>
+                                <row>
+                                    <hlayout 
+                                        sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Estudantes:"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <vbox width="98%">
+                                        <listbox   sizedByContent="true" style="overflow:auto" oddRowSclass="non-odd" hflex="1" emptyMessage="Nenhum Estudante"  rows="2" id="lbestu" span="true" checkmark="true" >
+                                            <listhead  hflex="1" visible="false">
+                                                <listheader   align="left" label=""   />
+                                                <listheader  align="left" label=""   />
+                                            </listhead>                                           
+                                            <template name="model" >
+                                                <listitem forward="onSellbestu"  value="${each}">
+                                                    <listcell ca:colspan="2"> 
+                                                        <attribute  name="onCreate"><![CDATA[
+                                                           if(((esira.domain.Estudante)self.getParent().getValue()).getIdEstudante()==null){
+                                                                 Label l = new Label();
+                                                                 l.setValue("--------------- Ver Mais ------------------");
+                                                                 self.setStyle("color:blue");
+                                                                 l.setParent(self);
+                                                                 //self.getParent().setCheckable(false);
+                                                                 self.getParent().setId("lid");
+                                                           } else { 
+                                                                        self.setParent(null);
+                                                                   }       
+                                                       ]]></attribute>
+                                                    </listcell>
+                                                    <listcell >
+                                                        <attribute name="onCreate"><![CDATA[
+                                                           if(((esira.domain.Estudante)self.getParent().getValue()).getIdEstudante()!=null){
+                                                              Label l = new Label();
+                                                                 esira.domain.Estudante e = (esira.domain.Estudante)self.getParent().getValue();
+                                                                 l.setValue(e.getNomeCompleto()+" -- Ing: "+e.getAnoIngresso());
+                                                                 l.setParent(self); //((Listitem)self.getParent()).setSclass("mylitem2");
+                                                           }
+                                                       ]]></attribute>
+                                                    </listcell>
+                                                    
+                                                    <listcell >
+                                                        <attribute name="onCreate"><![CDATA[
+                                                              if(((esira.domain.Estudante)self.getParent().getValue()).getIdEstudante()!=null){
+                                                               Doublespinner d = new Doublespinner();
+                                                               d.setDisabled(true);
+                                                               d.setConstraint("min 0 max 20");
+                                                               d.setWidth("50%");
+                                                               d.setParent(self); //((Listitem)self.getParent()).setSclass("mylitem2");
+                                                           }
+                                                              ]]></attribute>
+                                                    </listcell>                                               
+                                                </listitem>	
+                                            </template>		
+                                        </listbox>
+                                    </vbox>
+                                </row>
+                                <row>
+                                    <hlayout sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <checkbox id="chDisc" label="Registar a matricular automaticamente   " checked="false"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout 
+                                        sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Observação da Inscrição:"/>
+                                        </div>
+                                        <div sclass="description-area" height="98%">
+                                            <textbox id="txMotDisc" rows="5" width="98%"  constraint=" no Empty: Por favor, preenche o campo!" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                            </rows>
+                        </grid>
+                        <div align="center">
+                            <hbox >
+                                <button autodisable="self" forward="onClick=onSalvarDiscip" sclass="mybutton button blue medium"  mold="trendy" label="Salvar"/>
+                                <button autodisable="self" label="Cancelar" forward="onClick=onCanlar" mold="trendy" />
+                            </hbox>
+                        </div>
+                    </div>
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+    </window>
+    <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+    <script type="text/javascript">
+        zk.afterMount(function() {
+        jq("$combEstu").find("input").Watermark(".Pesquise ou seleccione um Estudante","gray");
+        });
+    </script>
+</zk>

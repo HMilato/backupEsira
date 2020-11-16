@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?page id="clientGUI" title="eSira Unilurio"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<!--<?link rel="stylesheet" type="text/css" href="/macros/zksandbox.css.dsp?v=${desktop.webApp.build}"?>-->
+<?script type="text/javascript" src="/macros/zksandbox.js.dsp?v=${desktop.webApp.build}"?>
+
+<?component name="category" extends="button" widgetClass="zksandbox.Category" mold="default"?>
+<?component name="categorybar" extends="div" widgetClass="zksandbox.Categorybar"?>
+
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <style>         
+        .redis {   
+        font-size:12pt;           
+        color: blue;
+        backgroud-color:  blue;               
+        }     
+    </style>
+    <borderlayout>
+        <north sclass="banner" border="none" size="100px" collapsible="true">
+            <div>
+                <hbox>
+      
+                    <image width="75%" height="75%" src="/img/icoul.png"/>
+                    <html>
+                        <![CDATA[ 
+                            <div id="cab" >
+                            	<div style="margin-left:-40px;" class="hello">
+                                   eSira<span></span>
+				<div class="ola">UniLurio</div>
+			    </div>
+                        </div>
+                        ]]>
+                    </html>
+                     
+                </hbox>
+                  
+            </div>
+        </north>
+
+          <center autoscroll="true" hflex="true"> 
+            <window contentStyle="overflow:auto;" id="visitante" apply="esira.controller.RecuperacaoController">
+                <div>
+                    <div height="20px">
+                        <html>
+                        <![CDATA[
+                        <ul id="breadcrumbs-one">
+
+                            <li><a>Recuperação de Senha</a></li>
+                        </ul>
+                          ]]>
+                        </html>
+                    </div>
+
+                      <div align="center" >
+                        <div style="margin-top: 70px; margin-left:10px;">
+                            <label id="validation" style="color:red;"/>
+                        </div>
+                        
+                        <div height="20px"> </div>
+
+                      <style>
+                            .banners {
+                                   background-color:#F5F5F5;
+                                   border-width: 10px;
+                                   border-color: red;
+                                   border-radius: 8px 8px 0px 0px;
+                                   padding-top: 30px;
+                                   padding-bottom: 25px;
+                                }
+
+                         .efei {
+                                   color: blue; 
+                                   width: 250px;
+                                   height: 40px;  
+                                   border-width: 2px;
+                                   border-color: #d4dedf;
+                                   border-radius: 5px 5px 5px 5px;
+                                   font-size: 15px;     
+                                   background-color: #e8f0fd; 
+                                   box-shadow: 1px 0.5px 4px 1px white;     
+                                }
+
+                        .baixo {
+                                       background-color:#d4dedf;        
+                                   padding-top: 20px;
+                                   height: 140px;
+                                   border-radius: 0px 0px 8px 8px;
+                                   box-shadow: 1px 0.5px 4px 1px white;
+                                }
+                        .btenviar {
+                                     border-radius: 5px 5px 5px 5px;
+                                   color: white; 
+                                   width: 100px;
+                                   background: #55c2e1;
+                                   align: right;
+                                   height:40px;
+                                   font-family:Times New Roman;
+                                   font-size: 14px;
+                                   margin-left: 5px;
+                                }  
+                         .btenviar:hover {  
+                                 background: #4682B4;
+                          }
+                          
+                          .btcancelar{
+                                  border-radius: 5px 5px 5px 5px;
+                                   color: white; 
+                                   width: 100px;
+                                   background: #B0C4DE;
+                                   align: right;
+                                   height:40px;
+                                   font-family:Times New Roman;
+                                   font-size: 14px;
+                                }  
+                         .btcancelar:hover {  
+                                 background: #4682B4;
+                          }
+                          
+    </style>
+   
+                                 <div sclass="banners" width="300px"  align="left" >
+                                        <label value="Recuperação de Senha" style="font-size: 25px; font-family:Linotype Devanagari Light; margin-left:31px; color: #363636; "/>
+                                        <div style="padding-top: 10px; margin-left:31px;">
+                                        <label value="Por favor, insira o seu email" style="font-size: 13px; font-family:Linotype Devanagari Light;  color: #9b9486;"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%" align="center" style=" padding-top: 30px;"> 
+                                         <textbox id="txEmail" sclass="efei"  placeholder="email" constraint=" no Empty: Insira um Email!"/>
+                                         </div> 
+                                </div>    
+                              <div sclass="baixo" width="300px" align="left">
+                                            <hbox visible="true" id="vb5" style="margin-left: 47px; padding-top: 10px;" > 
+                                                 <a  style="text-decoration:none;"   href="/loginteste.zul"> <button sclass="btcancelar">Cancelar</button> </a> 
+                                                <button autodisable="self" id="btNovaSenha" forward="onObterSenha" sclass="btenviar" disabled="false" label="Nova Senha"   />                                      
+                                          </hbox>
+                              
+                                </div>
+                           
+                  </div> 
+                        
+                 </div>                 
+       
+          </window>
+        </center>   
+
+        
+    </borderlayout >
+    <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+    <style>
+        .z-west{
+    
+        <!--border: 1px solid #FFFFFF; position: absolute; overflow: hidden; background-color: white;-->
+    
+        }
+        .z-west-splt, .z-west-header{
+        background: #FFFFFF top;
+        background-image:none;
+        }
+    </style>
+  
+    
+</zk>

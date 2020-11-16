@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="windowDocDisc" border="none" apply="esira.controller.DocenteDiscController">
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+     <li><a>Plano Curricular</a></li>
+    <li><a>Distribuição de Serviço Docente</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <div>
+            <div align="left" sclass="row-custimized criteriaPadEiditMatr" >
+                <hbox >
+                    <button autodisable="self" label="Exportar" image="/icon/ico-excel.png" forward="onClick=onExcelExportLista"/>
+                </hbox>
+            </div>
+            <!--<toolbar >-->
+            <div width="98%"  sclass="row-custimized criteriaPad button-blue" >
+                <hlayout hflex="max" >
+                    <label>Ano</label>
+                    <intbox  id="ano" />
+                    <image src="/icon/search.png"/>
+                    <combobox hflex="1" id="cbCursoPrec" readonly="true" width="98%" value="Curso" buttonVisible="true" constraint=" no Empty: Seleccione um Curso!" autodrop="true" model="${$composer.cursoModel}" mold="rounded"/>
+                    <combobox hflex="1" id="cbSemPrec" readonly="true" width="98%" value="Semestre" buttonVisible="true" autodrop="true"  mold="rounded">
+                        <!--                        <comboitem label="Semestre" value="0"/>-->
+                        <comboitem label="Semestre 1" value="1"/>
+                        <comboitem label="Semestre 2" value="2"/>
+                    </combobox>
+                    
+                    <longbox id="tmpcurso" visible="false" value="1" />
+                    
+                    
+                </hlayout>
+                <vbox align="center" width="100%">
+                    <vbox id="space" height="25px">
+                    </vbox>
+                    <vbox height="25px" visible="false" id="vb3" >
+                        Clique no boatao abaixo para criar disciplinas .
+                        Por favor certifique se selecionou o curso, semestre e o ano.
+                    </vbox>
+                    <button visible="false" id="btCriar" height="50px" label="Criar" width="150px" forward="onClick=onCriar" sclass="mybutton button blue large"></button>
+                </vbox>
+                <vbox height="25px">
+                </vbox>
+                <button   visible="false" id="btAdd" label="Adicionar Diciplina" height="25px" width="150px" forward="onClick=onAddDisc" sclass="mybutton button blue medium"></button>
+                <vbox height="25px">
+                </vbox>
+                <listbox visible="false" sizedByContent="true" width="100%" emptyMessage="Sem conteúdo (Seleccione um Curso)" id="lbdocdisc"
+                         span="true" >
+                        
+                    <listhead hflex="1" sizable="true">
+                        <listheader hflex="min" align="center" label="Nivel.Semestre"/>
+                        <listheader hflex="min" align="center" label="Disciplina"/>
+                        <listheader hflex="min" align="center" label="Docentes"/>
+                        <listheader hflex="min" align="center" label="Operação"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem value="${each}">
+                            <listcell >
+                                <label value="${each.planodisciplinaPK.nivel}.${each.planodisciplinaPK.semestre}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.disciplina.nome}"/>
+                            </listcell>
+                            <listcell >
+                                <attribute name="onCreate"><![CDATA[
+                                                            int ano = ((Intbox)windowDocDisc.getFellow("ano")).getValue();
+                                                           for (esira.domain.Lecciona l : ((esira.domain.Planodisciplina)self.getParent().getValue()).getDisciplina().getLeccionaList() ){
+                                                               
+                                                                if (l.getAno()==ano){
+                                                                    Vbox vb = new Vbox();
+                                                                    vb.setParent(self);
+                                                                    Label ls = new Label();
+                                                                    ls.setParent(vb);
+                                                                    ls.setValue("Turma "+l.getLeccionaPK().getTurma()+", "+l.getLeccionaPK().getTurno()+"º Turno" );
+                                                                    Label lb = new Label();
+                                                                    lb.setParent(vb);
+                                                                    lb.setValue(l.getDocente()+"");
+                                                                 }
+                                                                
+                                                            }
+                                                       ]]>
+                                </attribute>
+                                <!--                                <vbox>
+                                    <label value="${each.docente} - ${each.leccionaPK.turno}º Turno - 
+                                    Turma ${each.leccionaPK.turma}, " forEach="${each.disciplina.leccionaList}"/>
+                                </vbox>-->
+                            </listcell>
+                            <listcell>
+                                <button autodisable="self" tooltiptext="Editar" hoverImage="/icon/ico_editar.png" image="/icon/ico_editar1.png" forward="onClick=onEditDocDisc"   orient="horizontal" mold="trendy"/>
+                                <button autodisable="self" tooltiptext="Apagar" hoverImage="/icon/ico_borrar.png"  image="/icon/ico_borrar1.png" forward="onClick = onEliminar"   orient="horizontal" mold="trendy"/>  
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+            </div>
+        </div>
+    </window>
+   
+    <style>
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+    </style>
+</zk>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns:c="client">
+    <window id="winPermissao" forward="onCreate=onCreateWnd" border="none" apply="esira.controller.PermissaoController">
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+    <li><a>Funcionários</a></li>
+    <li><a>Criar Funcionários</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <div align="left" sclass="row-custimized criteriaPadEiditMatr">
+            <hbox >
+                <button autodisable="self" id="addPerm" label="Adicionar" mold="trendy" height="20px"/>
+            </hbox>
+        </div>
+        
+        <div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <listbox  id="lbPermissao"  sizedByContent="true" emptyMessage="Sem conteudo" span="true" autopaging="true">
+                    <listhead hflex="1" sizable="true">
+                        <listheader hflex="min" label="Funcionario" align="center"/>
+                        <listheader hflex="min" label="Operacao" align="center"/>
+                        <listheader hflex="min" label="Data Inicio" align="center"/>
+                        <listheader hflex="min" label="Data Final" align="center"/>
+                        <listheader hflex="min" align="center"/>
+                        <listheader hflex="min" align="center"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem value="${each}">
+                            <listcell >
+                                <label value="${each.nrfuncionario}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.nome}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.tipochefia.cargochefia}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.faculdade}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.contacto}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.email}"/>
+                            </listcell>
+                            <listcell >
+                                <button autodisable="self" label="editar" forward="onClick=onEditPerm"/>
+                            </listcell>
+                            <listcell >
+                                <button autodisable="self" label="apagar" forward="onClick=onDeletePerm"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+            </div>
+        
+        
+            <window id="mDialogAddPerm"  position="center,center" closable="false" visible="false" border="none"
+                    width="50%" apply="esira.controller.PermissaoController">
+                <div>
+                    <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                        <grid>
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" align="left" />
+                            </columns>
+                            <rows>
+                                <row height="0px" visible="false">
+                                    <intbox id="ibidpermissao"/>
+                                    <intbox id="litem"/>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100">
+                                            <label  value="funcionario"/>
+                                        </div>
+                                        <div sclass="description-area" height="100">
+                                            <combobox id="cbfunc" hflex="1" width="200px" model="${$composer.funcionarioModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100">
+                                            <label  value="Operacao"/>
+                                        </div>
+                                        <div sclass="description-area" height="100">
+                                            <combobox id="cboperacao" hflex="1" width="200px" model="${$composer.operacaoModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100">
+                                            <label  value="Apartir de:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100">
+                                            <datebox id="dbi" hflex="1" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Até:"/>
+                                        </div>
+                                        <datebox id="dbf" hflex="1" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                    </hlayout>
+                                </row>
+                            </rows>
+                        </grid>
+                        <div align="center">
+                            <hbox >
+                                <button autodisable="self" id="savePerm" forward="onClick=onSalvar" label="Salvar" mold="trendy" height="20px" />
+                                <button autodisable="self" id="cancelPerm" label="Cancelar" mold="trendy" height="20px" />
+                            </hbox>
+                        </div>
+                    </div>
+                </div>
+            </window>
+        </div>
+    </window>
+    
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+        
+        div.z-listcell-cnt{
+        border:1px;
+        }
+    </style>
+</zk>

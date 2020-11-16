@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:ca="client/attribute"> 
+    <zscript>
+		<![CDATA[
+			import esira.domain.Estudante;
+			Estudante estu = new Estudante();
+		]]>
+    </zscript>
+    <window id="winmain" apply="esira.controller.LancamentoTaxaController">
+        <div >
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+                    <li><a>Home</a></li>
+                    <li><a class="current">Lançamento de Taxas</a></li>
+                </ul>
+                ]]>
+            </html>
+        </div>
+
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+                <button autodisable="self" id="addTaxa" forward="onClick=onNovaTaxa" sclass="mybutton button blue medium" label="Adicionar Taxa" />
+          
+            <listbox  id="lbtaxa" sclass="semborda" sizedByContent="true" emptyMessage="Sem conteudo" span="true" >        
+                <listhead hflex="1" sizable="true">
+                    <listheader width="50%" hflex="max" align="center" label="Nome da Taxa"   />
+                    <listheader width="50%" hflex="max"  align="center" label="Faculdade"   />
+                      <listheader width="50%" hflex="max"  align="center" label="Curso"   />
+                    <listheader  width="50%" hflex="max"  align="center" label="Valor "   />
+                     <listheader  width="50%" hflex="max"  align="center" label="Operações"   />
+                </listhead>
+                <template  name="model">
+                    <listitem value="${each}">
+                        <listcell ><label value="${each.nomeTaxa}"/></listcell>
+                        <listcell ><label value="${each.faculdade.abreviatura}"/></listcell>
+                         <listcell ><label value="${each.curso.descricao}"/></listcell>
+                         <listcell ><label value="${each.valor}"/> </listcell>
+                         <listcell ><button autodisable="self" tooltiptext="Editar" hoverImage="/icon/ico_editar.png" image="/icon/ico_editar1.png"  forward="onClick = onEdit"/>
+                         </listcell>
+                    </listitem>  
+                </template>
+            </listbox>
+       </div>
+
+        <window id="mDialogAddPlano"  position="center,center" closable="false"  visible="false" border="none"
+                width="500px" apply="esira.controller.LancamentoTaxaController">
+        
+            <div height="20px">
+                <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+                    <li><a href=" ">Nova Taxa</a></li>
+                </ul>
+                  ]]>
+                </html>
+            </div>
+        
+            <div style="margin-top:20px; margin-bottom:4px;" ></div>
+            
+            <div style="margin: auto">
+                <label id="validation" style="color:red;"/>
+            </div>
+            
+            <tabbox id="tabPlanoMatricula" width="99%" apply=" ">
+                <tabs id="tabs">
+                    <tab  label="Taxas" style="color:red" id="tabtaxa" selected="true"/>
+                </tabs>            
+                <tabpanels>
+                    <tabpanel>
+                   
+                      <div width="98%" sclass="row-custimizedWhite criteriaPad button-blue">
+                        
+                              <div visible="false">
+                                        <intbox id="ibano"/>
+                                        <intbox id="litem"/>
+                                        <intbox id="idfac"/>
+                                    </div>
+                           
+                            
+                          
+                         <div sclass="banners" width="500px" style=" display:flex"  align="left" >   
+                              <hbox visible="true" id="vb5" style="margin-left: 10px; padding-top: 10px; " >  
+                                    <label value="Nome da Taxa" style=" padding-right: 30px;  "/>                                 
+                                     <textbox id="txTaxa" sclass="efei" width="250px" placeholder="Nome da taxa" constraint=" no Empty: Por favor insira o nome da taxa"/>
+                              </hbox>
+                         </div>   
+                            
+                         <div sclass="banners" width="500px" style=" display:flex"  align="left" >   
+                            <hbox  style="margin-left: 10px; padding-top: 10px; " >
+                                <label value="Faculdade:" style=" padding-right: 30px;  "/>   
+                                <combobox id="cbfaculdade" value="-Faculdade-" model="${$composer.faculdadeModel}" width="98%" readonly="true"  style="margin-left: 19px;">
+                                    <attribute name="onAfterRender"><![CDATA[
+                                            if((self.getModel()!=null) && self.getModel().getSize()>0){
+                                               self.setSelectedIndex(0);
+                                            }                           
+                                        ]]></attribute>
+                                    <comboitem label="${each}"/>
+                                 </combobox>
+                             </hbox>
+                        </div>
+                         
+                        <div  width="500px" style=" display:flex"  align="left" >   
+                            <hbox  style="margin-left: 10px; padding-top: 10px; " >
+                                <label value="Curso:" style=" padding-right: 30px;  "/>   
+                                <combobox id="cbcurso" value="-Curso-" model="${$composer.cursoModel}" width="98%" readonly="true"  style="margin-left: 42px;">
+                                    <attribute name="onAfterRender"><![CDATA[
+                                            if((self.getModel()!=null) && self.getModel().getSize()>0){
+                                               self.setSelectedIndex(0);
+                                            }                           
+                                        ]]></attribute>
+                                    <comboitem label="${each}"/>
+                                 </combobox>
+                             </hbox>
+                         </div>
+                         
+                          <div width="500px" style=" display:flex"  align="left" >   
+                              <hbox visible="true" id="btvalor" style="margin-left: 10px; padding-top: 10px; " >  
+                                    <label value="Valor" style=" padding-right: 80px;  "/>                                 
+                                     <doublebox id="txValor" sclass="efei" width="250px" placeholder="Valor da taxa" constraint=" no Empty: Por favor insira o valor da taxa"/>
+                              </hbox>
+                         </div>  
+
+                        </div>
+                    </tabpanel>
+
+                </tabpanels>
+            </tabbox>
+              <button autodisable="self" sclass="mybutton button blue medium" id="salvarPlano" forward="onSalvarTaxa" label="Salvar" mold="trendy" height="20px"/>
+               <button autodisable="self" id="cancelarTaxa" label="cancelar" mold="trendy" height="20px" />
+        </window>
+       
+
+    </window>
+</zk>

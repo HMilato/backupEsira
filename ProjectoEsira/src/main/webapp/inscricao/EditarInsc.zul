@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 12 21:23:35     2006, Created by tomyeh
+		Fri May 01 04:36:35     2009, Modified by stera
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="winEdInscricao" visible="false" apply="esira.inscricao.EditInscricaoController"
+            width="80%" contentStyle="overflow:auto" sclass="formNovo" >
+        <script type="text/javascript"><![CDATA[
+		zk.afterLoad('zul.tab', function () {
+			var _xTab = {};
+			zk.override(zul.tab.Tab.prototype, _xTab, {
+				_sel: function(notify, init) {
+					if (this.desktop && !init && notify)
+						zAu.send(new zk.Event(this, 'onSwitchTab'));
+					else
+						_xTab._sel.apply(this, arguments); //call the original method
+				}
+			});
+		});
+	]]></script>
+        <zscript>
+           
+        </zscript>
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+                    <li><a href="">Inscrição</a></li>
+                    <li><a href="" class="current">Validar Inscrição</a></li>
+                </ul>
+                ]]>
+            </html>
+        </div>
+        <div style="margin: auto">
+            <label id="taxamultas" value="${arg.periodo}" visible="false"/>
+        </div>
+        <div style="margin: auto">
+            <label id="validation" style="color:red;"/>
+        </div>
+      
+        <tabbox id="tabEstudante" width="98%"  apply=" ">
+            <tabs id="tabs">
+                <tab label="Dados da Inscrição" id="tabDadosInscricao" style="color:red"/>            
+                <tab label="Pagamento de Taxa" id="tabPagamentoTaxa"/>
+            </tabs>
+            <tabpanels>
+                <tabpanel>
+                    <div sclass="row-custimized toolbarNovo">
+                        <grid>
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" />
+                            </columns>
+                            <rows>
+                                <row visible="false">
+                                    <intbox id="ibidInsc"/>
+                                    <intbox id="ibitem"/>
+                                    <intbox id="versao"/>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label hflex="1" style="color:blue" id="lbano"/>
+                                            <space />
+                                            <label hflex="1"  style="color:blue" id="lbsem" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Nome Completo *" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <combobox id="combEstInsc" width="50%" value="pesquise um estudante..."  onAfterRender="self.setSelectedIndex(0)"   buttonVisible="true" autodrop="true" mold="rounded" >
+                                                <comboitem label="${each.descricao}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Curso *" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label hflex="1" id="lbcurso" value="" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Nivel *" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbnivel" value="${arg.datanasc}" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Sexo *" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbsexo" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <vbox hflex="1" width="100%">
+                                        <listbox id="discSel" rows="10" width="100%" height=""
+                                                     onSelect="">
+                                            <listhead>
+                                                <listheader label="Disciplinas seleccionadas"/>
+                                            </listhead>
+                                            <template name="model">
+                                                <listitem value="${each}">
+                                                    <listcell  >
+                                                        <label value="${each.nome} - ${each.nivel}º Ano - ${each.semestre}º Sem - ${each.credito} Credito" />
+                                                    </listcell>                                             
+                                                </listitem>	
+                                            </template>
+                                        </listbox>	
+                                        <hbox>     
+                                            <label value="Total de credito:" />
+                                            <label id="lbcred" />
+                                        </hbox>
+                                    </vbox>
+                                </row>
+                            </rows>
+                        </grid>
+                        <div style="margin-top:20px; margin-bottom:4px;" >
+                            <hbox >
+                                <button autodisable="self" id="btnAvancar1"  forward="onClick=onBtnAvancar1" label="Avançar"  mold="trendy" />
+                                <button autodisable="self" id="btnCancelar1" forward="onClick=onBtncancelar" label="Cancelar"  mold="trendy" />
+                            </hbox>
+                        </div>
+                    </div>
+                </tabpanel>
+                <tabpanel>
+                    <div sclass="row-custimized toolbarNovo">
+                        <grid>
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" />
+                            </columns> 
+                            <rows>
+                                 <row>
+                                        <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                            <div sclass="description-area" height="100%">
+                                                <label value="Histórico de prescrições:" />
+                                            </div>
+                                            <div sclass="description-area" height="100%">
+                                                <label id="lbprescricao" value="" width="98%" style="color:red;"/>
+                                            </div>
+                                        </hlayout>
+                                    </row>     
+                                <row id="rwTaxanM" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Taxa Normal de Matricula:" /> 
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbtaxaInscricao" value="" width="98%" style="color:red;"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwTaxaeM" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Taxa de Matricula para Estudante Estrangeiro:" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbtaxaInscricaoE" value="" width="98%" style="color:red;"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwTaxamulta15" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Taxa de Multa 1o Período:" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbtaxaMulta15dias" value="" width="98%" style="color:red;"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwTaxamulta30" visible="false">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Taxa de Multa 2o Período:" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbtaxaMulta30dias" value="" width="98%" style="color:red;"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Total :" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <label id="lbtotal" value="" width="98%"/>
+                                        </div>
+                                    </hlayout>
+                                </row>                                      
+                                <row>
+                                    <hlayout vflex="1" hflex="1">
+                                        <div sclass="description-area" height="100%">
+                                            <label style="align:center;color:blue" value="Comprovativo de Pagamento" />
+                                        </div>
+                                    </hlayout>
+                                </row>       
+                                <row visible="false" id="rwRU">
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <textbox style="background-color: yellow" id="txRU" rows="5" width="98%" />
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                        <hlayout sclass="second-layout">
+                                            <div sclass="description-area" height="100%">
+                                                <button id="btrecibo" label="Recibo de depósito" mold="trendy" upload="true,maxsize=50000">
+                                                    <attribute name="onUpload"><![CDATA[
+                               if(event.getMedias()==null)return;
+                               entidade.Arquivo[] lm = new entidade.Arquivo[event.getMedias().length+lbimg.getItemCount()];
+                                int t = 0;
+                               for (int i =0;i<event.getMedias().length;i++)
+                               {
+                                  org.zkoss.util.media.Media m = event.getMedias()[i];
+                                  String f = m.getFormat();
+                                  if (!(m instanceof org.zkoss.image.Image)&&(!f.equalsIgnoreCase("pdf"))&& (!f.equalsIgnoreCase("doc"))
+                                      && (!f.equalsIgnoreCase("xls"))&& (!f.equalsIgnoreCase("docx"))&& (!f.equalsIgnoreCase("xlsx"))) {
+                                         Clients.showNotification("Formato não suportado", "error", null, null, 0,true);
+                                         return;
+                                  }
+                                  lm[t]=new entidade.Arquivo("",m,m.getName(), "", null, "", null);
+                                  t=t+1;
+				  for(org.zkoss.zul.Listitem li:lbimg.getItems()){
+                                            org.zkoss.util.media.Media m2 = ((entidade.Arquivo)li.getValue()).getMedia();
+                                     if(m2.getName().equals(m.getName())){
+                                        Clients.showNotification("Por favor, os nomes devem ser diferentes", "error", null, null, 0,true);
+                                        return;
+                                     }
+                                     if(i==0){
+                                       lm[t]=new entidade.Arquivo("",m2,m.getName(), "", null, "", null);
+                                       t=t+1;
+                                     }
+                                  }
+                               }
+                               lbimg.setModel(new ListModelList(lm));
+                                                    tbimg4.setFocus(true);
+                                        ]]>
+                                                    </attribute>
+                                                </button> 
+                                            </div>
+                                            <div sclass="description-area" style="background-image:url('../images/profilev.png');border:1px solid #ddd;">
+                                                <textbox style="border:none;background: transparent;position: absolute" width="0px" height="0px" id="tbimg4"/>
+                                                <!--constraint="no Empty: Por favor anexar Comprovativo de Pagamento!"/>-->
+                                                <listbox span="true"  sizedByContent="true" style="overflow:auto" height="100%" id="lbimg" >
+                                                    <listhead  sizable="true">
+                                                        <listheader label="Numero de recibo" align="left"/>
+                                                        <listheader label="Banco" align="left"/>
+                                                        <listheader label="Valor do recibo" align="left"/>
+                                                        <listheader label="Data de depósito" align="left"/>
+                                                    </listhead>
+                                                    <template name="model">
+                                                        <listitem value="${each}">
+                                                            <listcell >
+                                                                <textbox constraint=" no Empty: Numero de recibo!">
+                                                                    <attribute name="onCreate"><![CDATA[
+                                                                   tbimg4.value="value";
+                                                                   // self.value=" ";
+                                                                       String s = self.parent.parent.value.nrtalao;
+                                                                  //  if(!s.equals(""))
+                                                                     self.value = s;
+                                                                ]]>
+                                                                    </attribute>
+                                                                    <attribute name="onError"><![CDATA[
+                                              Clients.scrollIntoView(self);
+                                             ]]>
+                                                                    </attribute>
+                                                                </textbox>
+                                                            </listcell>
+                                                            <listcell >
+                                                                <textbox constraint=" no Empty: Banco!">
+                                                                    <attribute name="onCreate"><![CDATA[
+                                                                    //if(ibidEstudante.getValue()!=null){
+                                                                       String s = self.parent.parent.value.banco;
+                                                                   // if(!s.equals(""))
+                                                                     self.value = s;
+                                                                    //}
+                                                                ]]>
+                                                                    </attribute>
+                                                                    <attribute name="onError"><![CDATA[
+                                              Clients.scrollIntoView(self);
+                                             ]]>
+                                                                    </attribute>
+                                                                </textbox>
+                                                            </listcell>
+                                                            <listcell >
+                                                                <doublebox constraint=" no Empty: Valor de depósito!">
+                                                                    <attribute name="onCreate"><![CDATA[
+                                                                   // if(ibidEstudante.getValue()!=null){
+                                                                       Float s2 = self.parent.parent.value.valor;
+                                                                   // if(s!=null)
+                                                                     self.value = s2;
+                                                                   // }
+                                                                ]]>
+                                                                    </attribute>
+                                                                    <attribute name="onError"><![CDATA[
+                                              Clients.scrollIntoView(self);
+                                             ]]>
+                                                                    </attribute>
+                                                                </doublebox>
+                                                            </listcell>
+                                                            <listcell >
+                                                                <datebox format="dd/MM/yyyy" constraint=" no Empty: Data de depósito!">
+                                                                    <attribute name="onCreate"><![CDATA[
+                                                                    //if(ibidEstudante.getValue()!=null){
+                                                                       Date s3 = self.parent.parent.value.datamat;
+                                                                    //if(s!=null)
+                                                                     self.value = s3;
+                                                                   // }
+                                                                ]]>
+                                                                    </attribute>
+                                                                    <attribute name="onError"><![CDATA[
+                                              Clients.scrollIntoView(self);
+                                             ]]>
+                                                                    </attribute>
+                                                                </datebox>
+                                                                <label value="${each.nome}"/> 
+                                                                <button label="ver">
+                                                                    <attribute name="onClick"><![CDATA[
+                                                Window win = (Window) Executions.createComponents("/report.zul", null, null);
+                                                win.setTitle("Recibo");
+                                                Iframe iframe = (Iframe) win.getFellow("report");
+                                                org.zkoss.util.media.Media m =((entidade.Arquivo)((Listitem)self.getParent().getParent()).getValue()).getMedia();
+                                                org.zkoss.util.media.Media amedia = new org.zkoss.util.media.AMedia(m.getName(), m.getFormat(), m.getContentType(), m.getStreamData());
+                                                iframe.setContent(amedia);
+                                                ]]>
+                                                                    </attribute>
+                                                                </button>
+                                   
+                                   
+                                                                <button label="apagar">
+                                                                    <attribute name="onClick"><![CDATA[
+                                                                    
+                                                lbimg.removeChild(((Listitem)self.getParent().getParent()));
+                                                                    if(lbimg.getItemCount()==0&&lbimgII.getItemCount()==0)tbimg4.setValue(null);
+                                                ]]>
+                                                                    </attribute>
+                                                                </button>
+                                                            </listcell>
+                                                        </listitem>
+                                                    </template>
+                                                </listbox>
+                                            </div>
+                    
+                                        </hlayout>
+                                    </row>
+                                    <row>
+                                        <hlayout sclass="second-layout">
+                                            <div sclass="description-area" height="100%">
+                                                <button id="btrecibo2" label="Outro comprovativo" mold="trendy" upload="true,maxsize=50000">
+                                                    <attribute name="onUpload"><![CDATA[
+                               if(event.getMedias()==null)return;
+                               entidade.Arquivo[] lm = new entidade.Arquivo[event.getMedias().length+lbimgII.getItemCount()];
+                                int t = 0;
+                               for (int i =0;i<event.getMedias().length;i++)
+                               {
+                                  org.zkoss.util.media.Media m = event.getMedias()[i];
+                                  String f = m.getFormat();
+                                  if (!(m instanceof org.zkoss.image.Image)&&(!f.equalsIgnoreCase("pdf"))&& (!f.equalsIgnoreCase("doc"))
+                                      && (!f.equalsIgnoreCase("xls"))&& (!f.equalsIgnoreCase("docx"))&& (!f.equalsIgnoreCase("xlsx"))) {
+                                         Clients.showNotification("Formato não suportado", "error", null, null, 0,true);
+                                         return;
+                                  }
+                                  lm[t]=new entidade.Arquivo("",m,m.getName());
+                                  t=t+1;
+				  for(org.zkoss.zul.Listitem li:lbimgII.getItems()){
+                                            org.zkoss.util.media.Media m2 = ((entidade.Arquivo)li.getValue()).getMedia();
+                                     if(m2.getName().equals(m.getName())){
+                                        Clients.showNotification("Por favor, os nomes devem ser diferentes", "error", null, null, 0,true);
+                                        return;
+                                     }
+                                     if(i==0){
+                                       lm[t]=new entidade.Arquivo("",m2,m.getName());
+                                       t=t+1;
+                                     }
+                                  }
+                               }
+                               lbimgII.setModel(new ListModelList(lm));
+                                                    tbimg4.setFocus(true);
+                                        ]]>
+                                                    </attribute>
+                                                </button> 
+                                            </div>
+                                            <div sclass="description-area" style="background-image:url('../images/profilev.png');border:1px solid #ddd;">
+                                                <listbox span="true"  sizedByContent="true" style="overflow:auto" height="100%" id="lbimgII" >
+                                                    <template name="model">
+                                                        <listitem value="${each}">
+                                                            <listcell >
+                                                                <label value="${each.nome}">
+                                                                    <attribute name="onCreate"><![CDATA[
+                                                                    tbimg4.value="value";
+                                                                   // self.value=" ";
+                                                                ]]>
+                                                                    </attribute>
+                                                                </label>
+                                                                <button label="ver">
+                                                                    <attribute name="onClick"><![CDATA[
+                                                Window win = (Window) Executions.createComponents("/report.zul", null, null);
+                                                win.setTitle("Recibo");
+                                                Iframe iframe = (Iframe) win.getFellow("report");
+                                                org.zkoss.util.media.Media m =((entidade.Arquivo)((Listitem)self.getParent().getParent()).getValue()).getMedia();
+                                                org.zkoss.util.media.Media amedia = new org.zkoss.util.media.AMedia(m.getName(), m.getFormat(), m.getContentType(), m.getStreamData());
+                                                iframe.setContent(amedia);
+                                                ]]>
+                                                                    </attribute>
+                                                                </button>
+                                                                <button label="apagar">
+                                                                    <attribute name="onClick"><![CDATA[
+                                                                    
+                                                lbimgII.removeChild(((Listitem)self.getParent().getParent()));
+                                                                    if(lbimg.getItemCount()==0&&lbimgII.getItemCount()==0)tbimg4.setValue(null);
+                                                ]]>
+                                                                    </attribute>
+                                                                </button>
+                                                            </listcell>
+                                                        </listitem>
+                                                    </template>
+                                                </listbox>
+                                            </div>
+                    
+                                        </hlayout>
+                                    </row>
+                                <row id="prazoinsc">
+                                    <hlayout sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label  value="Observações:"/>
+                                        </div>
+                                        <div sclass="description-area" height="98%">
+                                            <textbox id="txMot" rows="5" width="98%"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                            </rows>
+                        </grid>
+                        <button autodisable="self" id="btnCnf"  sclass="mybutton button blue medium" forward="onClick=onBtnCnf" label="Aceitar" style="margin:10px 0 0 10px;" mold="trendy" ></button>
+                        <button autodisable="self" id="btncancelar" sclass="mybutton button medium" forward="onClick=onBtncancelar" label="Cancelar" style="margin:10px 0 0 0px;" mold="trendy" />                
+                    </div>
+                </tabpanel>
+            </tabpanels> 
+        </tabbox>     
+    </window>
+</zk>

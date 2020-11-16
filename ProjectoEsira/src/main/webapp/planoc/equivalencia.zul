@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="windowEquivalencia" border="none" apply="esira.controller.PlanoCurricularController2">
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+    <li><a>Plano Curricular</a></li>
+    <li><a>Tabela de Equivalencias</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <div>
+            <!--<toolbar >-->
+            <div width="98%"  sclass="row-custimized criteriaPad button-blue">
+                <hlayout hflex="max" >
+                    <image src="/icon/search.png"/>
+                    <combobox hflex="1" id="cbCursoPrec" readonly="true" width="98%" value="Curso" buttonVisible="true" constraint=" no Empty: Seleccione um Curso!" autodrop="true" model="${$composer.cursoModel}" mold="rounded"/>
+                    <combobox hflex="1" id="cbPlanoP" readonly="true" width="150px" value="Plano Curricular" buttonVisible="true" autodrop="true" mold="rounded"/>
+                    <combobox hflex="1" id="cbCursoPrec2" readonly="true" width="98%" value="Curso" buttonVisible="true" constraint=" no Empty: Seleccione um Curso!" autodrop="true" model="${$composer.curso2Model}" mold="rounded"/>
+                    <combobox hflex="1" id="cbPlanoP2" readonly="true" width="150px" value="Plano Curricular" buttonVisible="true" autodrop="true" mold="rounded"/>
+                </hlayout>
+                <listbox sizedByContent="true" width="98%" emptyMessage="Sem conteúdo (Seleccione um Curso)" id="lbCursoPrec"
+                         oddRowSclass="non-odd" span="true" >
+                    <listhead hflex="1" sizable="true">
+                        <listheader hflex="min" align="center" label="Ano.Semestre"/>
+                        <listheader hflex="min" align="center" label="Disciplina"/>
+                        <listheader hflex="min" align="center" label="Equivalente"/>
+                        <listheader hflex="min" align="center" label="Operações"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem value="${each}">
+                            <listcell >
+                                <label value="${each.nivel}.${each.semestre}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.nome}"/>
+                            </listcell>
+                            <listcell >
+                                <vbox>
+                                    <attribute name="onCreate"><![CDATA[
+                                        Label l = new Label();
+                                    //<label value="${each.disciplina}, " forEach="${each.equivalenciaList1}"/>
+                            esira.domain.Disciplina d = (esira.domain.Disciplina)self.getParent().getParent().getValue();
+                            //            esira.service.CRUDService csimp = (esira.service.CRUDService) org.zkoss.zkplus.spring.SpringUtil.getBean("CRUDService");
+                             //java.util.Map par = new java.util.HashMap();
+                           //par.clear();
+                           //  par.put("pk",((esira.domain.Inscricaodisciplina)self.getValue()).getInscricaodisciplinaPK());
+                           //  esira.domain.Inscricaodisciplina m = csimp.findByJPQuery("from Inscricaodisciplina m where m.inscricaodisciplinaPK = :pk",par); 
+                             // Messagebox.show(d.getEquivalenciaList1()+"");
+                                       int ibcu=((esira.domain.Curso)self.getParent().getParent().getParent().getParent().getChildren().get(0).getChildren().get(3).getSelectedItem().getValue()).getIdCurso();
+      for(esira.domain.Equivalencia di:d.getEquivalenciaList1() ){
+                                          if(di.getDisciplina().getCurso().getIdCurso().intValue()==ibcu)  l.setValue(l.getValue()+", "+di.getDisciplina().getNome());
+                                      }
+                                        l.setParent(self);
+                                    ]]></attribute>   
+                                </vbox>
+                            </listcell>
+                            <listcell>
+                                <button label="editar" forward="onClick=onEditPrecDisc"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+            </div>
+        </div>
+    </window>
+    <style>
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+    </style>
+</zk>

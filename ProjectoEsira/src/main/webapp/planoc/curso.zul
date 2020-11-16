@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="windowCurso" border="none" apply="esira.controller.PlanoCurricularController">
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+    <li><a>Utilitarios</a></li>
+    <li><aCursos</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <div>
+            <!--<toolbar >-->
+            <div align="left" sclass="row-custimized criteriaPadEiditMatr" >
+                <hbox >
+                    <button autodisable="self" id="addCurso" label="Adicionar" mold="trendy" height="20px"/>            
+                </hbox>
+            </div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                
+                <hlayout   id="ahead">
+                    <image  src="/icon/search.png"/>
+                    <combobox id="cbfaculdade" forward="onSelect=onSelectcbfaculdadeCurso" visible="false"  hflex="1"   readonly="true">
+                        <attribute name="onAfterRender"><![CDATA[
+                            if((self.getModel()!=null) && self.getModel().getSize()>0){
+                               self.setSelectedIndex(0);
+                            }                           
+                        ]]></attribute>
+                        <comboitem label="${each}"/>
+                    </combobox>   
+                </hlayout>
+                <listbox  id="lbCurso"
+                          sizedByContent="true" 
+                          emptyMessage="Sem conteudo" span="true" autopaging="true" model="${$composer.cursoModel}" >
+                    
+                    <listhead>
+                        <listheader label="codigoCurso"/>
+                        <listheader label="Descricao"/>
+                        <listheader label="Faculdade"/>
+                        <listheader label="Qtd Semestres"/>
+                        <listheader label="Abreviatura"/>
+                        <listheader label="Periodo"/>
+                        <listheader label="Operação" align="center"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem value="${each}">
+                            <listcell >
+                                <label value="${each.codigoCurso}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.descricao}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.faculdade.desricao}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.qtdSemestres}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.abreviatura}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.turno.descricao}"/>
+                            </listcell>
+                            <listcell >
+                                <button autodisable="self" tooltiptext="Editar" hoverImage="/icon/ico_editar.png" image="/icon/ico_editar1.png" forward="onClick=onEditCurso"/>
+                                <button autodisable="self"  tooltiptext="Apagar" hoverImage="/icon/ico_borrar.png"  image="/icon/ico_borrar1.png" forward="onClick=onDeleteCurso"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+            </div>
+        </div>
+        
+        <window id="mDialogAddCurso" position="center,center" closable="false"  border="none"
+                width="50%" apply="esira.controller.PlanoCurricularController" style="margin-top:10px;" visible="false">
+            <!--<toolbar id="tbAddCurso" visible="false">-->
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <div style="margin-top: 10px; margin-left:10px;">
+                    <label id="validationCurso" style="color:red;"/>
+                </div>
+                <grid>
+                    <columns>
+                        <column width="20%"/>
+                        <column />
+                    </columns>
+                    <rows>
+                        <row visible="false">
+                            <intbox id="cid"/>
+                        </row>
+                        <row>
+                            <label value="Nome do Curso" />
+                            <textbox id="txtCurso" width="98%;" constraint=" no Empty: Insira o Nome do Curso!"/>
+                        </row>
+                        <row>
+                            <label value="Codigo do Curso" />
+                            <textbox id="txtCodCurso" constraint=" no Empty: Insira o codigo do Curso!"/>
+                        </row>
+                        <row>
+                            <label value="Faculdade" />
+                            <combobox id="cbfaculdade" width="100%" model="${$composer.faculdadeModel}" constraint=" no Empty: Seleccione uma Faculdade!" >
+                                <comboitem label="${each.desricao}"/>
+                            </combobox>
+                        </row>
+                        <row>
+                            <label value="Qtd semestres" />
+                            <intbox id="intSemestre" constraint=" no Empty: Insira o total de semestres!" />
+                        </row>
+                        <row>
+                            <label value="Abreviatura" />
+                            <textbox id="txtAbrevCurso" constraint=" no Empty: Insira abreviatura do Curso!" />
+                        </row>
+                        <row>
+                            <label value="turno:"/>
+                                 
+                            <combobox id="cbturno"  width="200px" model="${$composer.turnoModel}" constraint=" no Empty: Seleccione um item!">
+                                <comboitem label="${each}"/>
+                            </combobox>
+                        </row>
+                        <row>
+                            <label value="Ultimo plano curricular (Ano:)" />
+                            <intbox id="txtPlano" constraint=" no Empty: Insira o ultimo Plano Curricual!" />
+                        </row>
+                    </rows>
+                </grid>
+                <div align="center">
+                    <hbox >
+                        <button autodisable="self" id="saveCurso" forward="onClick=onSaveCurso" label="Salvar" mold="trendy" height="20px" />
+                        <button autodisable="self" id="cancelCurso" forward="onClick=onCancelCurso" label="Cancelar" mold="trendy" height="20px" />
+                    </hbox>
+                </div>
+            </div>
+            <!--</toolbar>-->
+            
+        </window>
+    </window>
+    
+   
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+         
+         
+    </style>
+</zk>

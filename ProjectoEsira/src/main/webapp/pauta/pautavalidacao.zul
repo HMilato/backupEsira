@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="windowPautaV"  border="none" apply="esira.pauta.PautaValidacao"> 
+        <div id="listapauta">
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+    <li><a>Pauta</a></li>
+    <li><a>Validação</a></li>
+</ul>
+                ]]>
+            </html>
+            <div align="left" sclass="row-custimized criteriaPadEiditMatr" >
+                <hbox style="margin-top:1em">
+                    <label value=""/>
+                </hbox>
+            </div>
+            <div>
+                <hlayout hflex="max" >
+                    <image src="/icon/search.png"/>
+                    <intbox style="display: inline-block;" hflex="1" id="ibano" />
+                    <!--model="${$composer.leccionaModel}"-->
+                    <combobox style="display: inline-block;" hflex="1" id="cbSemPrec" readonly="true" width="98%" value="Semestre" buttonVisible="true" autodrop="true"  mold="rounded">
+                        <comboitem label="Semestre 1" value="1"/>
+                        <comboitem label="Semestre 2" value="2"/>
+                    </combobox>
+                    <combobox id="cbcurso" style="display: inline-block;" hflex="1" width="98%" readonly="true"  forward="onSelect=onSelCurso,onAfterRender=onSIndexCbcurso" model="${$composer.listaCursoModel}">
+                        <comboitem label="${each}"/>
+                    </combobox>
+                </hlayout>
+            </div>
+            <div  width="100%"    sclass="row-custimized criteriaPad button-blue" >
+                <listbox id="lbpauta" width="100%" emptyMessage="Nenhuma pauta encontrada" >
+                    <template name="model">
+                        <listitem>
+                            <listcell  style="display:inline-block;width:40%;hflex:max">
+                                <attribute name="onCreate"><![CDATA[
+                                esira.domain.Pauta p = (esira.domain.Pauta)self.getParent().getValue();
+                                Label lb = new Label(p.getDisciplina().getCurso().getAbreviatura()
++" - "+p.getDisciplina().getNome());
+                                lb.setStyle("font-size:14px;color:blue");
+                                lb.setParent(self);
+                        ]]></attribute>
+                            </listcell>
+                            <listcell  style="display:inline-block;width:30%;hflex:max">
+                                <attribute name="onCreate"><![CDATA[
+                                esira.domain.Pauta p = (esira.domain.Pauta)self.getParent().getValue();
+                                Label lb = new Label(p.getDescricao());
+                                lb.setStyle("font-size:18px;color:blue");
+                                lb.setParent(self);
+                        ]]></attribute>
+                            </listcell>
+                            <listcell  style="display:inline-block;width:20%;hflex:max">
+                                <attribute name="onCreate"><![CDATA[
+                                esira.domain.Pauta p = (esira.domain.Pauta)self.getParent().getValue();
+                                Label lb;
+                             if (p.getDocente1() == null) {
+                                lb=new Label();
+                    lb.setStyle("font-size:14px;color:red");
+                    lb.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy").format(p.getPautaPK().getDatap()));
+                    lb.setValue("Não validado"); lb.setParent(self);    
+                } else {lb=new Label();
+                    lb.setStyle("font-size:14px;color:blue");
+                    lb.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy").format(p.getPautaPK().getDatap()));
+                    lb.setValue("Validado");lb.setParent(self);   
+                    if (p.getDatapublicacao() == null) {lb=new Label();
+                        lb.setStyle("font-size:14px;color:blue");
+                        lb.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy").format(p.getPautaPK().getDatap()));
+                        lb.setValue("Nao Publicado");lb.setParent(self); 
+                    } else {
+                          lb=new Label();
+                       lb.setStyle("font-size:14px;color:blue");
+                        lb.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy").format(p.getPautaPK().getDatap()));
+                        lb.setValue("Publicado");lb.setParent(self); 
+                    }
+                }
+                        ]]></attribute>
+                            </listcell>
+                            <listcell  style="display:inline-block;;width:10%">
+                                <attribute name="onCreate"><![CDATA[
+                                   esira.domain.Pauta id = (esira.domain.Pauta)self.getParent().getValue();
+                                Menupopup mp = new Menupopup();
+                            mp.setId("p"+mp.getUuid());
+                            Menuitem mi = new Menuitem();
+                            mi.addForward("onClick", "self", "onLancar");
+                            mi.setLabel("Validaçâo");
+                            mi.setParent(mp);
+                                    mi = new Menuitem();
+                            mi.addForward("onClick", "self", "onAbrirPauta");
+                            mi.setLabel("Ver Pauta");
+                            mi.setParent(mp);
+                                Button b = new Button();
+                                b.setStyle("position: absolute;width:100%");
+                                b.setParent(self);
+                            b.setPopup("p"+mp.getUuid()+", type=toggle, position=after_start");
+                            b.setImage("/icon/opcao.png");
+                            b.setStyle("padding: 0;");   
+                                mp.setParent(self);          
+                        ]]></attribute>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+            </div>
+        </div>
+        <div visible="false" width="100%" style="overflow:auto" id="formvalidacao" sclass="row-custimized criteriaPad button-blue">
+            <intbox id="ibordem" visible="false"/>
+            <intbox id="ibedicao" visible="false"/>
+            <button label="voltar" forward="onBack"/>
+            <listbox width="100%" id="lbStudentsMarks" emptyMessage="Sem conteudo"  >
+                <template name="model">
+                    <listitem>
+                        <listcell style="display: inline-block;">
+                        </listcell>
+                        <listcell style="display: inline-block;">
+                            <a width="100%" >
+                                <label   value="${each.nomeMecanografico}"/>
+                            </a>
+                        </listcell>
+                        <listcell  style="display: inline-block;width:60%;hflex:max">
+                            <label  value="${each.nomeCompleto}"/>
+                        </listcell>
+                        <listcell style="display: inline-block">
+                            <vlayout xmlns:w="client">
+                                <combobox model="${$composer.observacaoModel}">
+                                    <attribute w:name="doKeyPress_">
+			<![CDATA[
+				function(evt)
+				{
+                                var t =0;
+                                 var ind =this.getInputNode().value.indexOf('.');
+                                 if(ind>=0 && ((this.getInputNode().value.length-ind)>2)){
+                                   t=1;                                    
+                                }
+                                var v =this.getInputNode().value+(evt.which-48);
+                                if(evt.which==46 && (this.getInputNode().value=='' || ind>=0)){
+                                     t=1;
+                                }
+				if (!this._shallIgnore(evt, ".0123456789")){
+						if(t==1 || v>20)evt.stop();this.$doKeyPress_(evt);}
+                                }
+			]]>
+                                    </attribute>
+                                    <attribute w:name="onSelect">
+			<![CDATA[
+                         
+		       if(this.getInputNode().value==''){
+                          this.setReadonly(false);
+                        } else {
+                            this.setReadonly(true);
+                         }
+			]]>
+                                    </attribute>
+                                    <attribute name="onAfterRender">
+			<![CDATA[
+                           entidade.NotaPauta np = (entidade.NotaPauta)self.getParent().getParent().getParent().getValue();
+                          // Messagebox.show("vbccb");
+                          if(np.getIndice()<1){
+                             ((Combobox)self).setValue(np.getNota());
+                             if(!np.isEditavel()){
+                              //((Listitem) self.getParent().getParent().getParent()).setDisabled(true); 
+                               ((Combobox)self).setReadonly(true);  
+                               ((Combobox)self).setButtonVisible(false);                           
+                                }
+                           } else {
+                            ((Combobox)self).setSelectedIndex(np.getIndice());
+                            ((Combobox)self).setReadonly(true);
+                            }			
+                          ]]>
+                                    </attribute>
+                                    <template name="model">
+                                        <comboitem label="${each.abreviatura}" description="${each.descricao}"/>
+                                    </template>
+                                </combobox>
+                            </vlayout>
+                        </listcell>
+                    </listitem>
+                </template>
+            </listbox>  
+            <hbox>
+                <button label="Salvar" forward="onClick = onSavePauta"  mold="trendy" height="20px" autodisable="self" sclass="mybutton button blue medium" />
+                <button forward="onClick = onBack" sclass="mybutton button medium"  label="Fechar" autodisable="self" mold="trendy" height="20px" />
+            </hbox>
+        </div>
+    </window>
+    <style>
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+    </style>
+    <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+    <script type="text/javascript">
+        zk.afterMount(function() {});
+    </script>
+</zk>

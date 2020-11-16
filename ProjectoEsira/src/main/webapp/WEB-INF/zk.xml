@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk>
+     
+    <listener>
+        <description>ZK Demo properties loader</description>
+        <listener-class>
+            esira.webapp.AppInit
+        </listener-class>
+    </listener>
+    
+    <session-config>
+        <device-type>ajax</device-type>
+        <timeout-uri>/timeout.zul</timeout-uri>
+    </session-config>
+    <!-- Hibernate SessionFactory life cycle -->
+    <!-- [Optional]
+    Uncomment if you want to defines the application's name 
+    <preference>
+            <name>org.zkoss.zk.ui.WebApp.name</name>
+            <value>eSira</value>
+    </preference>
+    -->
+    
+    <!-- ========================================================== -->
+	<!--            running a zk application in a CLUSTER           -->
+	<!-- ========================================================== -->
+	<system-config>
+		<ui-factory-class>
+			org.zkoss.zk.ui.http.SerializableUiFactory
+		</ui-factory-class>
+	</system-config>
+        
+    <language-config>
+        <addon-uri>/ZKAddon.xml</addon-uri>
+    </language-config>
+</zk>

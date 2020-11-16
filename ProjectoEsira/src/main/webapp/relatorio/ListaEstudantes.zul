@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <div >
+        <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+                    <li><a >Relatório</a></li>
+                    <li><a class="current">Lista de Estudantes</a></li>
+                </ul>
+                ]]>
+        </html>
+    </div>
+    
+    <window id="winlestudantes" apply="esira.relatorio.RelEstudante">
+        <hbox >
+            <cell >
+                <hbox >
+                    <div  >
+                        <button autodisable="self" label="Exportar" image="/icon/ico-excel.png" forward="onClick=onExcelExport"/>
+                        <!-- <button id="relat" forward="onClick=onRelatorio" image="/icon/docpdf.png" label="PDF" mold="trendy" />-->
+                    </div>                      
+                </hbox>                
+            </cell>
+        </hbox>
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <!--<vbox width="100%" hflex="max">
+            <hlayout hflex="1" id="ahead">-->
+            <image src="/icon/search.png"/><button style="padding: 0;" tooltiptext="Filtrar" image="/icon/opcao.png" popup="popup, type=toggle, position=after_start" />
+            <textbox style="display: inline-block;" hflex="1" visible="false" id="txProcurar" width="98%" ></textbox>                    
+            <textbox style="display: inline-block;" hflex="1" visible="false" id="txPNrmec" width="98%" ></textbox>
+            <combobox style="display: inline-block;" id="cbfaculdade" model="${$composer.listFacModel}" readonly="true" onCreate="self.setSelectedIndex(0)" width="95%" >
+                <comboitem label="${each}"/>
+            </combobox>
+            <combobox style="display: inline-block;" id="cbcurso" visible="false" readonly="true" onAfterRender="self.setSelectedIndex(0)" width="98%" >
+                <comboitem disabled="true" label="${each}"/>
+            </combobox> 
+            <intbox tooltiptext="Ano de Ingresso" style="display: inline-block;" visible="false" id="ibAno" width="98%" ></intbox>
+            
+            <intbox tooltiptext="Nivel de Freq." style="display: inline-block;" visible="false" id="ibNivel" width="98%" ></intbox>
+            <radiogroup id="pgenero" visible="false" width="98%" style="display: inline-block;" >
+                <radio id="rgsexo" label="Masculino" hflex="1" checked="true"/>
+                <radio id="rgsm"  label="Feminino" hflex="1"/>
+            </radiogroup>
+            <radiogroup id="pmatric" visible="false" width="98%" style="display: inline-block;" >
+                <radio id="rgsmatric" label="Matriculado" hflex="1" checked="true"/>
+                <radio id="rgnmatric"  label="Não matriculado" hflex="1"/>
+            </radiogroup>
+            <radiogroup style="display: inline-block;"  id="pminsc" visible="false" width="98%"  >
+                <radio id="rgsminsc" label="Inscritos" hflex="1" checked="true"/>
+                <radio id="rgnminsc"  label="Não Inscritos" hflex="1"/>
+            </radiogroup>
+            <intbox tooltiptext="Ano Lectivo" style="display: inline-block;" visible="false" id="ibPAno" width="98%" ></intbox>
+            <combobox style="display: inline-block;"  readonly="true" visible="false" width="98%"  id="cbPeriodDisc" value="----Semestre----">
+                <comboitem label="Semestre 1" value="1"/>
+                <comboitem label="Semestre 2" value="2"/>
+            </combobox>
+            <radiogroup id="pactivo" visible="false" width="98%" hflex="min" >
+                <radio id="rgactivo" label="Estudantes Activos" hflex="1" checked="true"/>
+                <radio id="rgnactivo"  label="Não Activos" hflex="1"/>
+            </radiogroup>
+            <combobox style="display: inline-block;" id="cbnacionalidade" visible="false" readonly="true" onCreate="self.setSelectedIndex(0)" width="98%" >
+                <comboitem label="${each}"/>
+            </combobox> 											
+            <combobox style="display: inline-block;" readonly="true" visible="false" id="cbprovincia" onCreate="self.setSelectedIndex(0)" width="98%" >
+                <comboitem label="${each}"/>
+            </combobox> 
+            <menupopup id="popup">
+                <menuitem id="manoi" label="Ano de Ingresso" autocheck="true" checkmark="true"/>
+                <menuseparator />
+                <menuitem id="mgenero" label="Genero" autocheck="true" checkmark="true"/>
+                <menuseparator />
+                <menuitem id="mnacionalidade" label="Nacionalidade" autocheck="true" checkmark="true"/>
+                <menuseparator />
+                <menuitem id="mmatric" label="Matriculados" autocheck="true" checkmark="true"/>
+                <menuseparator />
+                <menuitem id="mnivel" label="Nivel Freq." autocheck="true" checkmark="true"/>
+                <menuseparator />
+                <menuitem id="minsc" label="Inscritos" autocheck="true" checkmark="true"/>
+                <menuseparator />
+                <!-- <menuitem id="mprovincia" label="Provincia" autocheck="true" checkmark="true"/>
+                <menuseparator />-->
+                <menuseparator />
+                <!--<menuitem id="mactivo" label="Estudantes Activos" autocheck="true" checkmark="true"/>-->
+                <menuitem id="manactivo" label="Estudantes não Activos" autocheck="true" checkmark="true"/>
+            </menupopup>
+            <menupopup id="mtt">
+                <menuitem id="paing" forward="onClick=onClickpl" label="Ano de Ingresso" autocheck="true" checkmark="true"/>
+                <menuitem id="pgenr" forward="onClick=onClickpl" label="Genero" checked="true" autocheck="true" checkmark="true"/>
+                <menuitem id="pnacio" forward="onClick=onClickpl" label="Nacionalidade" autocheck="true" checkmark="true"/>
+                <menuitem id="pprov" forward="onClick=onClickpl" label="Província" autocheck="true" checkmark="true"/>
+                <menuitem id="peml" forward="onClick=onClickpl" label="Email" autocheck="true" checkmark="true"/>
+                <menuitem id="pfoto" forward="onClick=onClickplfoto" label="Mostrar Foto" autocheck="true" checkmark="true"/>
+            </menupopup>
+            <listbox  id="lbEstudantes" sclass="semborda" sizedByContent="true" 
+                      emptyMessage="Sem conteudo" span="true" autopaging="true" >
+               
+                <listhead  menupopup="mtt" hflex="1" sizable="true">
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop" id="nomeCompleto"  hflex="min" label="Nome Completo" sort="auto(nomeCompleto)" align="left"/>
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop" hflex="min" label="Nr Mec" align="left"/>
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop" id="genr"  hflex="min"   label="Sexo" align="right" />
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop"   hflex="min"   label="Data Nasc." align="right" />
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop"   hflex="min"   label="Província" align="right" />
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop"   hflex="min"   label="Contacto" align="right" />
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop" hflex="min" popup="cur" label="Curso" align="left"/>
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop" hflex="min" label="Nivel" align="right" />
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop" id="aing" hflex="min" visible="false" label="Ano Ingresso" align="right" />
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop" id="nacio" hflex="min" visible="false" label="Nanionalidade" align="center"/>
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop" id="prov" hflex="min" visible="false" label="Provincia" align="right" />
+                    <listheader draggable="true" droppable="true" forward="onDrop=onDrop" id="eml" hflex="min" visible="false" label="Email" align="right" />
+                </listhead>
+                <template name="model">
+                    <listitem value="${each}">
+                        <listcell>
+                            <div sclass="description-area" style="background-image:url('../images/profilev.png'); width:171px; height:171px;">
+                                <attribute name="onCreate"><![CDATA[
+                        if(pfoto.isChecked()){
+                                        esira.service.CRUDService csimpm = (esira.service.CRUDService) org.zkoss.zkplus.spring.SpringUtil.getBean("CRUDService");
+                                        java.util.Map par = new java.util.HashMap();
+                                esira.domain.Estudante e = (esira.domain.Estudante)self.getParent().getParent().getValue();
+                                   // Messagebox.show(e.getNomeCompleto());
+                                        par.clear();
+                                 par.put("ide", e);
+                                 esira.domain.Arquivoestudante am = csimpm.findEntByJPQuery("from Arquivoestudante am where"
+                                 + " am.tipo=0 and am.idEstudante = :ide", par);
+                                         Label la= new Label();
+                                    la.setValue(e.getNomeCompleto());
+                                    la.setParent(self);
+                               if(am!=null){
+                                        
+                                String ss = esira.service.UserAutentic.getPathR(am.getTipo().toString()) + e.getNrEstudante() + am.getNomearquivo();
+                                        org.zkoss.image.Image i = null;
+                            try {
+                                i = new org.zkoss.image.AImage(ss);
+                            } catch (java.io.FileNotFoundException ex) {
+
+                            }
+                            if (i != null) {
+                                    Vlayout v = new Vlayout();
+                                   v.setWidth("171px");
+                                    v.setHeight("171px");
+                                    v.setStyle("overflow:auto");
+                                    v.setParent(self);
+                                    Image ii = new Image();
+                                    ii.setWidth("170px");
+                                    ii.setHeight("170px");
+                                    ii.setContent(i);
+                                ii.setParent(v); 
+                             }
+                           }
+                        }else{
+                            esira.domain.Estudante e = (esira.domain.Estudante)self.getParent().getParent().getValue();
+                            Label la= new Label();
+                            la.setValue(e.getNomeCompleto());
+                            la.setParent(self.getParent());
+                            self.detach();
+                        }                      
+                        ]]></attribute> 
+                            </div>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.nrEstudante}" />
+                        </listcell>
+                        <listcell >
+                            <label value="Masculino" if="${each.masculino}"/>
+                            <label value="Feminino" if="${not each.masculino}"/>
+                        </listcell>
+                        <listcell >
+                            <attribute name="onCreate"><![CDATA[
+                                esira.domain.Estudante e = (esira.domain.Estudante)self.getParent().getValue();
+                                Label l = new Label();
+                                if(e.getDataNascimento()!=null) l.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy").format(e.getDataNascimento()));
+                                l.setParent(self);                           
+                        ]]></attribute> 
+                        </listcell>
+                        <listcell >
+                            <label value="${each.enderecof.provincia.descricao}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.enderecof.telefone}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.cursocurrente}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.nivelFrequencia}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.anoIngresso}"/>
+                        </listcell>
+                       
+                        <listcell >
+                            <label value="${each.nacionalidade}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.endereco.provincia}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.email}"/>
+                        </listcell>
+                    </listitem>
+                </template>
+                <template name="model2" >
+                    <listitem value="${each}">
+                    </listitem>
+                </template>
+            </listbox>
+            <hbox width="100%" style="overflow:auto;  position:relative;">
+                <label id="totale"/>
+            </hbox>
+            <button id="btv" sclass="mybuton small" label="Ver Mais" forward="onClick=onLoadi"/>
+            <!--  <hbox width="100%" style="overflow:auto;  position:relative;">
+                <paging id="pagEstudante" detailed="true" hflex="min" pageSize="5" />
+                Tamanho da pagina: <selectbox id="pageSize" model="${$composer.pageModel}" onCreate="self.setSelectedIndex(0)" width="50px"/>
+            </hbox>-->
+        </div>
+         
+        
+    </window>
+    
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+        
+        div.z-listcell-cnt{
+        border:1px;
+        }
+    </style>
+    <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+    <script type="text/javascript">
+        zk.afterMount(function() {
+        jq("$inPAno").Watermark("Ano Ingresso","gray");
+        jq("$txProcurar").Watermark("Nome...","gray");
+        jq("$txPNrmec").Watermark("Numero...","gray");
+        });
+    </script>
+    
+</zk>

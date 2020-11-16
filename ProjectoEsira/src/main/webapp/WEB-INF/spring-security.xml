@@ -1,0 +1,82 @@
+<!-- Spring namespace-based configuration -->
+
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:aop="http://www.springframework.org/schema/aop"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	       http://www.springframework.org/schema/aop   
+		   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd                        
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <!-- ====================================================== -->
+    <!-- For catching the @Secured annotation methods -->
+    <!-- Tells the Spring Security engine that we will use Spring Security's -->
+    <!-- pre and post invocation Java annotations (@PreFilter, @PreAuthorize, -->
+    <!-- @PostFilter, -->
+    <!-- @PostAuthorize) to secure service layer methods.. -->
+    <!-- Look in GFCBaseCtrl.java onEvent() method. -->
+    <!-- ====================================================== -->
+
+    <!-- Enable the @Secured annotation to secure service layer methods -->
+    <global-method-security secured-annotations="enabled" />
+       
+    <http pattern="/ul/*" create-session="stateless">
+        <intercept-url pattern='/**' access='IS_AUTHENTICATED_REMEMBERED' />
+        <http-basic />
+    </http>
+    
+    <http pattern="/ul/estudantesmatriculados/*" create-session="stateless">
+        <intercept-url pattern='/**' access='IS_AUTHENTICATED_REMEMBERED' />
+        <http-basic />
+    </http>
+    
+    <http auto-config="true"> 
+
+        <!-- ====================================================== -->
+        <!-- If we have our own LoginPage. So we must -->
+        <!-- tell Spring the name and the place. -->
+        <!-- In our case we take the same page -->
+        <!-- for a error message by a failure. -->
+        <!-- Further the page after a successfully login. -->
+        <!-- ====================================================== -->
+        <form-login login-page="/loginteste.zul"
+                            authentication-failure-url="/loginteste.zul?login_error=1"
+                            default-target-url="/index.zul" always-use-default-target="true"/> <!--always-use-default-target="true" />-->
+        <intercept-url pattern="/timeout.zul" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/loginteste.zul" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/webresources/*" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <!-- <intercept-url pattern="/visitante/visitante.zul" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
+        <intercept-url pattern="/*.zul" access="IS_AUTHENTICATED_REMEMBERED" />
+        <intercept-url pattern="/" access="IS_AUTHENTICATED_REMEMBERED" />
+        <intercept-url pattern="/teste" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+                
+    </http>
+      
+    <beans:bean id='bCryptPasswordEncoder' class='org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder'/>
+
+        <authentication-manager>
+          <authentication-provider user-service-ref="myUserDetailsService">
+                  <password-encoder ref="bCryptPasswordEncoder"/>
+          </authentication-provider>
+        </authentication-manager>
+        
+
+    <beans:bean id="myUserDetailsService" class="esira.service.MyUserDetailsService" />
+            
+   
+    <!--<mvc:cors>
+    <mvc:mapping path="/students/all"
+    allowed-origins="*"
+    allowed-methods="GET, PUT"
+    allowed-headers="header1, header2, header3"
+    exposed-headers="header1, header2" allow-credentials="false"
+    max-age="123" />
+    <mvc:mapping path="/**"
+    allowed-origins="*" />
+    </mvc:cors>-->
+        
+</beans:beans>
+
+

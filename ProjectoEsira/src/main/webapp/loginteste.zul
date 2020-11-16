@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <zscript>
+		<![CDATA[
+                        esira.domain.Users u = (esira.domain.Users)Sessions.getCurrent().getAttribute("user");
+			if(u!=null && u.getUtilizador()!=null)Executions.sendRedirect("/index.zul"); 
+		]]> 
+    </zscript>
+    <window mode="overlapped" style="background:transparent;"  apply="org.zkoss.bind.BindComposer"
+            viewModel="@id('vm') @init('esira.MyViewModel')">
+        <label value="Novo Ingresso? "/>
+        <a    label="Matricula para Novo Ingresso" href="/visitante/visitante.zul"/>
+  
+    </window>
+    <html>
+        <head>
+
+            <style type="text/css">
+                a:link {
+                text-decoration:none;
+                }
+                a:visited {
+                text-decoration:none;
+                }
+                a:hover {
+                text-decoration:underline;
+                }
+            </style>
+            <!--META-->
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <title>Login Form</title>
+
+            <!--STYLESHEETS-->
+
+
+            <!--SCRIPTS-->
+         <!--   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>-->
+            <!--Slider-in icons-->
+            <script type="text/javascript">
+                $(document).ready(function() {
+                $(".username").focus(function() {
+                $(".user-icon").css("left","-48px");
+                });
+                $(".username").blur(function() {
+                $(".user-icon").css("left","0px");
+                });
+                $(".password").focus(function() {
+                $(".pass-icon").css("left","-48px");
+                });
+                $(".password").blur(function() {
+                $(".pass-icon").css("left","0px");
+                });
+                }); 
+                 
+            </script>
+            <script type="text/javascript">
+                function erro() { 
+                var login = location.search.split('login_error=')[1];
+                return login ? 'Utilizador ou Senha inválida' : '';
+                }
+            </script>
+        </head>
+        <body>
+
+            <!--WRAPPER-->
+            <div id="wrapper">
+
+                <!--SLIDE-IN ICONS-->
+                <div class="user-icon"></div>
+                <div class="pass-icon"></div>
+                <!--END SLIDE-IN ICONS-->
+
+                <!--LOGIN FORM-->
+                <form name="login-form" class="login-form" action="j_spring_security_check" method="post">
+
+                    <!--HEADER-->
+                    <div class="header">
+                        <!--TITLE-->
+                        <h1>Autenticação</h1><!--END TITLE-->
+                        <!--DESCRIPTION-->
+                        <span>Preencha os dados do utilizador.</span><!--END DESCRIPTION-->
+    
+                    </div>
+                    <!--END HEADER-->
+	
+                    <!--CONTENT-->
+                    <div class="content">
+                        <!--USERNAME-->
+                        <input name="j_username" id="username" type="text" class="input username" value="Username" onfocus="this.value=''" /><!--END USERNAME-->
+                        <!--PASSWORD-->
+                        <input name="j_password" id="password"   type="Password"  class="input password" value="Password" onfocus="this.value=''" /><!--END PASSWORD-->
+                        
+                 
+                    
+                    </div>
+                    <!--END CONTENT-->
+    
+                    <!--FOOTER-->
+                    <div class="footer">
+                        <!--LOGIN BUTTON-->
+                        <input type="submit" name="submit" value="Entrar" class="button" /><!--END LOGIN BUTTON-->
+                         
+                        <input id="message" readonly = "true" type="text" onsize="this.value=erro()" style="overflow:auto;  position:relative;background:transparent;color:red"/>
+                        <!--REGISTER BUTTON--><!--END REGISTER BUTTON-->
+                        
+                        <a  text-decoration="none" href="/esira/recuperacaoSenha/recuperacao.zul"> 
+                            <h4>  Esqueceste a tua Senha? </h4> 
+                        </a>
+                    </div>
+                    <!--END FOOTER-->
+
+                </form>
+                <!--END LOGIN FORM-->
+
+            </div>
+            <!--END WRAPPER-->
+
+            <!--GRADIENT-->
+            <div class="gradient"></div><!--END GRADIENT-->
+            <script type="text/javascript">
+                var elem = document.getElementById("message");
+                elem.value = erro();
+            </script>
+        </body>
+    </html>
+    
+</zk>

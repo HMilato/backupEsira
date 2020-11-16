@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 12 21:23:35     2006, Created by tomyeh
+		Fri May 01 04:36:35     2009, Modified by stera
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+  
+    <window id="winPrecDialog" title="Disciplinas precedentes" border="none" apply="esira.controller.PlanoCurricularController" 
+           width="50%" sizable="true"  position="center,center" closable="false" contentStyle="overflow:auto" sclass="formNovo" mode="modal">
+        
+        <grid oddRowSclass="non-odd">
+            <columns sizable="true">
+                <column hflex="1" vflex="1" />
+            </columns> 
+            <rows>
+                <row visible="false">
+                    <intbox  id="iddisc"/>
+                    <intbox id="ibitem"/>
+                    <intbox id="ibPlanoP"/>
+                </row>
+                <row>
+                    <label id="erroValidacao" style="color:#dc291e"/>
+                </row>
+                <row>
+                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                        <div sclass="description-area" height="100%"> Disciplina:</div>
+                        <div sclass="description-area" height="100%">
+                            <textbox readonly="true" id="lbNome" width="100%"/>
+                        </div>
+                    </hlayout>
+                </row>
+                <row>
+                    <hlayout sclass="second-layout">
+                        <div sclass="description-area" height="100%">
+                            <label  value="Disciplinas:"/>
+                        </div>
+                    </hlayout>
+                </row>
+                <row>
+                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                        <combobox id="cbprec" disabled="false" constraint=" no Empty: Seleccione uma disciplina!">
+                            <template name="model">
+                                <comboitem label="${each}">
+                                    
+                                </comboitem>
+                            </template>
+                        </combobox>
+                        <div sclass="description-area" height="100%">
+                            <button id="btnva" tooltiptext="Seleccionar" forward="onClick=onBtnva" label="►►" />
+                        </div>
+                    </hlayout>
+                </row>
+                <row>  
+                    <vbox width="100%">
+                        <listbox sizedByContent="true" hflex="1" sclass="mylitem4 mylitem5" oddRowSclass="non-odd" id="lbprec" span="true" rows="10">
+                            <listhead sizable="true">
+                                <listheader ></listheader>
+                                <listheader align="right"></listheader>
+                            </listhead>
+                            <template name="model" >
+                                <listitem value="${each}">
+                                    <listcell>
+                                        <label value="${each}"/> 
+                                    </listcell>
+                                    <listcell>
+                                        <button tooltiptext="remover" autodisable="self" hoverImage="/icon/ico_borrar.png"  image="/icon/ico_borrar1.png">
+                                            <attribute name="onClick"><![CDATA[
+                                                    ((ListModelList) lbprec.getModel()).remove(((Listitem)self.getParent().getParent()).getIndex());
+                                            new Listbox().appendChild(((Listitem)self.getParent().getParent()));                                                
+                                            // lbprec.removeChild();
+                                                ]]>
+                                            </attribute>
+                                        </button> 
+                                    </listcell>
+                                </listitem>
+                            </template>		
+                        </listbox>
+                    </vbox>
+                </row>
+            </rows>
+        </grid>
+        <div style="margin-top:20px; margin-bottom:4px;" >
+            <hbox >
+                <button autodisable="self" id="btnRegistar" forward="onClick=onBtnRegistar" label="Aceitar"  mold="trendy" />
+                <button autodisable="self" id="btnCancAnul" forward="onClick=onCancAnul" label="Cancelar"  mold="trendy" />
+            </hbox>
+        </div>
+    </window>
+</zk>

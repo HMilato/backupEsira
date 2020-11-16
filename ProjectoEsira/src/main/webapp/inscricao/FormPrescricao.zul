@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 12 21:23:35     2006, Created by tomyeh
+		Fri May 01 04:36:35     2009, Modified by stera
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+  
+   <window id="winAddPresc" title="Nova Prescrição" position="center,center" closable="false" visible="false" border="none"
+                width="50%" apply="esira.inscricao.PrescricaoController" mode="modal">
+            <div>
+                <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                    <grid>
+                        <columns sizable="true">
+                            <column hflex="1" vflex="1" align="left" />
+                        </columns>
+                        <rows>
+                            <row height="0px" visible="false">
+                                <intbox id="ibidestudante"/>
+                                <intbox id="litem"/>
+                            </row>
+                            <row>
+                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                    <div sclass="description-area" height="100">
+                                        <label  value="Estudante"/>
+                                    </div>
+                                    <div sclass="description-area" height="100">
+                                        <combobox id="cbestudante" forward="onChanging=onCbestudante, onSelect=onSCbestudante" hflex="1" width="200px" constraint=" no Empty: Seleccione um item!">
+                                            <template name="model">
+                                                    <comboitem label="${each}">
+                                                        <attribute name="onCreate"><![CDATA[
+                                                           if(((esira.domain.Estudante)self.getValue()).getIdEstudante()==null){
+                                                              self.setStyle("color:blue");
+                                                           }
+                                                       ]]>
+                                                        </attribute>
+                                                    </comboitem>
+                                                </template>
+                                        </combobox>
+                                    </div>
+                                </hlayout>
+                            </row>
+                            <row visible="false">
+                                    <intbox id="posc"/>
+                                </row>
+                            <row>
+                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                    <div sclass="description-area" height="100">
+                                        <label  value="Disciplina"/>
+                                    </div>
+                                    <div sclass="description-area" height="100">
+                                        <combobox id="cbdisciplina" hflex="1" width="200px" constraint=" no Empty: Seleccione um item!">
+                                            <comboitem label="${each}"/>
+                                        </combobox>
+                                    </div>
+                                </hlayout>
+                            </row>
+                            <row>
+                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                    <div sclass="description-area" height="100">
+                                        <label  value="Inscrição"/>
+                                    </div>
+                                    <div sclass="description-area" height="100">
+                                        <listbox id="cbinscricao" hflex="1" width="200px" style="overflow:auto" span="true" rows="6" height="100%" forward="onSelect=onSelcbinsc" checkmark="true" vflex="1">
+                                            <template name="model">
+                                                <listitem value="${each}">
+                                                    <listcell>
+                                                        <attribute name="onCreate"><![CDATA[
+                                esira.domain.Inscricaodisciplina m = (esira.domain.Inscricaodisciplina)self.getParent().getValue();
+                                Label l = new Label();
+                                l.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(m.getInscricao().getDataInscricao()));
+                                l.setParent(self);                           
+                        ]]></attribute>  
+                                                    </listcell>
+                                                </listitem>
+                                            </template>
+                                        </listbox>
+                                    </div>
+                                </hlayout>
+                            </row>
+                            <row>
+                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                    <div sclass="description-area" height="100">
+                                        <label  value="A data da Inscricão antecedente:"/>
+                                    </div>
+                                    <div sclass="description-area" height="100">
+                                        <datebox hflex="1" format="dd/MM/yyyy" id="dabdatai" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                    </div>
+                                </hlayout>
+                            </row>
+                        </rows>
+                    </grid>
+                    <div align="center">
+                        <hbox >
+                            <button autodisable="self" forward="onClick=onSalvar" sclass="mybutton button blue medium" label="Salvar" mold="trendy" height="20px" />
+                            <button autodisable="self" forward="onClick=onCancelar" label="Cancelar" mold="trendy" height="20px" />
+                        </hbox>
+                    </div>
+                </div>
+            </div>
+        </window> 
+</zk>

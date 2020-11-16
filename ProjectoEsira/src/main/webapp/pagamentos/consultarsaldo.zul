@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:ca="client/attribute"> 
+    <zscript>
+		<![CDATA[
+			import esira.domain.Estudante;
+			Estudante estu = new Estudante();
+		]]>
+    </zscript>
+    <window id="winConsultar" apply="esira.controller.ConsultarSaldo">
+        <div >
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+                    <li><a>Home</a></li>
+                    <li><a class="current">Consultar Saldos</a></li>
+                </ul>
+                ]]>
+            </html>
+        </div>
+
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <button id="btv" sclass="mybuton small" label="Consultar Referencia" forward="onClick=onConsultarR"/>
+            <listbox  id="lbtaxa" sclass="semborda" sizedByContent="true" emptyMessage="Sem conteudo" span="true" >        
+                <listhead hflex="1" sizable="true">
+                    <listheader width="50%" hflex="max" align="center" label="Data do Pagamento"   />
+                    <listheader width="50%" hflex="max"  align="center" label="Tipo de Taxa"   />
+                    <listheader id="valorTaxa" width="50%" hflex="max"  align="center" label="Valor da Taxa "   />
+                    <listheader id="valorPago" width="50%" hflex="max"  align="center" label="Valor Pago "   />       
+                </listhead>
+                <template  name="model">
+                    <listitem value="${each}">
+                        
+                      <listcell >
+<!--                                <label value="${each.data}"/>-->
+                                  <attribute name="onCreate"><![CDATA[
+                                esira.domain.Transacaoestudante i = (esira.domain.Transacaoestudante)self.getParent().getValue();
+                                Label l = new Label();
+                                l.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy").format(i.getData()));
+                                l.setParent(self);  
+                        ]]></attribute> 
+                                
+                      </listcell>
+                      
+                      <listcell ><label value="${each.tipoTaxa.nomeTaxa}"/> </listcell>
+                      <listcell ><label value="${each.tipoTaxa.valor}"/></listcell>
+                      <listcell > <label value="${each.valor}"/> </listcell>
+
+                    </listitem>
+                    
+                </template>
+            </listbox>
+       </div>
+        <div width="25%" sclass="row-custimized criteriaPad button-blue" align="left">     
+             <listbox>        
+                <listhead >
+                    <listheader id="saldo" width="10px" hflex="min"  align="center" label="Saldo do Estudante"   />
+                </listhead>
+            </listbox>
+            <grid>
+                <rows >
+                   <row align="center">
+                      <doublebox width="100%" style="text-align: center;" id="barcodeIntbox" value="${$composer.saldoEstudante}"/>
+                   </row>
+                </rows>       
+            </grid>
+        </div>    
+    </window>
+</zk>

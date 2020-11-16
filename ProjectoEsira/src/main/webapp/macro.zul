@@ -1,0 +1,9 @@
+<hbox>
+    <label id="myLabel" value="Click the button"/>
+    <button id="myButton" label="The Button">
+      <attribute name="onClick"><![CDATA[
+                            myLabel.setValue("sfdsfs");
+                                        ]]>
+                                                </attribute>
+    </button>
+</hbox>

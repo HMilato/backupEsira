@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 12 21:23:35     2006, Created by tomyeh
+		Fri May 01 04:36:35     2009, Modified by stera
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+  
+    <window id="winAddInscricaop" apply="esira.inscricao.PedidoInscricaoController2" title="Validar Equivalência do Estudante" position="center,center" closable="false" visible="false" border="none"
+            width="50%" mode="modal">
+        <div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <grid>
+                     <columns sizable="true">
+                                    <column hflex="1" vflex="1" />
+                                </columns>
+                    <rows>
+                        <row visible="false">
+                            <intbox id="ibidInsc"/>
+                            <intbox id="ibitem"/>
+                            <intbox id="versao"/>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Nome Completo *" />
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <textbox id="txtestudante"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Nivel *" />
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <label id="lbnivel" value="${arg.datanasc}" />
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Curso *" />
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <label id="lbcurso" value="" />
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <vbox hflex="1" width="100%">
+                                    <listbox id="discSel" hflex="max" rows="10" width="100%">
+                                        <listhead>
+                                            <listheader label="Disciplinas"/>
+                                        </listhead>
+                                        <template name="model">
+                                            <listitem value="${each}">
+                                                <listcell  >
+                                                    <label value="${each.disciplina.nome} - ${each.disciplina.nivel}º Ano - ${each.notaFinal}" />
+                                                </listcell>                                             
+                                            </listitem>
+                                        </template>
+                                    </listbox>
+                            </vbox>
+                        </row>
+                    </rows>
+                </grid>
+                <div style="margin-top:20px; margin-bottom:4px;" >
+                    <hbox >
+                        <button autodisable="self" id="btnCnf" sclass="mybutton button blue medium" forward="onClick=onBtnCnf" label="Aceitar" style="margin:10px 0 0 10px;" mold="trendy" />
+                            <button autodisable="self" id="btnRj" sclass="mybutton button blue medium" forward="onClick=onRejeitar" label="Rejeitar" style="margin:10px 0 0 10px;" mold="trendy" />
+                            <button autodisable="self" id="btncancelar" sclass="mybutton button medium" forward="onClick=onBtncancelar" label="Cancelar" style="margin:10px 0 0 0px;" mold="trendy" />   
+                    </hbox>
+                </div>
+            </div>
+        </div>
+    </window> 
+</zk>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <div >
+        <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+                    <li><a >Home</a></li>
+                    <li><a class="current">Lista de Estudantes</a></li>
+                </ul>
+                ]]>
+        </html>
+    </div>
+    
+    <window id="winlestudantes" apply="esira.matricula.ListaEstudantesController">
+          
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <listbox  id="lbEstudantes" onSelect=""   oddRowSclass="non" >
+             
+                <listhead>
+                    <listheader label="Nome Completo" align="left"/>
+                    <listheader label="Numero mecanográfico" align="left"/>
+                    <listheader label="Curso" align="right"/>
+                    <listheader label="Nivel de Frequência" align="right" />
+                    <listheader label="Data de Matricula" align="right" />
+                </listhead>
+                <template name="model">
+                    <listitem value="${each}">
+                        <listcell >
+                            <label value="${each.estudante.nomeCompleto}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.estudante.nrEstudante}" />
+                        </listcell>
+                        <listcell >
+                            <label value="${each.estudante.cursocurrente}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.estudante.nivelFrequencia}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.dataMatricula}"/>
+                        </listcell>
+                       
+                        
+                    </listitem>
+                </template>
+            </listbox>
+        </div>
+         
+        
+    </window>
+  
+</zk>

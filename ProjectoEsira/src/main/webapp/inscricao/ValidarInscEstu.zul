@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 12 21:23:35     2006, Created by tomyeh
+		Fri May 01 04:36:35     2009, Modified by stera
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="winAddInscricaop" apply="esira.inscricao.PedidoInscricaoController2" title="Validar Inscrições do Estudante" position="center,center" closable="false" visible="false" border="none"
+            width="50%" mode="modal">
+        <script type="text/javascript"><![CDATA[
+		zk.afterLoad('zul.tab', function () {
+			var _xTab = {};
+			zk.override(zul.tab.Tab.prototype, _xTab, {
+				_sel: function(notify, init) {
+					if (this.desktop && !init && notify)
+						zAu.send(new zk.Event(this, 'onSwitchTab'));
+					else
+						_xTab._sel.apply(this, arguments); //call the original method
+				}
+			});
+		});
+	]]></script>
+        <div style="margin: auto">
+            <label id="taxamultas" value="${arg.periodo}" visible="false"/>
+        </div>
+        <div style="margin: auto">
+            <label id="validation" style="color:red;"/>
+        </div>
+      
+        <div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <grid>
+                    <columns sizable="true">
+                        <column hflex="1" vflex="1" />
+                    </columns>
+                    <rows>
+                        <row visible="false">
+                            <intbox id="ibidInsc"/>
+                            <intbox id="ibitem"/>
+                            <intbox id="versao"/>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label hflex="1" style="color:blue" id="lbano"/>
+                                    <space />
+                                    <label hflex="1" style="color:blue" id="lbsem" />
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Nome Completo *" />
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <combobox id="combEstInsc" width="50%" value="pesquise um estudante..." onAfterRender="self.setSelectedIndex(0)" buttonVisible="true" autodrop="true" mold="rounded"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Curso *" />
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <label hflex="1" id="lbcurso" value="" />
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Nivel *" />
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <label id="lbnivel" value="${arg.datanasc}" />
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Sexo *" />
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <label id="lbsexo" />
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <vbox hflex="1" width="100%">
+                                <listbox id="discSel" rows="10" width="100%" height=""
+                                                 onSelect="">
+                                    <listhead>
+                                        <listheader label="Disciplinas seleccionadas"/>
+                                    </listhead>
+                                    <template name="model">
+                                        <listitem value="${each}">
+                                            <listcell  >
+                                                <label value="${each.nome} - ${each.nivel}º Ano - ${each.semestre}º Sem - ${each.credito} Credito" />
+                                            </listcell>                                             
+                                        </listitem>	
+                                    </template>
+                                </listbox>	
+                                <hbox>     
+                                    <label value="Total de credito:" />
+                                    <label id="lbcred" />
+                                </hbox>
+                            </vbox>
+                        </row>
+                        <row>
+                            <hlayout 
+                                sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label  value="Observações:"/>
+                                </div>
+                                <div sclass="description-area" height="98%">
+                                    <textbox id="txMot" rows="5" width="98%"  constraint=" no Empty: Por favor, preenche o campo!" />
+                                </div>
+                            </hlayout>
+                        </row>
+                    </rows>
+                </grid>
+                <div style="margin-top:20px; margin-bottom:4px;" >
+                    <hbox >
+                        <button autodisable="self" id="btnCnf" sclass="mybutton button blue medium" forward="onClick=onBtnCnf" label="Aceitar" style="margin:10px 0 0 10px;" mold="trendy" ></button>
+                        <button autodisable="self" id="btnRj" sclass="mybutton button blue medium" forward="onClick=onRejeitar" label="Rejeitar" style="margin:10px 0 0 10px;" mold="trendy" ></button>
+                        <button autodisable="self" id="btncancelar" sclass="mybutton button medium" forward="onClick=onBtncancelar" label="Cancelar" style="margin:10px 0 0 0px;" mold="trendy" />                
+                    </hbox>
+                </div>
+            </div> 
+        </div>
+    </window>
+</zk>

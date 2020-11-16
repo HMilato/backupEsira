@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="windowCargo" border="none" apply="esira.controller.FuncionarioController">
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+    <li><a>Plano Curricular</a></li>
+    <li><a>Areas Cientifica</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <div>
+            <!--<toolbar >-->
+            <div align="left" sclass="row-custimized criteriaPadEiditMatr" >
+                <hbox >
+                    <button autodisable="self" id="addCargo" label="Adicionar" mold="trendy" height="20px"/>
+                </hbox>
+            </div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <listbox  id="lbCargo" 
+                          onSelect="" model="${$composer.cargoModel}" sizedByContent="true" 
+                          emptyMessage="Sem conteudo" span="true" autopaging="true">
+                    <auxhead>
+                        <auxheader colspan="1" align="center">
+                            <textbox id="procargo" width="98%" ></textbox>
+                        </auxheader>
+                        <auxheader colspan="1" align="center"></auxheader>
+                    </auxhead>  
+                    <listhead>
+                        <listheader label="Nome Cargo"/>
+                        <listheader label="Operação" align="center"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem value="${each}">
+                            <listcell >
+                                <label value="${each.descricao}"/>
+                            </listcell>
+                            <listcell >
+                                <button autodisable="self" tooltiptext="Editar" hoverImage="/icon/ico_editar.png" image="/icon/ico_editar1.png" forward="onClick=onEditCargo"/>
+                                <button autodisable="self"  tooltiptext="Apagar" hoverImage="/icon/ico_borrar.png"  image="/icon/ico_borrar1.png" forward="onClick=onDeleteCargo"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+            </div>
+        </div>
+        
+        <window id="mDialogAddCargo" position="center,center" closable="false"  border="none"
+                width="50%" apply="esira.controller.FuncionarioController" style="margin-top:10px;" visible="false">
+            <!--<toolbar id="tbAddAcient" visible="false">-->
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <div style="margin-top: 10px; margin-left:10px;">
+                    <label id="validationCargo" style="color:red;"/>
+                </div>
+                <grid>
+                    <columns>
+                        <column width="20%"/>
+                        <column />
+                    </columns>
+                    <rows>
+                        <row visible="false">
+                            <intbox id="caid"/>
+                        </row>
+                        <row>
+                            <label value="Nome Cargo" />
+                            <textbox id="txtCargo" width="100%" constraint=" no Empty: Insira um Cargo!"/>
+                        </row>
+                    </rows>
+                </grid>
+                <div align="center">
+                    <hbox >
+                        <button autodisable="self" forward="onSaveCargo" label="Salvar" mold="trendy" height="20px" />
+                        <button autodisable="self" forward="onCancelCargo" label="Cancelar" mold="trendy" height="20px" />
+                    </hbox>
+                </div>
+            </div>
+            <!--</toolbar>-->
+            
+        </window>
+    </window>
+    
+   
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+         
+    </style>
+</zk>

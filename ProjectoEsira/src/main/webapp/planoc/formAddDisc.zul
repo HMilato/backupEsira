@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+index.zul
+
+{{IS_NOTE
+	Purpose:
+		
+	Description:
+		
+	History:
+		Mon Jun 12 21:23:35     2006, Created by tomyeh
+		Fri May 01 04:36:35     2009, Modified by stera
+}}IS_NOTE
+
+Copyright (C) 2006 Potix Corporation. All Rights Reserved.
+
+{{IS_RIGHT
+}}IS_RIGHT
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul">
+  
+    <window id="winAddDiscDialog" title="Adicionar Disciplina" border="none" apply="esira.controller.DocenteDiscController" 
+            width="40%" sizable="true"  position="center,center" closable="false" contentStyle="overflow:auto" sclass="formNovo" mode="modal">
+        
+        <radiogroup  id="toRadio"></radiogroup>
+        <grid oddRowSclass="non-odd">
+            <columns sizable="true">
+                <column hflex="1" vflex="1" />
+            </columns> 
+            <rows>
+                <row>
+                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <label value="Disciplina" style="margin-right:20px"/>
+                                </div>
+                                <div sclass="description-area" height="100%">
+                                    <combobox width="200px" id="cbDisc" value="selecione..."  >
+                                        <comboitem label="${each.nome}" />
+                                    </combobox> 
+                                </div>
+                            </hlayout>
+                </row>
+                <row>
+                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                        <div sclass="description-area" height="100%"> Nivel:</div>
+                        <div sclass="description-area" height="100%">
+                            <intbox width="200px"  constraint=" no negative,no Empty: Introduza o Nivel!" id="nivel"/>
+                        </div>
+                    </hlayout>
+                    <intbox id ="addano" visible="false" />
+                    <intbox id ="semestre" visible="false" />
+                    
+                </row>
+            </rows>
+        </grid>
+        <div style="margin-top:20px; margin-bottom:4px;" >
+            <hbox >
+                <button autodisable="self" id="btAdd" forward="onClick=onBtnAdd" label="Aceitar"  mold="trendy" />
+                <button autodisable="self" id="btCancel" forward="onClick=onCancel" label="Cancelar"  mold="trendy" />
+            </hbox>
+        </div>
+    </window>
+</zk>

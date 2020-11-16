@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+
+    <window sizable="true" maximizable="true" title="Relatorio" border="normal" width="70%" closable="true" mode="modal">
+        <iframe id="report" height="600px" width="100%" />
+    </window>
+</zk>

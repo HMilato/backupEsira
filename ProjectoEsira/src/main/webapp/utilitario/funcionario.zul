@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns:c="client">
+    <window id="windowFuncionario" xmlns:w="http://www.zkoss.org/2005/zk/client" forward="onCreate=onCreateWnd" border="none" apply="esira.controller.FuncionarioController">
+        <div>
+            <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+    <li><a>Funcionários</a></li>
+    <li><a>Criar Funcionários</a></li>
+</ul>
+                ]]>
+            </html>
+        </div>
+        <div align="left" sclass="row-custimized criteriaPadEiditMatr">
+            <hbox >
+                <button autodisable="self" id="addFunc" label="Adicionar" mold="trendy" height="20px"/>
+            </hbox>
+        </div>
+         
+        <div>
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <listbox  id="lbFuncionario"  sizedByContent="true" emptyMessage="Sem conteudo" span="true" autopaging="true">
+                    <auxhead>
+                        <auxheader colspan="8" align="center">
+                            <textbox hflex="1" id="txPnr"  />
+                            <!--  zAu.send(new zk.Event(zk.Widget.$('$btnSave'), "onSaveFile", {'' : {'data' : {'nodeId': ''}}}, {toServer:true}));-->
+                            <textbox hflex="1"  id="txPnome" ></textbox>
+                    
+                            <combobox id="cbPfac" hflex="1" model="${$composer.faculdadePModel}">
+                                <comboitem label="${each}"/>
+                            </combobox>
+                        </auxheader>
+                    </auxhead> 
+                    <listhead sizable="true">
+                        <listheader label="Numero" align="center"/>
+                        <listheader label="Nome" align="center"/>
+                        <listheader label="C. Chefia" align="center"/>
+                        <listheader label="Faculdade" align="center"/>
+                        <listheader label="Contacto" align="center"/>
+                        <listheader label="Email" align="center"/>
+                        <listheader align="center"/>
+                        <listheader align="center"/>
+                    </listhead>
+                    <template name="model">
+                        <listitem value="${each}">
+                            <listcell >
+                                <label value="${each.nrfuncionario}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.nome}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.tipochefia.cargochefia}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.faculdade}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.contacto}"/>
+                            </listcell>
+                            <listcell >
+                                <label value="${each.email}"/>
+                            </listcell>
+                            <listcell >
+                                <button autodisable="self" label="editar" forward="onClick=onEditFuncionario"/>
+                            </listcell>
+                            <listcell >
+                                <button autodisable="self" label="apagar" forward="onClick=onDeleteFuncionario"/>
+                            </listcell>
+                        </listitem>
+                    </template>
+                </listbox>
+                <paging id="pagFuncionario" hflex="max" detailed="true"  pageSize="8" />
+            </div>
+        
+        
+            <window id="mDialogAddFuncionario"  position="center,center" closable="false" visible="false" border="none"
+                    width="50%" apply="esira.controller.FuncionarioController">
+                <div>
+                    <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                        <grid>
+                            <columns sizable="true">
+                                <column hflex="1" vflex="1" align="left" />
+                            </columns>
+                            <rows>
+                                <row height="0px" visible="false">
+                                    <intbox id="ibidFuncionario"/>
+                                    <intbox id="litem"/>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100">
+                                            <label  value="Numero"/>
+                                        </div>
+                                        <div sclass="description-area" height="100">
+                                            <textbox id="tbnrfuncionario" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100">
+                                            <label  value="nome"/>
+                                        </div>
+                                        <div sclass="description-area" height="100">
+                                            <textbox id="tbnome" hflex="1" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100">
+                                            <label  value="apelido"/>
+                                        </div>
+                                        <div sclass="description-area" height="100">
+                                            <textbox id="tbapelido" hflex="1" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="sexo:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <radiogroup hflex="1" >
+                                                <radio id="rgsexo" label="Masculino    " checked="true"/>
+                                                <radio id="rgsm"  label="Femenino     "/>
+                                            </radiogroup>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100">
+                                            <label  value="contacto"/>
+                                        </div>
+                                        <div sclass="description-area" height="100">
+                                            <textbox id="tbcontacto" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100">
+                                            <label  value="email"/>
+                                        </div>
+                                        <div sclass="description-area" height="100">
+                                            <textbox id="tbemail" width="200px" constraint="/.+@.+\.[a-z]+/: Introduza um email válido"/>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100">
+                                            <label value="Faculdade:"/>
+                                        </div>
+                                        <div sclass="description-area" height="100">
+                                            <combobox id="cbfaculdade" hflex="1" width="200px" model="${$composer.faculdadeModel}" constraint=" no Empty: Seleccione um item!">
+                                                <comboitem label="${each}"/>
+                                            </combobox>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row>
+                                    <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                        <div sclass="description-area" height="100%">
+                                            <label value="Possui algum Cargo de Chefia? *" />
+                                        </div>
+                                        <div sclass="description-area" height="100%">
+                                            <radiogroup hflex="1" id="rdchefia">
+                                                <radio id="rgNP" label="Não    " checked="true"/>
+                                                <radio id="rgP" label="Sim     "/>
+                                            </radiogroup>
+                                        </div>
+                                    </hlayout>
+                                </row>
+                                <row id="rwchefia"  visible="false">
+                                    <grid >
+                                        <columns sizable="true">
+                                            <column hflex="1" vflex="1" align="left" />
+                                        </columns>
+                                        <rows>
+                                            <row>
+                                                <a label="Adicionar novo Cargo" onClick='cbcargochefia.setModel(null);execution.sendRedirect("/index.zul#h5", "_blank")'/>
+                                            </row>
+                                            <row>
+                                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                                    <div sclass="description-area" height="100">
+                                                        <label value="Cargo de Chefia:"/>
+                                                    </div>
+                                                    <div sclass="description-area" height="100">
+                                                        <combobox id="cbcargochefia" onOpen='if(cbcargochefia.getModel()==null)cbcargochefia.setModel($composer.cargochefiaModel)' hflex="1" width="200px" model="${$composer.cargochefiaModel}" constraint=" no Empty: Seleccione um item!">
+                                                            <template name="model">       
+                                                                <comboitem label="${each}">
+                                                                
+                                                                    <attribute name="onCreate"><![CDATA[
+                                                           if(((esira.domain.Cargochefia)self.getValue()).getIdcargochefia()==null){
+                                                              self.setStyle("color:blue");
+                                                           }
+                                                       ]]>
+                                                                    </attribute>
+                                                                </comboitem>
+                                                            </template>
+                                                        </combobox>
+                                                        <a label="Adicionar novo Cargo" onClick='execution.sendRedirect("/index.zul#h5", "_blank")'/>
+                                                    </div>
+                                                </hlayout>
+                                            </row>
+                                            <row>
+                                                <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                                    <div sclass="description-area" height="100">
+                                                        <label  value="Descricao"/>
+                                                    </div>
+                                                    <div sclass="description-area" height="100">
+                                                        <textbox hflex="1" id="tbdescricao" width="200px" constraint=" no Empty: Preenche o campo!"/>
+                                                    </div>
+                                                </hlayout>
+                                            </row>
+                                        </rows>
+                                    </grid>
+                                </row>
+                            </rows>
+                        </grid>
+                        <div align="center">
+                            <hbox >
+                                <button autodisable="self" id="saveFuncionario" sclass="mybutton button blue medium" forward="onClick=onSalvar" label="Salvar" mold="trendy" height="20px" />
+                                <button autodisable="self" id="cancelFuncionario" label="Cancelar" mold="trendy" height="20px" />
+                            </hbox>
+                        </div>
+                    </div>
+                </div>
+            </window>
+        </div>
+    </window>
+    <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+    <script type="text/javascript">
+        zk.afterMount(function() {
+        jq("$txPnr").Watermark(".Nr Funcionario","gray");
+        jq("$txPnome").Watermark(".Nome...","gray");
+        jq("$cbPfac").Watermark(".Faculdade...","gray");
+        
+        });
+    </script>
+    
+    <style>
+        
+        .z-textbox:focus{
+        border: 1px solid #469ee9;
+        }
+        
+        div.z-listcell-cnt{
+        border:1px;
+        }
+    </style>
+</zk>

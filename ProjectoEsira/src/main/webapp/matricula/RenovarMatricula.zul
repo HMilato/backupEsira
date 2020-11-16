@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?link rel="stylesheet" type="text/css" href="/style.css"?>
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="winlestudantes" forward="onCreate=onSetQueueEstMat" apply="esira.matricula.ListaEstudantesController" >
+        <div >
+        <html>
+                <![CDATA[
+                <ul id="breadcrumbs-one">
+   
+                    <li><a >Home</a></li>
+                    <li><a  class="current">Renovar Matricula</a></li>
+                </ul>
+                ]]>
+        </html>
+    </div>
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <vbox width="100%" hflex="max">
+                <window sclass="cabeca" visible="false" id="winanularmot" style="background:transparent;" closable="true"/>
+            <hlayout hflex="1" id="ahead">
+                <image src="/icon/search.png"/>
+                        <textbox  hflex="1" id="txProcurar" width="98%" ></textbox>
+                     
+                        <textbox  hflex="1" id="txPNrmec" width="98%" ></textbox>
+                     
+                   
+                        <intbox visible="false" hflex="1" tooltiptext="Ano de Ingresso" id="ibPAno" width="98%" ></intbox>
+                     
+                        <combobox hflex="1" tooltiptext="Curso" id="cbcurso" readonly="true" model="${$composer.listaCursoModel}" forward="onCreate=onAfrender" width="98%" >
+                            <comboitem label="${each}"/>
+                        </combobox> 
+            </hlayout>
+            </vbox>
+            <listbox id="lbEstudantes" sclass="semborda"  emptyMessage="Sem conteudo"  oddRowSclass="non" >
+                <listhead>
+                    <listheader label="Nome Completo" align="left"/>
+                    <listheader label="Numero mecanográfico" align="left"/>
+                    <listheader label="Curso" align="right"/>
+                    <listheader label="Nivel de Frequência" align="right" />
+                    <listheader label="Última Matricula" align="right" />
+                    <listheader label="Acção" align="center"/>
+                </listhead>
+                <template name="model">
+                    <listitem value="${each}">
+                        <listcell >
+                            <attribute name="onCreate"><![CDATA[
+                             esira.service.CRUDService csimp = (esira.service.CRUDService) org.zkoss.zkplus.spring.SpringUtil.getBean("CRUDService");
+                             java.util.Map par = new java.util.HashMap();
+                           par.clear();
+                             par.put("pk",((esira.domain.Matricula)self.getParent().getValue()).getMatriculaPK());
+                             esira.domain.Matricula m = csimp.findEntByJPQuery("from Matricula m where m.matriculaPK = :pk",par);                
+                                  Label l = new Label();
+                                l.setValue(m.getEstudante().getNomeCompleto());
+                                l.setParent(self);             
+                        ]]></attribute>  
+                        </listcell>
+                        <listcell >
+                            <attribute name="onCreate"><![CDATA[
+                             esira.service.CRUDService csimp = (esira.service.CRUDService) org.zkoss.zkplus.spring.SpringUtil.getBean("CRUDService");
+                             java.util.Map par = new java.util.HashMap();
+                           par.clear();
+                             par.put("pk",((esira.domain.Matricula)self.getParent().getValue()).getMatriculaPK());
+                             esira.domain.Matricula m = csimp.findEntByJPQuery("from Matricula m where m.matriculaPK = :pk",par);                
+                                  Label l = new Label();
+                                l.setValue(m.getEstudante().getNrEstudante());
+                                l.setParent(self);             
+                        ]]></attribute>  
+                        </listcell>
+                        <listcell >
+                            <attribute name="onCreate"><![CDATA[
+                             esira.service.CRUDService csimp = (esira.service.CRUDService) org.zkoss.zkplus.spring.SpringUtil.getBean("CRUDService");
+                             java.util.Map par = new java.util.HashMap();
+                           par.clear();
+                             par.put("pk",((esira.domain.Matricula)self.getParent().getValue()).getMatriculaPK());
+                             esira.domain.Matricula m = csimp.findEntByJPQuery("from Matricula m where m.matriculaPK = :pk",par);                
+                                  Label l = new Label();
+                                l.setValue(m.getEstudante().getCursocurrente().getDescricao());
+                                l.setParent(self);             
+                        ]]></attribute>  
+                        </listcell>
+                        <listcell >
+                            <attribute name="onCreate"><![CDATA[
+                             esira.service.CRUDService csimp = (esira.service.CRUDService) org.zkoss.zkplus.spring.SpringUtil.getBean("CRUDService");
+                             java.util.Map par = new java.util.HashMap();
+                           par.clear();
+                             par.put("pk",((esira.domain.Matricula)self.getParent().getValue()).getMatriculaPK());
+                             esira.domain.Matricula m = csimp.findEntByJPQuery("from Matricula m where m.matriculaPK = :pk",par);                
+                                  Label l = new Label();
+                                l.setValue(m.getEstudante().getNivelFrequencia()+"");
+                                l.setParent(self);             
+                        ]]></attribute>  
+                        </listcell>
+                       <!-- <listcell >
+                             
+                            <label value="${each.estudante.nomeCompleto}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.estudante.nrEstudante}" />
+                        </listcell>
+                        <listcell >
+                            <label value="${each.estudante.cursocurrente}"/>
+                        </listcell>
+                        <listcell >
+                            <label value="${each.estudante.nivelFrequencia}"/>
+                        </listcell>-->
+                        <listcell >
+                            <attribute name="onCreate"><![CDATA[
+                                esira.domain.Matricula m = (esira.domain.Matricula)self.getParent().getValue();
+                                Label l = new Label();
+                                l.setValue(new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(m.getDataMatricula()));
+                                l.setParent(self);                           
+                        ]]></attribute> 
+                        </listcell>
+                        <listcell >
+                            <button autodisable="self" label="Renovar" sclass="mybutton button blue medium" forward="onClick = onRenovar"   orient="horizontal" mold="trendy"/>
+                            <button style="padding: 0;" tooltiptext="Filtrar" image="/icon/opcao.png"  >
+
+                            </button>
+                            <menupopup> 
+                                <attribute name="onCreate"><![CDATA[
+                                Button b = (Button)self.getParent().getChildren().get(1);
+                                                            self.setId(self.getUuid());
+                                                           // Messagebox.show(self.getUuid()+"");
+                               b.setPopup(""+self.getId()+", type=toggle, position=after_start");
+                             
+                               ]]></attribute>
+                                <menuseparator />
+                                <menuitem  forward="onClick = onGraduar"  label="Graduado"/>
+                                <menuseparator />
+                                <menuitem  forward="onClick = onMudarTurma" label="Mudar a turma" />
+                                <menuseparator />
+                                <menuitem  forward="onClick = onMudarPlano"  label="Mudar o Curso e Plano"/>
+                                <menuseparator />
+                                <!-- <menuitem id="mprovincia" label="Provincia" autocheck="true" checkmark="true"/>
+                                <menuseparator />-->
+                                <menuseparator />
+                                <!-- <menuitem forward="onClick = onGraduar"  label="Estudantes Activos" />
+                                <menuitem id="manactivo" label="Não Activos" autocheck="true" checkmark="true"/>-->
+                            </menupopup>
+                        </listcell>
+                        
+                    </listitem>
+                </template>
+            </listbox>
+            <button autodisable="self" id="btv" sclass="mybuton small" label="Ver Mais" forward="onClick=onLoadi"/>
+        </div>
+        <div width="98%" sclass="row-custimized criteriaPad button-blue" >
+            <attribute name="onCreate"><![CDATA[
+                if(((esira.domain.Users) Sessions.getCurrent().getAttribute("user")).getUestudante()){
+                  self.setVisible(true);
+                }else{
+                    self.setVisible(false);
+                 }
+                ]]>
+            </attribute>
+            <vbox visible="false" id="vb1">
+                Ainda não renovou a sua Matrícula?
+                Para renovar a matricula, click no botão abaixo
+            </vbox>
+            <vbox visible="false" id="vb2">
+                <label value="A sua matricula ja foi Renovada" style="align:center;color:blue" id="lba"/>
+                <button autodisable="self" id="btnAnular" sclass="button2 cinza medium" forward="onClick=onAnular" label="Anular Matricula" mold="trendy" height="20px" />
+            </vbox>
+            <vbox visible="false" id="vb3">
+                O seu pedido de matricula foi enviado.
+                Por favor aguarde a confirmacao...
+            </vbox>
+            <vbox visible="false" id="vb4">
+                O Seu pedido de matricula foi rejeitado!
+                <label style="align:center;color:red" id="lbmot" />
+                Tente de novo, click no botão abaixo
+            </vbox>
+            <vbox>
+                <button autodisable="self" id="btnMatric" sclass="mybutton button blue medium" visible="false" forward="onClick=onMatric" label="Matricular" mold="trendy" height="20px" /> 
+            </vbox>
+        </div>
+            
+        <window id="winTurma" border="none" visible="false" apply="esira.matricula.ListaEstudantesController"
+                width="50%" contentStyle="overflow:auto" sclass="formNovo" >
+         
+            
+            <div width="98%" sclass="row-custimized criteriaPad button-blue">
+                <grid>
+                    <columns sizable="true">
+                        <column hflex="1" vflex="1" align="left" />
+                    </columns>
+                    <rows>
+                        <row height="0px" visible="false">
+                            <intbox id="ide"/>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100">
+                                    <label value="Nome Completo" />
+                                </div>
+                                <div sclass="description-area" height="100">
+                                    <label id="nome"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100">
+                                    <label value="Turno" />
+                                </div>
+                                <div sclass="description-area" height="100" >
+                                    <combobox readonly="true" id="cbTurno">
+                                        <comboitem label="Laboral" value="1"/>
+                                        <comboitem label="Pos-Laboral" value="2"/>
+                                    </combobox>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout vflex="1" hflex="1" sclass="second-layout">
+                                <div sclass="description-area" height="100">
+                                    <label value="Nr. Turma" />
+                                </div>
+                                <div sclass="description-area" height="100">
+                                    <intbox id="ibturma" constraint=" no Empty: Introduza o Numero da turma!"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                        <row>
+                            <hlayout sclass="second-layout">
+                                <div sclass="description-area" height="100%">
+                                    <checkbox id="chturma" label="Mudar a turma de todas as disciplinas deste Semestre  " checked="false"/>
+                                </div>
+                            </hlayout>
+                        </row>
+                    </rows>
+                </grid>
+                <div align="center">
+                    <hbox >
+                        <button autodisable="self" sclass="mybutton button blue medium" id="btnSave" forward="onClick=onSalvarTurma" label="Aceitar"  mold="trendy" />
+                        <button autodisable="self" sclass="mybutton button medium" id="btnCanc" forward="onClick=onBtnCanc" label="Cancelar"  mold="trendy" />
+                    </hbox>
+                </div>
+                            
+            </div>
+                      
+        </window> 
+    </window>
+    
+    
+    <script type="text/javascript" src="/widgets/effects/form_effect/watermarkinput.js" />
+    <script type="text/javascript">
+        zk.afterMount(function() {
+        jq("$txAno").Watermark("Ano","gray");
+        jq("$txProcurar").Watermark(".Pesquisar por nome...","gray");
+        jq("$txPNrmec").Watermark(".Pesquisar por Numero...","gray");
+        
+        });
+    </script>
+</zk>

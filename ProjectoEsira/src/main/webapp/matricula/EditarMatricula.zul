@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul">
+    <window id="winEditaMatricula" border="normal" hflex="1" vflex="1" width="50%" contentStyle="overflow:auto" 
+            apply="esira.matricula.EditarMatriculaController" mode="modal">
+                
+        <div height="20px">
+            <html>
+                        <![CDATA[
+                        <ul id="breadcrumbs-one">
+
+                            <li><a>Comprovativo de Matricula</a></li>
+                        </ul>
+                          ]]>
+            </html>
+        </div>
+            
+        <div width="98%" sclass="row-custimizedWhite criteriaPad button-blue">
+                   
+            <grid>
+                <columns>
+                    <column width="50%" align="right" />
+                    <column width="50%" align="left" />
+                </columns>
+                <rows>
+                       
+                        
+                    <row visible="false">    
+                        <textbox id="txnrEst" value="${arg.matricula.estudante.nrEstudante}" width="200px" />
+                    </row>
+                    <row>
+                        <label value="Nome Completo" style="margin-right:20px"/>
+                               
+                        <textbox id="txNomec" value="${arg.matricula.estudante.nomeCompleto}"  width="200px" />
+                              
+                    </row>
+                    <row>
+                        <label value="Curso" style="margin-right:20px" />
+                        <textbox id="txCurso" value="${arg.matricula.curso}"  width="200px" />
+                    </row>
+                    <row>
+                        <label value="Data de Matricula" style="margin-right:20px" />
+                        <textbox id="txdataMatricula" value="${arg.matricula.dataMatricula}"  width="200px" />
+                    </row>
+                    <row>
+                        <label value="Data de Confirmaҫão" style="margin-right:20px" />
+                        <textbox id="txdataConfirmacao" value="${arg.matricula.confirmacao}"  width="200px" />
+                    </row>
+                        
+                    <row>
+                        <label value="Funcionario de Confirmaҫão" style="margin-right:20px" />
+                        <textbox id="txfConf" value="" width="200px" />
+                    </row>
+                    <row>
+                        <label value="Comprovativo de Pagamento de Taxa" style="margin-right:20px" />
+                        <button id="btnComprovativo" label="Visualizar" mold="trendy" height="20px" />
+                    </row>
+                </rows>  
+            </grid> 
+        </div>
+       
+        <div align="center">
+            <hbox >
+                <button id="imprimir" label="Imprimir" mold="trendy" height="20px" />
+                <button id="btncancelar" label="Cancelar" mold="trendy" height="20px" />
+            </hbox>
+        </div>
+        
+        <window id="winComprovativo" position="center,center" closable="true"  visible="false" border="none"
+                onClick="self.visible=false;event.stopPropagation();" 
+                width="50%"
+                apply="esira.matricula.EditarMatriculaController">
+            
+            <groupbox width="100%" height="100%" sclass="back"> 
+                <image id="imagen1" width="100%" height="100%"/>
+            </groupbox>
+        </window>    
+            
+    </window>
+</zk>
