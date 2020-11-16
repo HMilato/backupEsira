@@ -7,10 +7,10 @@ package esira.controller;
 
 import esira.domain.Curso;
 import esira.domain.Faculdade;
-import esira.domain.PlanificacaoAnoLectivo;
 import esira.domain.Taxa;
 import esira.domain.Users;
 import esira.service.CRUDService;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,12 +50,14 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
     Map<String, Object> par = new HashMap<String, Object>();
     Users usr = (Users) Sessions.getCurrent().getAttribute("user");  
     Window mDialogAddPlano, mDialogMultas, winmain;
-    private Combobox cbfaculdade, cbcurso;
+    private Combobox cbfaculdade, cbcurso, ListFacModel;
     private Button addTaxa, addPlano;
-    private Label validation, massage;
+    private Label validation, massage, labelcurso;
     private Intbox ibano, litem, idfac;
     Textbox txTaxa;
     Doublebox txValor;
+    String condfac = "", condcurso = "";
+    Map<String, Object> condpar = new HashMap<String, Object>();
   
 
     @Init
@@ -94,15 +96,77 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
 
         }
      
-        public ListModel<Faculdade> getFaculdadeModel() {
-            List<Faculdade> faculdades = csimpm.getAll(Faculdade.class);
-            return new ListModelList<Faculdade>(faculdades);
+//        public ListModel<Faculdade> getFaculdadeModel() {
+//            List<Faculdade> faculdades = csimpm.getAll(Faculdade.class);
+//            return new ListModelList<Faculdade>(faculdades);
+//    }
+        
+        
+    public ListModel<Faculdade> getFaculdadeModel() {
+        List<Faculdade> lf = new ArrayList<Faculdade>();
+        Faculdade f = new Faculdade();
+        f.setDesricao("------- Todas Faculdades-------");
+        lf.add(f);
+        List<Faculdade> lf2 = csimpm.getAll(Faculdade.class);
+        lf.addAll(lf2);
+        return new ListModelList<Faculdade>(lf);
+    }
+    
+     public void onChange$cbfaculdade() {
+        if (cbfaculdade.getSelectedIndex() != 0) {
+            condfac = " and e.cursocurrente.faculdade = :fac";
+            Faculdade f = (Faculdade) cbfaculdade.getSelectedItem().getValue();
+            if (condpar.containsKey("fac")) {
+                condpar.replace("fac", f);
+            } else {
+                condpar.put("fac", f);
+            }
+            par.clear();
+            par.put("f", f);
+            condcurso = "";
+            if (condpar.containsKey("curso")) {
+                condpar.remove("curso");
+            }
+            Curso cu = new Curso();
+            cu.setDescricao("----------Todos Cursos---------");
+            List<Curso> lc = new ArrayList<Curso>();
+            lc.add(cu);
+            List<Curso> lc2 = csimpm.findByJPQuery("from Curso c where c.faculdade = :f", par);
+            lc.addAll(lc2);
+            cbcurso.setModel(new ListModelList<Curso>(lc));
+            cbcurso.setVisible(true);
+            labelcurso.setVisible(true);
+            
+        } else {
+            condfac = "";
+            condcurso = "";
+            if (condpar.containsKey("fac")) {
+                condpar.remove("fac");
+            }
+            if (condpar.containsKey("curso")) {
+                condpar.remove("curso");
+            }
+            cbcurso.setVisible(false);
+        }
+       // setLB(0, 20);
     }
         
-    public ListModel<Curso> getCursoModel() {
-            List<Curso> cursos = csimpm.getAll(Curso.class);
-            return new ListModelList<Curso>(cursos);
-    }    
+        
+        
+//    public ListModel<Curso> getCursoModel() {
+//            List<Curso> cursos = csimpm.getAll(Curso.class);
+//            return new ListModelList<Curso>(cursos);
+//    }   
+    
+        public ListModel<Curso> getCursoModel() {
+        List<Curso> lf = new ArrayList<Curso>();
+        Curso c = new Curso();
+        c.setDescricao("---- Todos Cursos ----");
+        lf.add(c);
+        List<Curso> lf2 = csimpm.getAll(Curso.class);
+        lf.addAll(lf2);
+        return new ListModelList<Curso>(lf);
+    }
 
     public void onSalvarTaxa() {
 

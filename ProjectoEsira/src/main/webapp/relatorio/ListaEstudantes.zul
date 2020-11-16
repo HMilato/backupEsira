@@ -33,7 +33,7 @@
             <combobox style="display: inline-block;" id="cbfaculdade" model="${$composer.listFacModel}" readonly="true" onCreate="self.setSelectedIndex(0)" width="95%" >
                 <comboitem label="${each}"/>
             </combobox>
-            <combobox style="display: inline-block;" id="cbcurso" visible="false" readonly="true" onAfterRender="self.setSelectedIndex(0)" width="98%" >
+            <combobox style="display: inline-block;" id="cbcurso" >
                 <comboitem disabled="true" label="${each}"/>
             </combobox> 
             <intbox tooltiptext="Ano de Ingresso" style="display: inline-block;" visible="false" id="ibAno" width="98%" ></intbox>

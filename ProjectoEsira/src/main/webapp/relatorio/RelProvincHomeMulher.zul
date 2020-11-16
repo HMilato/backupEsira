@@ -46,7 +46,7 @@
                     </radiogroup>
                     <label style="display: inline-block;"  visible="" value="Ano" id="lbPAno" width="98%" ></label>
                     <intbox tooltiptext="Ano Lectivo" style="display: inline-block;"   visible="false" id="ibPAno" width="98%" ></intbox>
-                     <combobox style="display: inline-block;"  readonly="true" visible="false" width="98%"  id="cbPeriodDisc" value="----Semestre----">
+                     <combobox style="display: inline-block;"  readonly="true" visible="false" width="98%"  id="cbPeriodDisc" value="Semestre">
                         <comboitem label="Semestre 1" value="1"/>
                         <comboitem label="Semestre 2" value="2"/>
                     </combobox>
@@ -58,7 +58,7 @@
                         De:<intbox id="fxa1" hflex="1" />
                         `a<intbox id="fxa2" hflex="1"/>
                     </div>
-                   <menupopup style="" id="popup">
+<!--                   <menupopup style="" id="popup">
                         <menuitem id="manoi" label="Ano de Ingresso" autocheck="true" checkmark="true"/>
                         <menuseparator />
                         <menuitem id="mmatric" label="Matriculados" autocheck="true" checkmark="true"/>
@@ -69,12 +69,12 @@
                         <menuseparator />
                         <menuitem id="mfaxa" label="Faixa Etaria" autocheck="true" checkmark="true"/>
                         <menuseparator />
-                        <!-- <menuitem id="mprovincia" label="Provincia" autocheck="true" checkmark="true"/>
-                        <menuseparator />-->
+                         <menuitem id="mprovincia" label="Provincia" autocheck="true" checkmark="true"/>
                         <menuseparator />
-                      <!--   <menuitem id="mactivo" label="Estudantes Activos" autocheck="true" checkmark="true"/>-->
+                        <menuseparator />
+                         <menuitem id="mactivo" label="Estudantes Activos" autocheck="true" checkmark="true"/>
                        <menuitem id="manactivo" label="Estudantes não Activos" autocheck="true" checkmark="true"/>
-                    </menupopup>
+                    </menupopup>-->
             <listbox  id="lbEstudantes" sclass="semborda" sizedByContent="true" 
                       emptyMessage="Sem conteudo" span="true" autopaging="true" >
                
