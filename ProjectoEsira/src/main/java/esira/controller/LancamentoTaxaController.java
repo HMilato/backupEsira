@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.util.GenericForwardComposer;
 import org.zkoss.zkplus.spring.SpringUtil;
 import org.zkoss.zul.Button;
 import org.zkoss.zul.Combobox;
+import org.zkoss.zul.Constraint;
 import org.zkoss.zul.Doublebox;
 import org.zkoss.zul.Intbox;
 import org.zkoss.zul.Label;
@@ -43,8 +44,7 @@ import org.zkoss.zul.Window;
  *
  * @author Milato
  */
-
-public class LancamentoTaxaController  extends GenericForwardComposer {
+public class LancamentoTaxaController extends GenericForwardComposer {
 
     private static final long serialVersionUID = 1L;
     private static int c = 0;
@@ -52,7 +52,7 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
     private CRUDService csimpm = (CRUDService) SpringUtil.getBean("CRUDService");
     private Listbox lbtaxa;
     Map<String, Object> par = new HashMap<String, Object>();
-    Users usr = (Users) Sessions.getCurrent().getAttribute("user");  
+    Users usr = (Users) Sessions.getCurrent().getAttribute("user");
     Window mDialogAddPlano, mDialogMultas, winmain;
     private Combobox cbfaculdade, cbcurso, ListFacModel;
     private Button addTaxa, addPlano;
@@ -62,50 +62,47 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
     Doublebox txValor;
     String condfac = "", condcurso = "";
     Map<String, Object> condpar = new HashMap<String, Object>();
-  
 
     @Init
     @Override
     public void doAfterCompose(Component comp) throws Exception {
         super.doAfterCompose(comp);
-   
-        List<Taxa> pa =null;
-             pa = csimpm.getAllQuery("SELECT t FROM Taxa t");
-             setLB(pa);          
+
+        List<Taxa> pa = null;
+        pa = csimpm.getAllQuery("SELECT t FROM Taxa t");
+        setLB(pa);
     }
- 
-     public void setLB(List<Taxa> lp) {
-                lbtaxa.setModel(new ListModelList<>(lp));
-    }   
-  
+
+    public void setLB(List<Taxa> lp) {
+        lbtaxa.setModel(new ListModelList<>(lp));
+    }
+
     public void onNovaTaxa() {
-       // limparcampos();
- 
-        if (usr.getFaculdade().getLocalizacao() == null) {
-            ((Combobox) mDialogAddPlano.getFellow("cbfaculdade")).setVisible(true);
-        } else {
-            ((Combobox) mDialogAddPlano.getFellow("cbfaculdade")).setVisible(false);
-            ((Intbox) mDialogAddPlano.getFellow("idfac")).setValue(usr.getFaculdade().getIdFaculdade());
-        }
-        Tab tab2 = (Tab) mDialogAddPlano.getFellow("tabtaxa");
+        // limparcampos();
+
+//        if (usr.getFaculdade().getLocalizacao() == null) {
+//            ((Combobox) mDialogAddPlano.getFellow("cbfaculdade")).setVisible(true);
+//        } else {
+//            ((Combobox) mDialogAddPlano.getFellow("cbfaculdade")).setVisible(false);
+//            ((Intbox) mDialogAddPlano.getFellow("idfac")).setValue(usr.getFaculdade().getIdFaculdade());
+//        }
+        // Tab tab2 = (Tab) mDialogAddPlano.getFellow("tabtaxa");
         mDialogAddPlano.setTitle("");
         mDialogAddPlano.setParent(winmain);
         c = 0;
-        mDialogAddPlano.doModal();   
-        tab2.setSelected(true);
+        mDialogAddPlano.doModal();
+        //   tab2.setSelected(true);
 //        Taxa ta = csimpm.findEntByJPQuery("from Taxa", null);
 //        if (ta != null) {
 //            setTaxa(ta);
 //        }
 
-        }
-     
+    }
+
 //        public ListModel<Faculdade> getFaculdadeModel() {
 //            List<Faculdade> faculdades = csimpm.getAll(Faculdade.class);
 //            return new ListModelList<Faculdade>(faculdades);
 //    }
-        
-        
     public ListModel<Faculdade> getFaculdadeModel() {
         List<Faculdade> lf = new ArrayList<Faculdade>();
         Faculdade f = new Faculdade();
@@ -115,8 +112,8 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
         lf.addAll(lf2);
         return new ListModelList<Faculdade>(lf);
     }
-    
-     public void onChange$cbfaculdade() {
+
+    public void onChange$cbfaculdade() {
         if (cbfaculdade.getSelectedIndex() != 0) {
             condfac = " and e.cursocurrente.faculdade = :fac";
             Faculdade f = (Faculdade) cbfaculdade.getSelectedItem().getValue();
@@ -139,8 +136,8 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
             lc.addAll(lc2);
             cbcurso.setModel(new ListModelList<Curso>(lc));
             cbcurso.setVisible(true);
-            labelcurso.setVisible(true); 
-            
+            labelcurso.setVisible(true);
+
         } else {
             condfac = "";
             condcurso = "";
@@ -152,90 +149,71 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
             }
             cbcurso.setVisible(false);
         }
-       // setLB(0, 20);
-    }
-        
-        
-        
-//    public ListModel<Curso> getCursoModel() {
-//            List<Curso> cursos = csimpm.getAll(Curso.class);
-//            return new ListModelList<Curso>(cursos);
-//    }   
-    
-        public ListModel<Curso> getCursoModel() {
-        List<Curso> lf = new ArrayList<Curso>();
-        Curso c = new Curso();
-        c.setDescricao("---- Todos Cursos ----");
-        lf.add(c);
-        List<Curso> lf2 = csimpm.getAll(Curso.class);
-        lf.addAll(lf2);
-        return new ListModelList<Curso>(lf);
+        // setLB(0, 20);
     }
 
     public void onSalvarTaxa() {
 
-             Taxa tax = getTaxa();
-             Faculdade fa = null;
-             Curso curso = null;
-             
-             if (c == 0) {
-                  if (usr.getFaculdade().getLocalizacao() == null) {
-                        if (cbfaculdade.getSelectedItem() == null) {
-                            Clients.showNotification(" Selecione a faculdade", "error", null, null, 3000);
-                            return;
-                        } else {
-                              fa = csimpm.get(Faculdade.class, ((Faculdade) cbfaculdade.getSelectedItem().getValue()).getIdFaculdade());               
-                              tax.setFaculdade(fa);
-                        }
-                  }else {
-                          fa = csimpm.get(Faculdade.class, idfac.getValue());
-                        }
-         
-                  if(cbcurso.getSelectedItem() == null){
-                       Clients.showNotification(" Selecione o curso", "error", null, null, 3000);
-                       return;  
-                    } else{
-                        curso = csimpm.get(Curso.class, ((Curso) cbcurso.getSelectedItem().getValue()).getIdCurso());
-                        tax.setCurso(curso);
-                        }
-                         par.clear();
-                         par.put("f", fa);
-                         par.put("c", curso);
-                         par.put("nt", txTaxa.getText());
-                         
-                         
-                         
-                        Taxa ta = csimpm.findEntByJPQuery("from Taxa t where t.faculdade = :f and t.curso = :c and t.nomeTaxa = :nt ", par);
-                         if (ta != null) {
-                           Clients.showNotification(" Ja se encontra cadastrada essa taxa", "error", null, null, 3000);
-                           return;
-                        }
+        Taxa tax = getTaxa();
+        Faculdade fa = null;
+        Curso curso = null;
 
-                      //  tax.setCurso(curso.getIdCurso());
-                        tax.setNomeTaxa(txTaxa.getText());
-                        tax.setValor(Float.parseFloat(String.valueOf(txValor.getValue())));
-                        
-                        csimpm.Save(tax);
-                        
-                        ((ListModelList) lbtaxa.getModel()).add(tax);
-                        Clients.showNotification(" Adicionado com Sucesso", null, null, null, 0);
-                        mDialogAddPlano.detach();
-                  
+        if (c == 0) {
+            if (usr.getFaculdade().getLocalizacao() == null) {
+                if (cbfaculdade.getSelectedItem() == null) {
+                    Clients.showNotification(" Selecione a faculdade", "error", null, null, 3000);
+                    return;
+                } else {
+                    fa = csimpm.get(Faculdade.class, ((Faculdade) cbfaculdade.getSelectedItem().getValue()).getIdFaculdade());
+                    tax.setFaculdade(fa);
                 }
-              else {
-                    csimpm.update(tax);
-                  ((ListModelList) lbtaxa.getModel()).set(litem.getValue(), tax);
-                     Clients.showNotification(" Actualizado com Sucesso", null, null, null, 0);
-                     mDialogAddPlano.detach();
- 
+            } else {
+                fa = csimpm.get(Faculdade.class, idfac.getValue());
+            }
+
+            if (cbcurso.getSelectedItem() == null) {
+                Clients.showNotification(" Selecione o curso", "error", null, null, 3000);
+                return;
+            } else {
+                curso = csimpm.get(Curso.class, ((Curso) cbcurso.getSelectedItem().getValue()).getIdCurso());
+                tax.setCurso(curso);
+            }
+            par.clear();
+            par.put("f", fa);
+            par.put("c", curso);
+            par.put("nt", txTaxa.getText());
+
+            Taxa ta = csimpm.findEntByJPQuery("from Taxa t where t.faculdade = :f and t.curso = :c and t.nomeTaxa = :nt ", par);
+            if (ta != null) {
+                Clients.showNotification(" Ja se encontra cadastrada essa taxa", "error", null, null, 3000);
+                return;
+            }
+
+            //  tax.setCurso(curso.getIdCurso());
+            tax.setNomeTaxa(txTaxa.getText());
+            tax.setValor(Float.parseFloat(String.valueOf(txValor.getValue())));
+
+            csimpm.Save(tax);
+
+            ((ListModelList) lbtaxa.getModel()).add(tax);
+            Clients.showNotification(" Adicionado com Sucesso", null, null, null, 0);
+            mDialogAddPlano.detach();
+//                          Textbox NomeTaxa = (Textbox) mDialogAddPlano.getFellow("txTaxa");
+//          NomeTaxa.setValue(""); 
+
+        } else {
+            csimpm.update(tax);
+            ((ListModelList) lbtaxa.getModel()).set(litem.getValue(), tax);
+            Clients.showNotification(" Actualizado com Sucesso", null, null, null, 0);
+            mDialogAddPlano.detach();
+
         }
-        
-                   
-                
- 
+
+        limparCampos();
+
     }
-   
-        public void onEdit(ForwardEvent evt) throws Exception {
+
+    public void onEdit(ForwardEvent evt) throws Exception {
 
         Button btn = (Button) evt.getOrigin().getTarget();
         Listitem litem = (Listitem) btn.getParent().getParent();
@@ -243,17 +221,19 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
         mDialogAddPlano.setParent(winmain);
         c = 1;
         mDialogAddPlano.doModal();
-       // mDialogAddPlano.setTitle(todo.getFaculdade().getDesricao());
+        // mDialogAddPlano.setTitle(todo.getFaculdade().getDesricao());
         // ((Combobox) mDialogAddPlano.getFellow("cbfaculdade")).setVisible(true);
         ((Intbox) mDialogAddPlano.getFellow("ibano")).setValue(todo.getIdTaxa());
         ((Intbox) mDialogAddPlano.getFellow("litem")).setValue(litem.getIndex());
         ((Intbox) mDialogAddPlano.getFellow("idfac")).setValue(todo.getFaculdade().getIdFaculdade());
+        ((Combobox) mDialogAddPlano.getFellow("cbcurso")).setVisible(true);
+        ((Label) mDialogAddPlano.getFellow("labelcurso")).setVisible(true);
+
         setTaxa(todo);
-        
+
     }
-    
-    
-      public void setTaxa(Taxa t) {
+
+    public void setTaxa(Taxa t) {
           Textbox NomeTaxa = (Textbox) mDialogAddPlano.getFellow("txTaxa");
           NomeTaxa.setValue(t.getNomeTaxa());         
           Doublebox TxValor = (Doublebox) mDialogAddPlano.getFellow("txValor");
@@ -263,60 +243,77 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
           Combobox curso = (Combobox) mDialogAddPlano.getFellow("cbcurso");
           curso.setValue(t.getCurso().getDescricao());
 
-      } 
-      
-      
-        public Taxa getTaxa() {
+    }
+
+    public Taxa getTaxa() {
 
         Taxa p = new Taxa();
+         Faculdade fa = null;
+         Curso curso = null;
         if (c == 0) {
             //p.setAno(ano);
         } else {
-            
+
             p = csimpm.get(Taxa.class, ibano.getValue());
 
         }
         p.setNomeTaxa(txTaxa.getValue());
         p.setValor(Float.parseFloat(String.valueOf(txValor.getValue())));
+        fa = csimpm.get(Faculdade.class, ((Faculdade) cbfaculdade.getSelectedItem().getValue()).getIdFaculdade());
+        p.setFaculdade(fa);
+        curso = csimpm.get(Curso.class, ((Curso) cbcurso.getSelectedItem().getValue()).getIdCurso());
+        p.setCurso(curso);
 
         return p;
-    } 
-        
+    }
+
     public void onClick$cancelarTaxa() {
         validation.setValue("");
-        //limparcampos();
+   
+         limparCampos();
         mDialogAddPlano.setVisible(false);
+        
 
     }
-            
-    public void limparcampos() {
-        
-        txValor.setValue(null);
-        txTaxa.setValue(null);
-    }
-    
+
     public void onDelete(final ForwardEvent evt) throws Exception {
         Messagebox.show("Tens a certeza que desejas apagar?", "Atencao", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
                 new EventListener() {
-                    @Override
-                    public void onEvent(Event evet) {
-                        switch (((Integer) evet.getData()).intValue()) {
-                            case Messagebox.YES:
-                                Button btn = (Button) evt.getOrigin().getTarget();
-                                Listitem litem = (Listitem) btn.getParent().getParent();
+            @Override
+            public void onEvent(Event evet) {
+                switch (((Integer) evet.getData()).intValue()) {
+                    case Messagebox.YES:
+                        Button btn = (Button) evt.getOrigin().getTarget();
+                        Listitem litem = (Listitem) btn.getParent().getParent();
 
-                                Taxa taxa = (Taxa) litem.getValue();
-                                ((ListModelList) lbtaxa.getModel()).remove(taxa);
-                                new Listbox().appendChild(litem);
-                                csimpm.delete(taxa);
-                                
-                                Clients.showNotification("Taxa " + taxa.getNomeTaxa() + " apagada com sucesso", null, null, null, 2000);
-                            case Messagebox.NO:
-                                return;
-                        }
-                    }
+                        Taxa taxa = (Taxa) litem.getValue();
+                        ((ListModelList) lbtaxa.getModel()).remove(taxa);
+                        new Listbox().appendChild(litem);
+                        csimpm.delete(taxa);
 
-                });
+                        Clients.showNotification("Taxa " + taxa.getNomeTaxa() + " apagada com sucesso", null, null, null, 2000);
+                    case Messagebox.NO:
+                        return;
+                }
+            }
+
+        });
     }
-    
+
+    private void limparCampos() {
+        Constraint c = null;
+        txValor.setConstraint(c);
+        txValor.setValue(null);
+
+        txTaxa.setConstraint(c);
+        txTaxa.setValue(null);
+
+        cbfaculdade.setSelectedIndex(0);
+        condpar.remove("curso");
+
+        cbcurso.setVisible(false);
+        labelcurso.setVisible(false);
+
+    }
+
 }

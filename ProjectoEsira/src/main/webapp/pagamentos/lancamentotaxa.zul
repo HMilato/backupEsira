@@ -65,7 +65,7 @@
                 <label id="validation" style="color:red;"/>
             </div>
             
-            <tabbox id="tabPlanoMatricula" width="99%" apply=" ">
+            <tabbox  width="99%" apply=" ">
                 <tabs id="tabs">
                     <tab  label="Taxas" style="color:red" id="tabtaxa" selected="true"/>
                 </tabs>            
@@ -78,7 +78,7 @@
                                         <intbox id="ibano"/>
                                         <intbox id="litem"/>
                                         <intbox id="idfac"/>
-                                    </div>
+                              </div>
                            
                             
                           
@@ -91,8 +91,7 @@
                             
                          <div sclass="banners" width="500px" style=" display:flex"  align="left" >   
                             <hbox  style="margin-left: 10px; padding-top: 10px; " >
-                                <label value="Faculdade:" style=" padding-right: 30px;  "/>   
-                                 <!--<combobox id="cbfaculdade" value="-Faculdade-" model="${$composer.ListFacModel}" width="98%" readonly="true"  style="margin-left: 19px;">-->
+                                <label value="Faculdade:" style=" padding-right: 30px;  "/> 
                                 <combobox style="display: inline-block; margin-left: 19px;" id="cbfaculdade" value="-Faculdade-" model="${$composer.faculdadeModel}" width="98%" readonly="true"  >
                                     <attribute name="onAfterRender"><![CDATA[
                                             if((self.getModel()!=null) && self.getModel().getSize()>0){
@@ -128,8 +127,10 @@
 
                 </tabpanels>
             </tabbox>
-              <button autodisable="self" sclass="mybutton button blue medium" id="salvarPlano" forward="onSalvarTaxa" label="Salvar" mold="trendy" height="20px"/>
-               <button autodisable="self" id="cancelarTaxa" label="cancelar" mold="trendy" height="20px" />
+             <div  height="20px"> </div>  
+              <button autodisable="self" sclass="mybutton button blue medium" id="salvarTaxa" forward="onSalvarTaxa" label="Salvar" mold="trendy" height="20px" style="margin-left: 180px;" />
+              <button autodisable="self" sclass="mybutton button blue medium" id="cancelarTaxa" label="Cancelar" mold="trendy" height="20px" />
+             <div height="10px"> </div>
         </window>
        
 
