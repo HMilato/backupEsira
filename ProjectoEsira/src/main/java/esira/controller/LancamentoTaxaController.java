@@ -7,6 +7,7 @@ package esira.controller;
 
 import esira.domain.Curso;
 import esira.domain.Faculdade;
+import esira.domain.Grupo;
 import esira.domain.Taxa;
 import esira.domain.Users;
 import esira.service.CRUDService;
@@ -17,6 +18,8 @@ import java.util.Map;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.ForwardEvent;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
@@ -31,6 +34,7 @@ import org.zkoss.zul.ListModel;
 import org.zkoss.zul.ListModelList;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.Listitem;
+import org.zkoss.zul.Messagebox;
 import org.zkoss.zul.Tab;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
@@ -135,7 +139,7 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
             lc.addAll(lc2);
             cbcurso.setModel(new ListModelList<Curso>(lc));
             cbcurso.setVisible(true);
-            labelcurso.setVisible(true);
+            labelcurso.setVisible(true); 
             
         } else {
             condfac = "";
@@ -289,6 +293,30 @@ public class LancamentoTaxaController  extends GenericForwardComposer {
         
         txValor.setValue(null);
         txTaxa.setValue(null);
+    }
+    
+    public void onDelete(final ForwardEvent evt) throws Exception {
+        Messagebox.show("Tens a certeza que desejas apagar?", "Atencao", Messagebox.YES | Messagebox.NO, Messagebox.QUESTION,
+                new EventListener() {
+                    @Override
+                    public void onEvent(Event evet) {
+                        switch (((Integer) evet.getData()).intValue()) {
+                            case Messagebox.YES:
+                                Button btn = (Button) evt.getOrigin().getTarget();
+                                Listitem litem = (Listitem) btn.getParent().getParent();
+
+                                Taxa taxa = (Taxa) litem.getValue();
+                                ((ListModelList) lbtaxa.getModel()).remove(taxa);
+                                new Listbox().appendChild(litem);
+                                csimpm.delete(taxa);
+                                
+                                Clients.showNotification("Taxa " + taxa.getNomeTaxa() + " apagada com sucesso", null, null, null, 2000);
+                            case Messagebox.NO:
+                                return;
+                        }
+                    }
+
+                });
     }
     
 }

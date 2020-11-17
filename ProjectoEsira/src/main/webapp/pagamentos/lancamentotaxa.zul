@@ -39,6 +39,7 @@
                          <listcell ><label value="${each.curso.descricao}"/></listcell>
                          <listcell ><label value="${each.valor}"/> </listcell>
                          <listcell ><button autodisable="self" tooltiptext="Editar" hoverImage="/icon/ico_editar.png" image="/icon/ico_editar1.png"  forward="onClick = onEdit"/>
+                                   <button autodisable="self" tooltiptext="Apagar" hoverImage="/icon/ico_borrar.png"  image="/icon/ico_borrar1.png"  forward="onClick = onDelete"/>
                          </listcell>
                     </listitem>  
                 </template>
@@ -107,7 +108,7 @@
                             <hbox  style="margin-left: 10px; padding-top: 10px; " >
                                 <label id="labelcurso" visible="false" value="Curso:" style=" padding-right: 30px;  "/>  
                                 <combobox id="cbcurso" visible="false" readonly="true" onAfterRender="self.setSelectedIndex(0)" width="100%"   style="margin-left: 42px;">
-                                 
+                                
                                     <comboitem label="${each}"/>
                                    
                                  </combobox>
