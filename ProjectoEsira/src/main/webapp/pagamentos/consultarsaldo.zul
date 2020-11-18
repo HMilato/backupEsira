@@ -75,27 +75,37 @@
         </div>   
         
         <window id="winReferencia"  position="center,center" closable="true"  visible="false" border="none"
-                   width="400px" apply="esira.controller.ConsultarSaldo">
+                width="400px" apply="esira.controller.ConsultarSaldo">
                
             <div height="200px">
-                <!--                <html>
+                <html>
                 <![CDATA[
                 <ul id="breadcrumbs-one">
-                    <li><a href=" ">Nova Taxa</a></li>
+                    <li><a href=" ">Referencia</a></li>
                 </ul>
                   ]]>
-                </html>-->
-              
-                    <hbox  style="margin-left: 10px; padding-top: 10px; " >
-                        <combobox style="display: inline-block; margin-left: 25px;" id="cbtaxa" model="${$composer.taxaModel}" width="320px" readonly="true"  >
-                            <attribute name="onAfterRender"><![CDATA[
+                </html>
+   
+                <hbox  style="margin-left: 10px; padding-top: 30px; " >
+                    <combobox style="display: inline-block; margin-left: 25px; font-size:10pt;  color: blue; text-align: center; " id="cbtaxa" model="${$composer.taxaModel}" width="320px" readonly="true"  >
+                        <attribute name="onAfterRender"><![CDATA[
                                             if((self.getModel()!=null) && self.getModel().getSize()>0){
                                                self.setSelectedIndex(0);
                                             }                           
                                         ]]></attribute>
-                            <comboitem label="${each}"/>
-                        </combobox>
-                    </hbox>
+                        <comboitem label="${each}"/>
+                    </combobox>
+                </hbox>
+                    
+                <div  style=" padding-top: 20px; backgroud-color:  blue; color: blue;" align="center" >
+                   
+                    <textbox visible="false" width="320px" style="text-align: center; font-size:14pt;  color: blue; " id="txtRef" value=""/>
+                           
+                </div>
+                
+                <div  height="40px" align="center" style=" padding-top: 20px; "> 
+                    <button autodisable="self" sclass="mybutton button blue medium" id="fecharTela" label="Sair" mold="trendy" height="20px" width="320px" />
+                </div>
    
             </div>
         

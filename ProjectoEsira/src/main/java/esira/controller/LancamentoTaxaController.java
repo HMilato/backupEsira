@@ -13,8 +13,11 @@ import esira.domain.Users;
 import esira.service.CRUDService;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Sessions;
@@ -133,13 +136,13 @@ public class LancamentoTaxaController extends GenericForwardComposer {
             cbcurso.setVisible(false);
             labelcurso.setVisible(false);
      
-            int idf = 9;
-            par.clear();
-            par.put("fac", idf);
-
-            Faculdade us = csimpm.findEntByJPQuery("from Faculdade f where f.idFaculdade = :fac", par);
+//            int idf = 9;
+//            par.clear();
+//            par.put("fac", idf);
+//
+//            Faculdade us = csimpm.findEntByJPQuery("from Faculdade f where f.idFaculdade = :fac", par);
  
-            Messagebox.show("a faculdade que sera setada eh esta" +us.getDesricao());
+          //  Messagebox.show("a faculdade que sera setada eh esta" +us.getDesricao());
         }
         // setLB(0, 20);
     }
@@ -198,7 +201,7 @@ public class LancamentoTaxaController extends GenericForwardComposer {
 
             tax.setNomeTaxa(txTaxa.getText());
             tax.setValor(Float.parseFloat(String.valueOf(txValor.getValue())));
-
+     
             csimpm.Save(tax);
 
             ((ListModelList) lbtaxa.getModel()).add(tax);

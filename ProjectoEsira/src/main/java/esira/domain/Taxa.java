@@ -6,7 +6,6 @@
 package esira.domain;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,6 +50,10 @@ public class Taxa implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Curso curso;
     //private Long curso;
+    
+    @Size(max = 255)
+    @Column(name = "codigo", length = 255)
+    private String codigo;
     
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(precision = 8, scale = 8)
@@ -126,6 +129,15 @@ public class Taxa implements Serializable {
         this.idTaxa = idTaxa;
     }
 
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 0;
