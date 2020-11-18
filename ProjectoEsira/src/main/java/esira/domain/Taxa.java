@@ -148,7 +148,7 @@ public class Taxa implements Serializable {
 
     @Override
     public String toString() {
-        return "esira.domain.Taxa[ idTaxa=" + idTaxa + " ]";
+        return nomeTaxa;
     }
     
 }

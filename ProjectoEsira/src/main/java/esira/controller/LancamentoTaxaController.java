@@ -78,31 +78,14 @@ public class LancamentoTaxaController extends GenericForwardComposer {
     }
 
     public void onNovaTaxa() {
-        // limparcampos();
 
-//        if (usr.getFaculdade().getLocalizacao() == null) {
-//            ((Combobox) mDialogAddPlano.getFellow("cbfaculdade")).setVisible(true);
-//        } else {
-//            ((Combobox) mDialogAddPlano.getFellow("cbfaculdade")).setVisible(false);
-//            ((Intbox) mDialogAddPlano.getFellow("idfac")).setValue(usr.getFaculdade().getIdFaculdade());
-//        }
-        // Tab tab2 = (Tab) mDialogAddPlano.getFellow("tabtaxa");
         mDialogAddPlano.setTitle("");
         mDialogAddPlano.setParent(winmain);
         c = 0;
         mDialogAddPlano.doModal();
-        //   tab2.setSelected(true);
-//        Taxa ta = csimpm.findEntByJPQuery("from Taxa", null);
-//        if (ta != null) {
-//            setTaxa(ta);
-//        }
 
     }
 
-//        public ListModel<Faculdade> getFaculdadeModel() {
-//            List<Faculdade> faculdades = csimpm.getAll(Faculdade.class);
-//            return new ListModelList<Faculdade>(faculdades);
-//    }
     public ListModel<Faculdade> getFaculdadeModel() {
         List<Faculdade> lf = new ArrayList<Faculdade>();
         Faculdade f = new Faculdade();
@@ -148,6 +131,15 @@ public class LancamentoTaxaController extends GenericForwardComposer {
                 condpar.remove("curso");
             }
             cbcurso.setVisible(false);
+            labelcurso.setVisible(false);
+     
+            int idf = 9;
+            par.clear();
+            par.put("fac", idf);
+
+            Faculdade us = csimpm.findEntByJPQuery("from Faculdade f where f.idFaculdade = :fac", par);
+ 
+            Messagebox.show("a faculdade que sera setada eh esta" +us.getDesricao());
         }
         // setLB(0, 20);
     }
@@ -157,15 +149,21 @@ public class LancamentoTaxaController extends GenericForwardComposer {
         Taxa tax = getTaxa();
         Faculdade fa = null;
         Curso curso = null;
-
+        
         if (c == 0) {
+            
+            
             if (usr.getFaculdade().getLocalizacao() == null) {
+
                 if (cbfaculdade.getSelectedItem() == null) {
+
                     Clients.showNotification(" Selecione a faculdade", "error", null, null, 3000);
                     return;
                 } else {
+                     if (cbfaculdade.getSelectedIndex() != 0) {
                     fa = csimpm.get(Faculdade.class, ((Faculdade) cbfaculdade.getSelectedItem().getValue()).getIdFaculdade());
                     tax.setFaculdade(fa);
+                     }
                 }
             } else {
                 fa = csimpm.get(Faculdade.class, idfac.getValue());
@@ -174,22 +172,30 @@ public class LancamentoTaxaController extends GenericForwardComposer {
             if (cbcurso.getSelectedItem() == null) {
                 Clients.showNotification(" Selecione o curso", "error", null, null, 3000);
                 return;
-            } else {
-                curso = csimpm.get(Curso.class, ((Curso) cbcurso.getSelectedItem().getValue()).getIdCurso());
-                tax.setCurso(curso);
-            }
+            } //else {
+         //        if (cbfaculdade.getSelectedIndex() != 0) {
+//                curso = csimpm.get(Curso.class, ((Curso) cbcurso.getSelectedItem().getValue()).getIdCurso());
+//                tax.setCurso(curso); 
+         
+                 
+           // }
+            
+           // curso = 1;
+        //   int co = 1;
             par.clear();
             par.put("f", fa);
-            par.put("c", curso);
+//            par.put("c", curso);
+           // par.put("c", co);
             par.put("nt", txTaxa.getText());
 
-            Taxa ta = csimpm.findEntByJPQuery("from Taxa t where t.faculdade = :f and t.curso = :c and t.nomeTaxa = :nt ", par);
+            Taxa ta = csimpm.findEntByJPQuery("from Taxa t where t.faculdade = :f and t.nomeTaxa = :nt ", par);
+         //    Taxa ta = csimpm.findEntByJPQuery("from Taxa t where t.faculdade = :f and t.curso = :c and t.nomeTaxa = :nt ", par);
             if (ta != null) {
                 Clients.showNotification(" Ja se encontra cadastrada essa taxa", "error", null, null, 3000);
                 return;
             }
 
-            //  tax.setCurso(curso.getIdCurso());
+
             tax.setNomeTaxa(txTaxa.getText());
             tax.setValor(Float.parseFloat(String.valueOf(txValor.getValue())));
 
@@ -198,8 +204,7 @@ public class LancamentoTaxaController extends GenericForwardComposer {
             ((ListModelList) lbtaxa.getModel()).add(tax);
             Clients.showNotification(" Adicionado com Sucesso", null, null, null, 0);
             mDialogAddPlano.detach();
-//                          Textbox NomeTaxa = (Textbox) mDialogAddPlano.getFellow("txTaxa");
-//          NomeTaxa.setValue(""); 
+
 
         } else {
             csimpm.update(tax);
@@ -259,11 +264,24 @@ public class LancamentoTaxaController extends GenericForwardComposer {
         }
         p.setNomeTaxa(txTaxa.getValue());
         p.setValor(Float.parseFloat(String.valueOf(txValor.getValue())));
-        fa = csimpm.get(Faculdade.class, ((Faculdade) cbfaculdade.getSelectedItem().getValue()).getIdFaculdade());
-        p.setFaculdade(fa);
-        curso = csimpm.get(Curso.class, ((Curso) cbcurso.getSelectedItem().getValue()).getIdCurso());
-        p.setCurso(curso);
+         if (cbfaculdade.getSelectedIndex() != 0) {
+           fa = csimpm.get(Faculdade.class, ((Faculdade) cbfaculdade.getSelectedItem().getValue()).getIdFaculdade());
+           p.setFaculdade(fa);
+           curso = csimpm.get(Curso.class, ((Curso) cbcurso.getSelectedItem().getValue()).getIdCurso());
+           p.setCurso(curso); 
 
+         } 
+            int idf = 10;
+            par.clear();
+            par.put("fac", idf);
+
+            Faculdade us = csimpm.findEntByJPQuery("from Faculdade f where f.idFaculdade = :fac", par);
+            p.setFaculdade(us);
+ 
+        
+         
+         
+     
         return p;
     }
 
